@@ -1,16 +1,18 @@
 package com.basket.BasketballSystem.temporadas;
 
 import com.basket.BasketballSystem.ligas.Liga;
+import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "temporadas")
 public class Temporada {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer clave;
+    private Long claveTemporada;
 
     @Column(name = "nombre_temporada")
     private String nombreTemporada;
@@ -32,7 +34,13 @@ public class Temporada {
 
     @Column(name = "cantidad_eliminados")
     private Integer cantidadEliminados;
-
+    @ManyToMany
+    @JoinTable(
+            name = "temporadas_arbitro",
+            joinColumns = @JoinColumn(name = "clave_temporada"),
+            inverseJoinColumns = @JoinColumn(name = "arbitro")
+    )
+    private List<Usuario> arbitros;
     private String categoria;
 
     private String rama;
@@ -40,8 +48,8 @@ public class Temporada {
     // Getters y setters
 
 
-    public Integer getClave() {
-        return clave;
+    public Long getClaveTemporada() {
+        return claveTemporada;
     }
 
     public String getNombreTemporada() {
