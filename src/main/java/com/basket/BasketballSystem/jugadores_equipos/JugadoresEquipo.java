@@ -24,7 +24,11 @@ public class JugadoresEquipo {
 
     private String posicion;
 
-    public Equipo getEquipo() {
-        return equipo;
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public String getPosicion() {
+        return posicion;
     }
 }

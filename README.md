@@ -53,6 +53,40 @@ Resultado:
 ```
 
 
+## Equipos
+**Obtener Jugadores por Nombre del Equipo**
+```bash
+GET /Equipo/{nombreEquipo}/jugadores
+```
+
+
+#### Parámetros de Ruta
+
+- `{nombreEquipo}` (**cadena,requerido**): El nombre del equipo del cual deseas obtener los jugadores.
+
+#### Ejemplo
+
+**Respuesta*
+
+
+```bash
+[
+    {
+        "usuario": {
+            "usuario": "usuario1",
+            "email": "usuario1@example.com",
+            "nombre": "Nombre1",
+            "apellido": "Apellido1",
+            "genero": "MASCULINO",
+            "rol": "JUGADOR",
+            "edad": 33
+        },
+        "posicion": "Delantero"
+    }
+]
+```
+
+
 
 
 
