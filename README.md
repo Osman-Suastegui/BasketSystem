@@ -51,6 +51,23 @@ Resultado:
     }
 ]
 ```
+**Asignarle Administradores a una Liga**
+
+```bash
+POST /Ligas/asignarAdmin
+```
+
+**Parámetros:**
+
+- `idLiga` (**requerido**): El identificador de la liga a la que deseas asignarle un administrador.
+- `idUsuario` (**requerido**): El identificador del usuario que deseas asignarle como administrador de la liga.
+
+```bash
+{
+    "idLiga": 1,
+    "idUsuario": "user"
+}
+```
 
 
 ## Equipos
