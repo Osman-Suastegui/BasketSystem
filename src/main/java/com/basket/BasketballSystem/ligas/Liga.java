@@ -12,11 +12,20 @@ import java.util.List;
 public class Liga {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "nombre",  unique = true)
     private String nombre; // nombre de la liga
+
+
+
+    public Liga(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // Constructor por defecto (sin argumentos)
+    public Liga() {
+    }
 
     @ManyToMany
     @JoinTable(
@@ -37,6 +46,9 @@ public class Liga {
         return this.administradores;
     }
 
+    public String getNombre() {
+        return nombre;
+    }
 
     // Getters y setters
 }

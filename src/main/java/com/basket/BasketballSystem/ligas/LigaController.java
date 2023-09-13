@@ -36,5 +36,11 @@ public class LigaController {
         return ligaService.asignarAdministrador(ligaId, usuarioId);
     }
 
+    @PostMapping("/crearLiga")
+    public ResponseEntity<String> crearLiga(@RequestBody Liga liga) {
+
+        return ligaService.crearLiga(liga);
+    }
+
 
 }

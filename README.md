@@ -68,6 +68,21 @@ POST /Ligas/asignarAdmin
     "idUsuario": "user"
 }
 ```
+**Crear Liga**
+
+```bash
+POST /Ligas/crearLiga
+```
+
+**Parámetros:**
+
+- `nombre` (**requerido**): El nombre de la liga que deseas crear.
+
+```bash
+{
+    "nombre": "Liga de Baloncesto"
+}
+```
 
 
 ## Equipos
