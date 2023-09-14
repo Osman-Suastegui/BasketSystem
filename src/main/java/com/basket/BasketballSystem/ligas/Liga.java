@@ -50,5 +50,9 @@ public class Liga {
         return nombre;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     // Getters y setters
 }

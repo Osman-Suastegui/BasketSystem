@@ -27,7 +27,7 @@ public class Temporada {
     @Column(name = "fecha_termino")
     private LocalDate fechaTermino;
 
-    private String estado; // en curso, terminada, cancelada
+
 
     @Column(name = "cantidad_equipos")
     private Integer cantidadEquipos;
@@ -41,12 +41,30 @@ public class Temporada {
             inverseJoinColumns = @JoinColumn(name = "arbitro")
     )
     private List<Usuario> arbitros;
-    private String categoria;
+    @Enumerated(EnumType.STRING)
+    private Estado estado; // en curso, terminada, cancelada
 
-    private String rama;
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
 
+    @Enumerated(EnumType.STRING)
+    private Rama rama;
     // Getters y setters
 
+
+    public Temporada(String nombreTemporada, Liga liga, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos, List<Usuario> arbitros, Categoria categoria, Rama rama) {
+        this.nombreTemporada = nombreTemporada;
+        this.liga = liga;
+        this.fechaInicio = fechaInicio;
+        this.fechaTermino = fechaTermino;
+        this.cantidadEquipos = cantidadEquipos;
+        this.arbitros = arbitros;
+        this.categoria = categoria;
+        this.rama = rama;
+    }
+
+    public Temporada() {
+    }
 
     public Long getClaveTemporada() {
         return claveTemporada;
@@ -64,7 +82,7 @@ public class Temporada {
         return fechaTermino;
     }
 
-    public String getEstado() {
+    public Estado getEstado() {
         return estado;
     }
 
@@ -76,12 +94,28 @@ public class Temporada {
         return cantidadEliminados;
     }
 
-    public String getCategoria() {
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    public void setCantidadEliminados(Integer cantidadEliminados) {
+        this.cantidadEliminados = cantidadEliminados;
+    }
+
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public String getRama() {
+    public Rama getRama() {
         return rama;
     }
+
+    public Liga getLiga() {
+        return liga;
+    }
+
+
+
+
 }
 

@@ -119,6 +119,38 @@ GET /Equipo/{nombreEquipo}/jugadores
 ```
 
 
+## Temporadas
+**Crear una Temporada**
+```bash
+POST /Temporadas/crearTemporada
+```
+**Parámetros:**
+
+- `nombreTemporada` (**requerido**): El nombre de la temporada que deseas crear.
+- `fechaInicio` (**requerido**): La fecha de inicio de la temporada que deseas crear.
+- `fechaTermino` (**requerido**): La fecha de termino de la temporada que deseas crear.
+- `cantidadEquipos` (**requerido**): La cantidad de equipos de la temporada que deseas crear.
+- `categoria` (**requerido**): La categoria de la temporada que deseas crear.
+- `rama` (**requerido**): La rama de la temporada que deseas crear.
+- `liga` (**requerido**): La liga de la temporada que deseas crear.
+
+```bash
+{
+    "nombreTemporada": "Temporada 2023-2024",
+    "fechaInicio": "2023-09-01",
+    "fechaTermino": "2024-06-30",
+    "cantidadEquipos": 10,
+    "categoria": "SENIOR",
+    "rama": "MASCULINO",
+    "liga": {
+        "id": 1
+    }
+}
+```
+
+
+
+
 
 
 
