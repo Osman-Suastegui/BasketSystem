@@ -1,7 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import java.time.Period;
 

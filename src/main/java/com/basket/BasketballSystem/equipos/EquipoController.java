@@ -2,6 +2,7 @@ package com.basket.BasketballSystem.equipos;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,11 @@ public class EquipoController {
         return equipoService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
     }
 
+    @PostMapping("/crearEquipo")
+    public ResponseEntity<String> crearEquipo(@RequestBody Equipo equipo) {
+
+        return equipoService.crearEquipo(equipo);
+    }
 
 
 

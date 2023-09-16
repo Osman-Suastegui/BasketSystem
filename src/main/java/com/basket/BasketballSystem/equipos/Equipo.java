@@ -19,7 +19,13 @@ public class Equipo {
     @OneToMany(mappedBy = "equipo")
     private List<JugadoresEquipo> jugadores;
 
+    public Equipo(String nombre, Usuario admin_equipo) {
+        this.nombre = nombre;
+        this.admin_equipo = admin_equipo;
+    }
 
+    public Equipo() {
+    }
 
     public String getNombre() {
         return nombre;
@@ -30,6 +36,10 @@ public class Equipo {
     }
     public String getUsuario_Admin_equipo() {
         return admin_equipo.getUsuario();
+    }
+
+    public Usuario getAdmin_equipo() {
+        return admin_equipo;
     }
 
     public List<JugadoresEquipo> getJugadores() {

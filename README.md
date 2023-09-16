@@ -118,6 +118,26 @@ GET /Equipo/{nombreEquipo}/jugadores
 ]
 ```
 
+**Crear un Equipo**
+```bash
+POST /Equipo/crearEquipo
+```
+**Parámetros:**
+
+- `nombre` (**requerido**): El nombre del equipo que deseas crear.
+- `admin_equipo` (**requerido**): El identificador del usuario que deseas asignarle como administrador del equipo.
+
+```bash
+{
+    "nombre": "NombreDelEquipo",
+    "admin_equipo": {
+        "usuario": "Manuel321"
+    }
+}
+```
+
+
+
 
 ## Temporadas
 **Crear una Temporada**
