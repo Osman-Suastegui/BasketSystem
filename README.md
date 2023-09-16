@@ -132,7 +132,6 @@ POST /Temporadas/crearTemporada
 - `cantidadEquipos` (**requerido**): La cantidad de equipos de la temporada que deseas crear.
 - `categoria` (**requerido**): La categoria de la temporada que deseas crear.
 - `rama` (**requerido**): La rama de la temporada que deseas crear.
-- `liga` (**requerido**): La liga de la temporada que deseas crear.
 
 ```bash
 {
@@ -141,12 +140,40 @@ POST /Temporadas/crearTemporada
     "fechaTermino": "2024-06-30",
     "cantidadEquipos": 10,
     "categoria": "SENIOR",
-    "rama": "MASCULINO",
-    "liga": {
-        "id": 1
-    }
+    "rama": "MASCULINO"
 }
 ```
+
+## Usuarios
+**Registrar Usuarios**
+```bash
+POST /usuarios/registrarUsuario
+```
+**Parámetros:**
+
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas registrar.
+- `email` (**requerido**): El email del usuario que deseas registrar.
+- `password` (**requerido**): La contraseña del usuario que deseas registrar.
+- `nombre` (**requerido**): El nombre del usuario que deseas registrar.
+- `fechaNacimiento` (**requerido**): La fecha de nacimiento del usuario que deseas registrar.
+- `apellido` (**requerido**): El apellido del usuario que deseas registrar.
+- `genero` (**requerido**): El genero del usuario que deseas registrar.
+- `rol` (**requerido**): El rol del usuario que deseas registrar.
+
+
+```bash
+{
+    "usuario": "nombre_de_usuario101",
+    "email": "correo_electronico101@example.com",
+    "password": "contrasena_segura",
+    "nombre": "Nombre del Usuario",
+    "fechaNacimiento": "1990-01-01", 
+    "apellido": "Apellido del Usuario",
+    "genero": "MASCULINO", 
+    "rol": "JUGADOR" 
+}
+```
+
 
 
 

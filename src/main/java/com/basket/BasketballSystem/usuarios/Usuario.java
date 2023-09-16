@@ -64,4 +64,12 @@ public class Usuario {
     public Integer getEdad(){
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
 }

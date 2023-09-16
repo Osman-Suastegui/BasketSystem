@@ -110,9 +110,7 @@ public class Temporada {
         return rama;
     }
 
-    public Liga getLiga() {
-        return liga;
-    }
+
 
 
 

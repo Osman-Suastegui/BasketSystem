@@ -17,8 +17,6 @@ public class TemporadaService {
         if(temporada.getFechaInicio() == null) return ResponseEntity.badRequest().body("La fecha de inicio de la temporada no puede ser nula");
         if(temporada.getFechaTermino() == null) return ResponseEntity.badRequest().body("La fecha de fin de la temporada no puede ser nula");
         if(temporada.getFechaInicio().isAfter(temporada.getFechaTermino())) return ResponseEntity.badRequest().body("La fecha de inicio no puede ser posterior a la fecha de fin");
-        if(temporada.getLiga() == null) return ResponseEntity.badRequest().body("La liga no puede ser nula");
-        if(temporada.getLiga().getId() == null) return ResponseEntity.badRequest().body("El id de la liga no puede ser nulo");
         if(temporada.getCantidadEquipos() == null) return ResponseEntity.badRequest().body("La cantidad de equipos no puede ser nula");
         if(temporada.getCantidadEquipos() < 2) return ResponseEntity.badRequest().body("La cantidad de equipos no puede ser menor a 2");
 
