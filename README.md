@@ -136,6 +136,30 @@ POST /Equipo/crearEquipo
 }
 ```
 
+**Asignarle Jugadores a un Equipo**
+```bash
+POST /jugadores-equipo/crearJugadoresEquipo
+```
+**Parámetros:**
+- `nombreEquipo` (**requerido**): El nombre del equipo al que deseas asignarle un jugador.
+- `idUsuario` (**requerido**): El identificador del usuario que deseas asignarle como jugador del equipo.
+- `posicion` (**requerido**): La posicion del jugador que deseas asignarle al equipo.
+
+```bash
+{
+    "equipo": {
+        "nombre": "equipes"
+    },
+    "usuario": {
+        "usuario": "usuario1"
+    },
+    "posicion": "Delantero"
+}
+```
+
+
+
+
 
 
 

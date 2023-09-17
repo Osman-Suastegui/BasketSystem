@@ -37,6 +37,14 @@ public class Usuario {
         this.rol = rol;
     }
 
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getUsuario() {
         return usuario;
     }
