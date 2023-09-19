@@ -14,7 +14,6 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
     private String password;
     private String nombre;
     private LocalDate fechaNacimiento;
@@ -78,7 +77,6 @@ public class Usuario {
         return password;
     }
 
-    @JsonIgnore
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
