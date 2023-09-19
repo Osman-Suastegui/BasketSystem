@@ -237,6 +237,26 @@ POST /usuarios/registrarUsuario
     "rol": "JUGADOR" 
 }
 ```
+**Modificar Datos de un Usuario**
+
+```bash
+PUT /usuarios/ActualizarUsuario
+```
+**Parámetros:**
+
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas modificar.
+- `nombre` (**opcional**): El nombre del usuario que deseas modificar.
+- `apellido` (**opcional**): El apellido del usuario que deseas modificar.
+
+```bash
+{
+    "usuario": "Jesus123",
+    "nombre": "NuevoNombre2",
+    "apellido": ""
+}
+```
+
+
 - [x] Registrar Administradores de Ligas
 - [x] Modificar datos de Administradores de Ligas
 - [x] Registrar Liga
@@ -244,13 +264,13 @@ POST /usuarios/registrarUsuario
 - [x] Registrar Temporada
 - [ ] Modificar datos de una Temporada
 - [x] Registrar Administrador de equipo
-- [ ] Modificar datos de Administrador de Equipo
+- [x] Modificar datos de Administrador de Equipo
 - [x] Crear Equipo
 - [ ] Modificar datos de un equipo
 - [x] Registrar Jugadores
-- [ ] Modificar datos de un Jugador
+- [x] Modificar datos de un Jugador
 - [x] Registrar Árbitros
-- [ ] Modificar datos de un Arbitro
+- [x] Modificar datos de un Arbitro
 - [ ] Asignar una temporada a una liga
 - [ ] Iniciar Temporada
 - [ ] Concluir una temporada
