@@ -73,4 +73,23 @@ public class LigaService {
         ligaRepository.save(liga);
         return ResponseEntity.ok("Liga creada exitosamente.");
     }
+
+
+    //quiero hacer un update al nombre de la liga
+    public ResponseEntity<String> actualizarLiga(Long ligaId, String nombre) {
+        Optional<Liga> ligaOptional = ligaRepository.findById(ligaId);
+        if (!ligaOptional.isPresent()) {
+            throw new BadRequestException("La liga " + ligaId + " no existe");
+        }
+        Liga liga = ligaOptional.get();
+        liga.setNombre(nombre);
+        if(liga.getNombre() == null) throw new BadRequestException("El nombre de la liga no puede ser nulo");
+        if(liga.getNombre().isEmpty()) throw new BadRequestException("El nombre de la liga no puede estar vacio");
+        if(liga.getNombre().length() > 50) throw new BadRequestException("El nombre de la liga no puede tener mas de 50 caracteres");
+        if(ligaRepository.findByNombre(liga.getNombre()).isPresent()) throw new BadRequestException("Ya existe una liga con ese nombre");
+        if(liga.getNombre().length() < 3) throw new BadRequestException("El nombre de la liga debe tener al menos 3 caracteres");
+
+        ligaRepository.save(liga);
+        return ResponseEntity.ok("Liga actualizada exitosamente.");
+    }
 }

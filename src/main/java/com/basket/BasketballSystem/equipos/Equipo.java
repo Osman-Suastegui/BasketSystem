@@ -27,6 +27,9 @@ public class Equipo {
     public Equipo() {
     }
 
+
+
+
     public String getNombre() {
         return nombre;
     }

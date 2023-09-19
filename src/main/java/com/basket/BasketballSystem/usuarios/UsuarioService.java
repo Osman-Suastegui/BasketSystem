@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
+import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.exceptions.GlobalExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,7 @@ public class UsuarioService {
 
         return ResponseEntity.ok("Usuario creado exitosamente.");
     }
+
 
 
 }

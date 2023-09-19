@@ -42,5 +42,14 @@ public class LigaController {
         return ligaService.crearLiga(liga);
     }
 
+    //quiero hacer un update al nombre de la liga
+    @PutMapping("/actualizarLiga")
+    public ResponseEntity<String> actualizarLiga(@RequestBody Map<String, Object> requestMap) {
+        Long ligaId = Long.parseLong(requestMap.get("ligaId").toString());
+        String nombre = (String) requestMap.get("nombre");
+
+        return ligaService.actualizarLiga(ligaId, nombre);
+    }
+
 
 }

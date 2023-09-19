@@ -51,6 +51,26 @@ Resultado:
     }
 ]
 ```
+**Modificar Datos de una Liga**
+
+```bash
+PUT /Ligas/actualizarLiga
+```
+
+**Parámetros:**
+
+- `idLiga` (**requerido**): El identificador de la liga que deseas modificar.
+- `nombre` (**requerido**): El nombre de la liga que deseas modificar.
+
+```bash
+{
+    "ligaId": 1,
+    "nombre": "Liga de Baloncesto"
+}
+```
+
+
+
 **Asignarle Administradores a una Liga**
 
 ```bash
@@ -217,7 +237,50 @@ POST /usuarios/registrarUsuario
     "rol": "JUGADOR" 
 }
 ```
-
+1. Registrar Administradores de Ligas -- X
+2. Modificar datos de Administradores de Ligas
+3. Registrar Liga    -- X
+4. Modificar datos de una liga -- X
+5. Registrar Temporada  -- X
+6. Modificar datos de una Temporada
+7. Registrar Administrador de equipo   -- X
+8. Modificar datos de Administrador de Equipo
+9. Crear Equipo   -- X
+10. Modificar datos de un equipo
+11. Registrar Jugadores   -- X
+12. Modificar datos de un Jugador
+13. Registrar Árbitros  -- X
+14. Modificar datos de un Arbitro
+15. Asignar una temporada a una liga
+16. Iniciar Temporada
+17. Concluir una temporada
+18. Asignar jugadores a equipos  -- X
+19. Modificar jugadores de equipos
+20. Asignar Equipos a temporada
+21. Modificar Equipos de una temporada
+22. Agendar partidos dentro de una temporada
+23. Reagendar partido dentro de una temporada
+24. Asignar arbitro a un partido
+25. Arbitro da por iniciado un partido
+26. Arbitro registra datos de un partido
+27. Arbitro modifica datos de un partido
+28. Arbitro da por terminado algunos de los tiempos del partido
+29. Arbitro inicia algunos de los tiempos del partido
+30. Arbitro finaliza un partido
+31. Ver calendario de partidos
+32. Ver jugadores   -- X
+33. Ver estadísticas de puntos de un jugador por temporada
+34. Ver estadísticas de asistencias de un jugador por temporada
+35. Ver estadísticas de tiros de 3 puntos de un jugador por temporada
+36. Ver estadísticas de equipo por temporada
+37. Ver perfil de un jugador
+38. Ver perfil de un equipo
+39. Ver perfil de un arbitro
+40. Ver ranking de los equipos
+41. Buscar Equipo por nombre
+42. Buscar Jugador por nombre
+43. Buscar liga por nombre
+44. Buscar Temporada por nombre
 
 
 

@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.data;
 
+
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.exceptions.GlobalExceptionHandler;
 import com.basket.BasketballSystem.usuarios.*;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -17,10 +19,13 @@ public class DataInitializer implements CommandLineRunner {
 
 
 
+
+
     @Override
     public void run(String... args) throws Exception {
 
         initializeUsuarios();
+
     }
 
     private void initializeUsuarios(){
@@ -64,7 +69,9 @@ public class DataInitializer implements CommandLineRunner {
         });
 
 
-
-
     }
+
+
+
+
 }
