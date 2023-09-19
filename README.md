@@ -170,7 +170,7 @@ POST /jugadores-equipo/crearJugadoresEquipo
     "equipo": {
         "nombre": "equipes"
     },
-    "usuario": {
+    "jugador": {
         "usuario": "usuario1"
     },
     "posicion": "Delantero"
@@ -237,50 +237,51 @@ POST /usuarios/registrarUsuario
     "rol": "JUGADOR" 
 }
 ```
-1. Registrar Administradores de Ligas -- X
-2. Modificar datos de Administradores de Ligas
-3. Registrar Liga    -- X
-4. Modificar datos de una liga -- X
-5. Registrar Temporada  -- X
-6. Modificar datos de una Temporada
-7. Registrar Administrador de equipo   -- X
-8. Modificar datos de Administrador de Equipo
-9. Crear Equipo   -- X
-10. Modificar datos de un equipo
-11. Registrar Jugadores   -- X
-12. Modificar datos de un Jugador
-13. Registrar Árbitros  -- X
-14. Modificar datos de un Arbitro
-15. Asignar una temporada a una liga
-16. Iniciar Temporada
-17. Concluir una temporada
-18. Asignar jugadores a equipos  -- X
-19. Modificar jugadores de equipos
-20. Asignar Equipos a temporada
-21. Modificar Equipos de una temporada
-22. Agendar partidos dentro de una temporada
-23. Reagendar partido dentro de una temporada
-24. Asignar arbitro a un partido
-25. Arbitro da por iniciado un partido
-26. Arbitro registra datos de un partido
-27. Arbitro modifica datos de un partido
-28. Arbitro da por terminado algunos de los tiempos del partido
-29. Arbitro inicia algunos de los tiempos del partido
-30. Arbitro finaliza un partido
-31. Ver calendario de partidos
-32. Ver jugadores   -- X
-33. Ver estadísticas de puntos de un jugador por temporada
-34. Ver estadísticas de asistencias de un jugador por temporada
-35. Ver estadísticas de tiros de 3 puntos de un jugador por temporada
-36. Ver estadísticas de equipo por temporada
-37. Ver perfil de un jugador
-38. Ver perfil de un equipo
-39. Ver perfil de un arbitro
-40. Ver ranking de los equipos
-41. Buscar Equipo por nombre
-42. Buscar Jugador por nombre
-43. Buscar liga por nombre
-44. Buscar Temporada por nombre
+- [x] Registrar Administradores de Ligas
+- [x] Modificar datos de Administradores de Ligas
+- [x] Registrar Liga
+- [x] Modificar datos de una liga
+- [x] Registrar Temporada
+- [ ] Modificar datos de una Temporada
+- [x] Registrar Administrador de equipo
+- [ ] Modificar datos de Administrador de Equipo
+- [x] Crear Equipo
+- [ ] Modificar datos de un equipo
+- [x] Registrar Jugadores
+- [ ] Modificar datos de un Jugador
+- [x] Registrar Árbitros
+- [ ] Modificar datos de un Arbitro
+- [ ] Asignar una temporada a una liga
+- [ ] Iniciar Temporada
+- [ ] Concluir una temporada
+- [x] Asignar jugadores a equipos
+- [ ] Modificar jugadores de equipos
+- [ ] Asignar Equipos a temporada
+- [ ] Modificar Equipos de una temporada
+- [ ] Agendar partidos dentro de una temporada
+- [ ] Reagendar partido dentro de una temporada
+- [ ] Asignar arbitro a un partido
+- [ ] Arbitro da por iniciado un partido
+- [ ] Arbitro registra datos de un partido
+- [ ] Arbitro modifica datos de un partido
+- [ ] Arbitro da por terminado algunos de los tiempos del partido
+- [ ] Arbitro inicia algunos de los tiempos del partido
+- [ ] Arbitro finaliza un partido
+- [ ] Ver calendario de partidos
+- [x] Ver jugadores
+- [ ] Ver estadísticas de puntos de un jugador por temporada
+- [ ] Ver estadísticas de asistencias de un jugador por temporada
+- [ ] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
+- [ ] Ver estadísticas de equipo por temporada
+- [ ] Ver perfil de un jugador
+- [ ] Ver perfil de un equipo
+- [ ] Ver perfil de un arbitro
+- [ ] Ver ranking de los equipos
+- [ ] Buscar Equipo por nombre
+- [ ] Buscar Jugador por nombre
+- [ ] Buscar liga por nombre
+- [ ] Buscar Temporada por nombre
+
 
 
 
