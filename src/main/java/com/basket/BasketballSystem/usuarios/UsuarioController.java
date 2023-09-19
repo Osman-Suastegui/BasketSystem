@@ -4,10 +4,7 @@ package com.basket.BasketballSystem.usuarios;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,15 @@ public class UsuarioController {
     @PostMapping("RegistrarUsuario")
     public ResponseEntity<String> registrarUsuario(@RequestBody Usuario usuario) {
         return usuarioService.registrarUsuario(usuario);
+    }
+
+    @PutMapping("ActualizarUsuario")
+    public ResponseEntity<String> actualizarUsuario(@RequestBody Usuario usuario) {
+        String usuarioId = usuario.getUsuario(); // Obtener el ID del usuario
+        String nuevoNombre = usuario.getNombre(); // Obtener el nuevo nombre
+        String nuevoApellido = usuario.getApellido(); // Obtener el nuevo apellido
+
+        return usuarioService.actualizarUsuario(usuarioId, nuevoNombre, nuevoApellido);
     }
 
 }

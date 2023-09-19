@@ -75,6 +75,32 @@ public class UsuarioService {
         return ResponseEntity.ok("Usuario creado exitosamente.");
     }
 
+    public ResponseEntity<String> actualizarUsuario(String usuarioId, String nuevoNombre, String nuevoApellido) {
+        // Verifica si el usuario existe por su ID
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
+        if (usuarioOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("El usuario no existe.");
+        }
+
+        // Obtiene el usuario de la base de datos
+        Usuario usuario = usuarioOptional.get();
+
+        // Actualiza el nombre y el apellido si se proporcionan valores válidos
+        if (nuevoNombre != null && !nuevoNombre.isEmpty()) {
+            usuario.setNombre(nuevoNombre);
+        }
+        if (nuevoApellido != null && !nuevoApellido.isEmpty()) {
+            usuario.setApellido(nuevoApellido);
+        }
+
+
+
+        // Guarda los cambios en la base de datos
+        usuarioRepository.save(usuario);
+
+        return ResponseEntity.ok("Nombre y apellido del usuario actualizados exitosamente.");
+    }
+
 
 
 }

@@ -84,4 +84,8 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 }
