@@ -8,5 +8,4 @@ import java.util.Optional;
 
 @Repository
 public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo, String> {
-    Optional<Object> findByUsuario(Usuario usuario);
 }

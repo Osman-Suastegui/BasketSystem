@@ -62,6 +62,42 @@ public class EquipoService {
     }
 
 
+    public ResponseEntity<String> agregarJugador(JugadoresEquipo jugadoresEquipo) {
+        if (jugadoresEquipo == null) {
+            return ResponseEntity.badRequest().body("El objeto JugadoresEquipo no puede ser nulo");
+        }
+
+        if (jugadoresEquipo.getNombreEquipo() == null || jugadoresEquipo.getNombreEquipo().isEmpty()) {
+            return ResponseEntity.badRequest().body("El equipo no puede ser nulo");
+        }
+
+        if (jugadoresEquipo.getJugador().getUsuario() == null) {
+            return ResponseEntity.badRequest().body("El usuario no puede ser nulo");
+        }
+
+        if (jugadoresEquipo.getPosicion() == null || jugadoresEquipo.getPosicion().isEmpty()) {
+            return ResponseEntity.badRequest().body("La posición no puede ser nula o vacía");
+        }
 
 
+
+        Optional<Equipo> equipo = equipoRepository.findById(jugadoresEquipo.getNombreEquipo());
+        if(!equipo.isPresent()){
+            return ResponseEntity.badRequest().body("El equipo no existe");
+        }
+
+
+        for (JugadoresEquipo jugador : equipo.get().getJugadores()) {
+            if(jugador.getJugador().getUsuario().equals(jugadoresEquipo.getJugador().getUsuario())){
+                return ResponseEntity.badRequest().body("El usuario ya se encuentra en el equipo");
+            }
+        }
+
+
+        equipo.get().addJugador(jugadoresEquipo);
+        equipoRepository.save(equipo.get());
+
+
+        return ResponseEntity.ok("Jugador asignado correctamente");
+    }
 }

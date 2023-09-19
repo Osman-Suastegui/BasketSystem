@@ -4,6 +4,8 @@ import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -11,12 +13,14 @@ import java.util.List;
 @Table(name = "equipos")
 public class Equipo {
     @Id
+    @NotNull
+    @Size(min = 3, max = 30)
     private String nombre;
     @ManyToOne
     @JoinColumn(name="admin_equipo")
     private Usuario admin_equipo;
 
-    @OneToMany(mappedBy = "equipo")
+    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
     private List<JugadoresEquipo> jugadores;
 
     public Equipo(String nombre, Usuario admin_equipo) {
@@ -48,6 +52,11 @@ public class Equipo {
     public List<JugadoresEquipo> getJugadores() {
         return jugadores;
     }
+    @JsonIgnore
+    public void addJugador(JugadoresEquipo jugador){
+        jugadores.add(jugador);
+    }
+
 
 
 
