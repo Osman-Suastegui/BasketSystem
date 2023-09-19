@@ -18,10 +18,7 @@ public class JugadoresEquipoController {
         this.jugadoresEquipoService = jugadoresEquipoService;
     }
 
-    @PostMapping("/crearJugadoresEquipo")
-    public ResponseEntity<String> crearJugadoresEquipo(@RequestBody JugadoresEquipo jugadoresEquipo){
-        return jugadoresEquipoService.crearJugadoresEquipo(jugadoresEquipo);
-    }
+
 
 
 

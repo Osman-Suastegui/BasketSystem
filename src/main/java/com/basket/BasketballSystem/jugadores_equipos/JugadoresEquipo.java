@@ -21,32 +21,27 @@ public class JugadoresEquipo {
 
     @ManyToOne
     @JoinColumn(name = "jugador")
-    private Usuario usuario;
+    private Usuario jugador;
 
     private String posicion;
 
     public JugadoresEquipo() {
     }
 
-    public JugadoresEquipo(Long id, Equipo equipo, Usuario usuario, String posicion) {
+    public JugadoresEquipo(Long id, Equipo equipo, Usuario jugador, String posicion) {
         this.id = id;
         this.equipo = equipo;
-        this.usuario = usuario;
+        this.jugador = jugador;
         this.posicion = posicion;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Usuario getJugador() {
+        return jugador;
     }
 
-    public String getNombreUsuario() {
-        return usuario.getNombre();
-    }
 
-    public Equipo getEquipo() {
-        return equipo;
-    }
 
+    @JsonIgnore
     public String getNombreEquipo() {
         return equipo.getNombre();
     }
@@ -56,22 +51,33 @@ public class JugadoresEquipo {
         return id;
     }
 
-
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-
-
     public String getPosicion() {
         return posicion;
     }
 
 
+    public void setJugador(Usuario jugador) {
+        this.jugador = jugador;
+    }
 
+    public void setPosicion(String posicion) {
+        this.posicion = posicion;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
 
-
+    @Override
+    public String toString() {
+        return "JugadoresEquipo{" +
+                "equiponombre=" + equipo.getNombre() +
+                ", jugador=" + jugador.getUsuario() +
+                ", posicion='" + posicion + '\'' +
+                '}';
+    }
 }
