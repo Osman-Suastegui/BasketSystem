@@ -111,9 +111,7 @@ public class Temporada {
     }
 
 
-
-
-
-
+    public void setLiga(Long ligaId) {
+    }
 }
 

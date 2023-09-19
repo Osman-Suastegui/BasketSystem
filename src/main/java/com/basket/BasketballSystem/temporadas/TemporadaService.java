@@ -1,5 +1,7 @@
 package com.basket.BasketballSystem.temporadas;
 
+import com.basket.BasketballSystem.ligas.Liga;
+import com.basket.BasketballSystem.ligas.LigaRepository;
 import org.apache.catalina.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +12,8 @@ public class TemporadaService {
 
     @Autowired
     TemporadaRepository temporadaRepository;
+    @Autowired
+    LigaRepository ligaRepository;
 
     public ResponseEntity<String> crearTemporada(Temporada temporada) {
 
@@ -33,4 +37,14 @@ public class TemporadaService {
     }
 
 
+    public ResponseEntity<String> asignarLiga(Long temporadaId, Long ligaId) {
+        Temporada temporada = temporadaRepository.findById(temporadaId).orElse(null);
+        Liga liga = ligaRepository.findById(ligaId).orElse(null);
+        if(liga == null) return ResponseEntity.badRequest().body("La liga no existe");
+        if(temporada == null) return ResponseEntity.badRequest().body("La temporada no existe");
+
+        temporada.setLiga(ligaId);
+        temporadaRepository.save(temporada);
+        return ResponseEntity.ok("Liga asignada exitosamente.");
+    }
 }

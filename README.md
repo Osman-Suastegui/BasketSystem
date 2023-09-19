@@ -207,6 +207,16 @@ POST /Temporadas/crearTemporada
     "rama": "MASCULINO"
 }
 ```
+**ASIGNAR TEMPORADA A UNA LIGA**
+```bash
+PUT /Temporadas/asignarLiga
+```
+```bash
+{
+    "ligaId": 1,
+    "temporadaId": 1,
+}
+```
 
 ## Usuarios
 **Registrar Usuarios**
@@ -271,7 +281,7 @@ PUT /usuarios/ActualizarUsuario
 - [x] Modificar datos de un Jugador
 - [x] Registrar Árbitros
 - [x] Modificar datos de un Arbitro
-- [ ] Asignar una temporada a una liga
+- [x] Asignar una temporada a una liga
 - [ ] Iniciar Temporada
 - [ ] Concluir una temporada
 - [x] Asignar jugadores a equipos
