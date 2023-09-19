@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -13,6 +14,7 @@ public class Usuario {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     private String password;
     private String nombre;
     private LocalDate fechaNacimiento;
@@ -76,7 +78,12 @@ public class Usuario {
         return password;
     }
 
+    @JsonIgnore
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

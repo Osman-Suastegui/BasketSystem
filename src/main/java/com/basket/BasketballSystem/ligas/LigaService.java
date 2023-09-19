@@ -37,6 +37,8 @@ public class LigaService {
         Optional<Liga> liga = ligaRepository.findById(idLiga);
         if(!liga.isPresent()) throw new BadRequestException("La liga " + idLiga + " no existe");
 
+
+        liga.get().getAdministradores().forEach(usuario -> usuario.setPassword(null));
         return liga.get().getAdministradores();
     }
 

@@ -3,6 +3,7 @@ package com.basket.BasketballSystem.jugadores_equipos;
 import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.usuarios.Usuario;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity()
