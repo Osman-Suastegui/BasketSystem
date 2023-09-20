@@ -47,4 +47,17 @@ public class TemporadaService {
         temporadaRepository.save(temporada);
         return ResponseEntity.ok("Liga asignada exitosamente.");
     }
+
+    public ResponseEntity<String> modificarDatosTemporada(Long temporadaId, Estado estado) {
+        Temporada temporada = temporadaRepository.findById(temporadaId).orElse(null);
+        if(temporada == null) return ResponseEntity.badRequest().body("La temporada no existe");
+        temporada.setEstado(estado);
+        temporadaRepository.save(temporada);
+        return ResponseEntity.ok("Temporada modificada exitosamente.");
+    }
+
+
+
+
+
 }

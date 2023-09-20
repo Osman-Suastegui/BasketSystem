@@ -218,6 +218,23 @@ PUT /Temporadas/asignarLiga
 }
 ```
 
+**Modificar Datos de una Temporada**
+```bash
+PUT /Temporadas/modificarDatosTemporada
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada que deseas modificar.
+- `estado` (**requerido**): El estado de la temporada que deseas modificar.
+
+```bash
+{
+  "temporadaId": 1,
+  "estado": "FINALIZADA"
+}
+```
+
+
+
 ## Usuarios
 **Registrar Usuarios**
 ```bash
@@ -272,7 +289,7 @@ PUT /usuarios/ActualizarUsuario
 - [x] Registrar Liga
 - [x] Modificar datos de una liga
 - [x] Registrar Temporada
-- [ ] Modificar datos de una Temporada
+- [x] Modificar datos de una Temporada
 - [x] Registrar Administrador de equipo
 - [x] Modificar datos de Administrador de Equipo
 - [x] Crear Equipo
@@ -282,8 +299,8 @@ PUT /usuarios/ActualizarUsuario
 - [x] Registrar Árbitros
 - [x] Modificar datos de un Arbitro
 - [x] Asignar una temporada a una liga
-- [ ] Iniciar Temporada
-- [ ] Concluir una temporada
+- [x] Iniciar Temporada
+- [x] Concluir una temporada
 - [x] Asignar jugadores a equipos
 - [ ] Modificar jugadores de equipos
 - [ ] Asignar Equipos a temporada

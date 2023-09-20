@@ -32,5 +32,14 @@ public class TemporadaController {
 
     }
 
+    @PutMapping("/modificarDatosTemporada")
+    public ResponseEntity<String> modificarDatosTemporada(@RequestBody Map<String, Object> requestMap) {
+        Long temporadaId = Long.parseLong(requestMap.get("temporadaId").toString());
+        Estado estado = Estado.valueOf(requestMap.get("estado").toString());
+
+        return TemporadaService.modificarDatosTemporada(temporadaId, estado);
+
+    }
+
 
 }
