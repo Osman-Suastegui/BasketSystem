@@ -43,7 +43,7 @@ public class TemporadaService {
         if(liga == null) return ResponseEntity.badRequest().body("La liga no existe");
         if(temporada == null) return ResponseEntity.badRequest().body("La temporada no existe");
 
-        temporada.setLiga(ligaId);
+        temporada.setLiga(liga);
         temporadaRepository.save(temporada);
         return ResponseEntity.ok("Liga asignada exitosamente.");
     }

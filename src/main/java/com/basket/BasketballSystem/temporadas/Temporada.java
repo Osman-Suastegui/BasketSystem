@@ -111,7 +111,8 @@ public class Temporada {
     }
 
 
-    public void setLiga(Long ligaId) {
+    public void setLiga(Liga ligaId) {
+        this.liga = ligaId;
     }
 }
 
