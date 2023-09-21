@@ -3,6 +3,12 @@ package com.basket.BasketballSystem.equipos;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoService;
+import com.basket.BasketballSystem.ligas.LigaRepository;
+import com.basket.BasketballSystem.usuarios.Usuario;
+import com.basket.BasketballSystem.usuarios.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,9 +22,16 @@ public class EquipoService {
     EquipoRepository equipoRepository;
 
     @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Autowired
     public EquipoService(EquipoRepository equipoRepository) {
         this.equipoRepository = equipoRepository;
     }
+
+    @Autowired
+    JugadoresEquipoRepository jugadoresEquipoRepository;
+
 
     public Equipo obtenerEquipoAdminEquipo(String idAdminEquipo){
         //System.out.println("idAdminEquipo: " + idAdminEquipo);
@@ -100,4 +113,10 @@ public class EquipoService {
 
         return ResponseEntity.ok("Jugador asignado correctamente");
     }
+    @Transactional
+    public ResponseEntity<String> eliminarJugador(String nombreEquipo, String nombreJugador) {
+        jugadoresEquipoRepository.deleteByJugadorAndEquipo(nombreEquipo, nombreJugador);
+        return ResponseEntity.ok("Jugador eliminado exitosamente.");
+    }
+
 }

@@ -1,12 +1,14 @@
 package com.basket.BasketballSystem.equipos;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/Equipo")
@@ -37,6 +39,16 @@ public class EquipoController {
     @PostMapping("/agregarJugador")
     public ResponseEntity<String> crearJugadoresEquipo( @RequestBody JugadoresEquipo jugadoresEquipo){
         return equipoService.agregarJugador(jugadoresEquipo);
+    }
+
+    @DeleteMapping("/eliminarJugador")
+    public ResponseEntity<String> eliminarJugador(@RequestBody Map<String, String> requestMap) {
+        String nombreEquipo = requestMap.get("nombreEquipo");
+        String nombreJugador = requestMap.get("nombreJugador");
+
+        equipoService.eliminarJugador(nombreEquipo, nombreJugador);
+
+        return ResponseEntity.ok("Jugador eliminado exitosamente.");
     }
 
 

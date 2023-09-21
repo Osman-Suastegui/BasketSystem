@@ -177,6 +177,24 @@ POST /jugadores-equipo/crearJugadoresEquipo
 }
 ```
 
+**Eliminar Jugadores de un Equipo**
+```bash
+DELETE /Equipo/eliminarJugador
+```
+**Parámetros:**
+- `nombreEquipo` (**requerido**): El nombre del equipo al que deseas eliminarle un jugador.
+- `nombreJugador` (**requerido**): El identificador del usuario que deseas eliminarle como jugador del equipo.
+
+```bash
+{
+  "nombreEquipo": "equipes",
+  "nombreJugador": "nombre_de_usuario"
+}
+```
+
+
+
+
 
 
 
@@ -293,7 +311,7 @@ PUT /usuarios/ActualizarUsuario
 - [x] Registrar Administrador de equipo
 - [x] Modificar datos de Administrador de Equipo
 - [x] Crear Equipo
-- [ ] Modificar datos de un equipo
+- [x] Modificar datos de un equipo
 - [x] Registrar Jugadores
 - [x] Modificar datos de un Jugador
 - [x] Registrar Árbitros
@@ -302,7 +320,7 @@ PUT /usuarios/ActualizarUsuario
 - [x] Iniciar Temporada
 - [x] Concluir una temporada
 - [x] Asignar jugadores a equipos
-- [ ] Modificar jugadores de equipos
+- [x] Modificar jugadores de equipos
 - [ ] Asignar Equipos a temporada
 - [ ] Modificar Equipos de una temporada
 - [ ] Agendar partidos dentro de una temporada
