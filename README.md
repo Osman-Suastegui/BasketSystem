@@ -8,19 +8,7 @@ Servicio Web de Sistema de Baloncesto en Spring Boot
 
 Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de baloncesto.
 
-## Inicio Rápido
-
-Para empezar con este proyecto, sigue estos pasos:
-
-1. Clona el repositorio en tu máquina local.
-2. Configura la base de datos (por ejemplo, MySQL) según sea necesario.
-3. Asegúrate de tener Java y Maven instalados.
-4. Ejecuta la aplicación localmente.
-```bash
-mvn spring-boot:run
-```
 # Uso
-
 ## Ligas
 **Obtener Temporadas de una Liga**
 
@@ -251,6 +239,25 @@ PUT /Temporadas/modificarDatosTemporada
 }
 ```
 
+**Asignar Equipo a una Temporada**
+```bash
+POST /EquipoTemporada/crearEquipoTemporada
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas asignarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas asignarle a la temporada.
+
+```bash
+{
+  "temporada": {
+    "claveTemporada": 1
+  },
+  "equipo": {
+    "nombre": "equipes"
+  }
+}
+```
+
 
 
 ## Usuarios
@@ -301,6 +308,43 @@ PUT /usuarios/ActualizarUsuario
 }
 ```
 
+## Arbitros
+### agregar arbitro a una temporada
+```bash
+POST /Temporadas/agregarArbitro
+```
+**Parámetros:**
+
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas agregar un arbitro.
+- `arbitroId` (**requerido**): El identificador del arbitro que deseas agregar a la temporada.
+
+```bash
+{
+    "temporadaId": 1,
+    "arbitroId": "usuario1"
+}
+```
+### obtener arbitros de una temporada
+```bash
+GET /Temporadas/obtenerArbitros?idTemporada=1
+```
+**resultado**
+```bash
+
+  [
+      {
+        "usuario": "usuario1",
+        "email": "usuario1@example.com",
+        "password": null,
+        "nombre": "Nombre1",
+        "fechaNacimiento": "1990-05-15",
+        "apellido": "Apellido1",
+        "genero": "MASCULINO",
+        "rol": "ADMIN_EQUIPO",
+        "edad": 33
+      }
+  ]
+```
 
 - [x] Registrar Administradores de Ligas
 - [x] Modificar datos de Administradores de Ligas
@@ -321,7 +365,7 @@ PUT /usuarios/ActualizarUsuario
 - [x] Concluir una temporada
 - [x] Asignar jugadores a equipos
 - [x] Modificar jugadores de equipos
-- [ ] Asignar Equipos a temporada
+- [x] Asignar Equipos a temporada
 - [ ] Modificar Equipos de una temporada
 - [ ] Agendar partidos dentro de una temporada
 - [ ] Reagendar partido dentro de una temporada
@@ -332,6 +376,8 @@ PUT /usuarios/ActualizarUsuario
 - [ ] Arbitro da por terminado algunos de los tiempos del partido
 - [ ] Arbitro inicia algunos de los tiempos del partido
 - [ ] Arbitro finaliza un partido
+- [x] Obtener Arbitro de una temporada
+- [x] Asginar Arbitro a una temporada
 - [ ] Ver calendario de partidos
 - [x] Ver jugadores
 - [ ] Ver estadísticas de puntos de un jugador por temporada
@@ -346,6 +392,7 @@ PUT /usuarios/ActualizarUsuario
 - [ ] Buscar Jugador por nombre
 - [ ] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
+
 
 
 

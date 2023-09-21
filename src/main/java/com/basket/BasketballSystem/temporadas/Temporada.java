@@ -94,6 +94,10 @@ public class Temporada {
         return cantidadEliminados;
     }
 
+    public List<Usuario> getArbitros() {
+        return arbitros;
+    }
+
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
