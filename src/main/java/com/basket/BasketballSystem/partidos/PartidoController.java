@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/Partido")
@@ -15,7 +16,7 @@ public class PartidoController {
     PartidoService partidoService;
 
     @RequestMapping ("/obtenerPartidosArbitro")
-    public List<Partido> obtenerPartidosArbitro(@RequestParam("idArbitro") String idArbitro){
+    public List<Map<String,Object>>  obtenerPartidosArbitro(@RequestParam("idArbitro") String idArbitro){
 
         return partidoService.obtenerPartidosArbitro(idArbitro);
     }
