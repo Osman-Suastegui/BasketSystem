@@ -239,6 +239,45 @@ PUT /Temporadas/modificarDatosTemporada
 }
 ```
 
+**Asignar Equipo a una Temporada**
+```bash
+POST /EquipoTemporada/crearEquipoTemporada
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas asignarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas asignarle a la temporada.
+
+```bash
+{
+  "temporada": {
+    "claveTemporada": 1
+  },
+  "equipo": {
+    "nombre": "equipes"
+  }
+}
+```
+
+**Eliminar Equipos de una Temporada**
+```bash
+DELETE /EquipoTemporada/eliminarEquipoTemporada
+```
+
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas modificarle/eliminarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas modificar/eliminar de la temporada.
+
+```bash
+{
+  "temporada": {
+    "claveTemporada": 1
+  },
+  "equipo": {
+    "nombre": "equipes"
+  }
+}
+```
+
 
 
 ## Usuarios
@@ -346,8 +385,8 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
 - [x] Concluir una temporada
 - [x] Asignar jugadores a equipos
 - [x] Modificar jugadores de equipos
-- [ ] Asignar Equipos a temporada
-- [ ] Modificar Equipos de una temporada
+- [x] Asignar Equipos a temporada
+- [x] Modificar Equipos de una temporada
 - [ ] Agendar partidos dentro de una temporada
 - [ ] Reagendar partido dentro de una temporada
 - [ ] Asignar arbitro a un partido
@@ -357,6 +396,8 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
 - [ ] Arbitro da por terminado algunos de los tiempos del partido
 - [ ] Arbitro inicia algunos de los tiempos del partido
 - [ ] Arbitro finaliza un partido
+- [x] Obtener Arbitro de una temporada
+- [x] Asginar Arbitro a una temporada
 - [ ] Ver calendario de partidos
 - [x] Ver jugadores
 - [ ] Ver estadísticas de puntos de un jugador por temporada
@@ -371,6 +412,7 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
 - [ ] Buscar Jugador por nombre
 - [ ] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
+
 
 
 
