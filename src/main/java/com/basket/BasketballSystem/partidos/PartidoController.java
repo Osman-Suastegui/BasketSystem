@@ -21,5 +21,11 @@ public class PartidoController {
         return partidoService.obtenerPartidosArbitro(idArbitro);
     }
 
+    @RequestMapping ("/obtenerPartidosJugador")
+    public List<Map<String,Object>>  obtenerPartidosJugador(@RequestParam("idJugador") String idJugador){
+
+        return partidoService.obtenerPartidosJugador(idJugador);
+    }
+
 
 }

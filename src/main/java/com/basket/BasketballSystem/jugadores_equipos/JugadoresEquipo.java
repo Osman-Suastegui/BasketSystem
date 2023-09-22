@@ -54,6 +54,10 @@ public class JugadoresEquipo {
     public String getPosicion() {
         return posicion;
     }
+    @JsonIgnore
+    public Equipo getEquipo() {
+        return equipo;
+    }
 
 
     public void setJugador(Usuario jugador) {
