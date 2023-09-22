@@ -39,6 +39,30 @@ Resultado:
     }
 ]
 ```
+**Buscar Liga por Nombre**
+
+```bash
+GET /Ligas/buscarLigaPorNombre?nombre=liga
+```
+
+**Parámetros:**
+- `nombre` (**requerido**): El nombre de la liga que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "nombre": "Liga de Baloncesto",
+        "administradores": [],
+        "temporadas": []
+    }
+]
+```
+
+
+
+
+
 **Modificar Datos de una Liga**
 
 ```bash

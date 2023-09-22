@@ -52,4 +52,10 @@ public class LigaController {
     }
 
 
+    @GetMapping("/buscarLigaPorNombre")
+    public List<Liga> buscarLigaPorNombre(@RequestParam(name = "nombre",required = false) String nombre) {
+        return ligaService.buscarLigaPorNombre(nombre);
+    }
+
+
 }

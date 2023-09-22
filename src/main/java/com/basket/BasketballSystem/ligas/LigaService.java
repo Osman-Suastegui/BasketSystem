@@ -92,4 +92,9 @@ public class LigaService {
         ligaRepository.save(liga);
         return ResponseEntity.ok("Liga actualizada exitosamente.");
     }
+
+    public List<Liga> buscarLigaPorNombre(String nombre) {
+
+        return ligaRepository.findByNombreContaining(nombre);
+    }
 }
