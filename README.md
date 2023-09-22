@@ -428,7 +428,7 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
       }
   ]
 ```
-### obtener partidos de un arbitro
+### obtener partidos de un arbitro (calendario)
 ```bash
 Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
 ```
@@ -449,6 +449,28 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
     }
 ]
 ```
+### obtener partidos de un jugador (calendario)
+```bash
+Get Partido/obtenerPartidosJugador?idJugador=usuario1
+```
+
+**parámetros**
+- `idJugador` (**requerido**): El identificador del jugador del que deseas obtener los partidos.
+
+**resultado**
+```bash
+[
+    {
+        "temporadaId": 1,
+        "arbitro": "Manuel321",
+        "fechaInicio": "2023-09-22T02:17:07.000+00:00",
+        "equipo2": "el real madrid",
+        "equipo1": "Chivas",
+        "idPartido": 1
+    }
+]
+```
+
 
 - [x] Registrar Administradores de Ligas
 - [x] Modificar datos de Administradores de Ligas
@@ -496,7 +518,8 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
 - [x] Buscar Jugador por nombre
 - [ ] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
-
+- [ ] obtener partidos de una temporada
+- [ ] generar partidos de una temporada
 
 
 
