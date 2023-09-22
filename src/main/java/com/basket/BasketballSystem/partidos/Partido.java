@@ -5,6 +5,9 @@ import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 @Entity
 @Table(name = "partidos")
 public class Partido {
@@ -32,5 +35,46 @@ public class Partido {
     @JoinColumn(name = "arbitro")
     private Usuario arbitro;
 
+    @Column(name = "fecha_inicio")
+    private Timestamp fechaInicio;
+
+    @ManyToOne
+    @JoinColumn(name = "resultado")
+    private Equipo ganador;
+
+
+
     // Getters y setters
+
+    public Long getClavePartido() {
+        return clavePartido;
+    }
+
+    public Temporada getTemporada() {
+        return temporada;
+    }
+
+    public Equipo getEquipo1() {
+        return equipo1;
+    }
+
+    public Equipo getEquipo2() {
+        return equipo2;
+    }
+
+    public String getFase() {
+        return fase;
+    }
+
+    public Usuario getArbitro() {
+        return arbitro;
+    }
+
+    public Timestamp getFechaInicio() {
+        return fechaInicio;
+    }
+    public String getGanador() {
+        if(ganador == null) return "";
+        return ganador.getNombre();
+    }
 }
