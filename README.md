@@ -258,6 +258,26 @@ POST /EquipoTemporada/crearEquipoTemporada
 }
 ```
 
+**Eliminar Equipos de una Temporada**
+```bash
+DELETE /EquipoTemporada/eliminarEquipoTemporada
+```
+
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas modificarle/eliminarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas modificar/eliminar de la temporada.
+
+```bash
+{
+  "temporada": {
+    "claveTemporada": 1
+  },
+  "equipo": {
+    "nombre": "equipes"
+  }
+}
+```
+
 
 
 ## Usuarios
@@ -366,7 +386,7 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
 - [x] Asignar jugadores a equipos
 - [x] Modificar jugadores de equipos
 - [x] Asignar Equipos a temporada
-- [ ] Modificar Equipos de una temporada
+- [x] Modificar Equipos de una temporada
 - [ ] Agendar partidos dentro de una temporada
 - [ ] Reagendar partido dentro de una temporada
 - [ ] Asignar arbitro a un partido

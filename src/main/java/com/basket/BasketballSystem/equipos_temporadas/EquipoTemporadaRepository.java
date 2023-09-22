@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EquipoTemporadaRepository extends JpaRepository<EquipoTemporada, Long> {
 
+    void deleteByTemporadaClaveTemporadaAndEquipoNombre(Long claveTemporada, String nombreEquipo);
 
 }
