@@ -309,6 +309,45 @@ POST /usuarios/registrarUsuario
     "rol": "JUGADOR" 
 }
 ```
+
+**Buscar Jugador por Usuario**
+```bash
+GET /usuarios/obtenerJugador?usuario=nombre_de_usuario
+```
+**Parámetros:**
+
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "usuario": "nombre_de_usuario10",
+        "email": "correo_electronico10@example.com",
+        "nombre": "Nombre del Usuario",
+        "fechaNacimiento": "1990-01-01",
+        "apellido": "Apellido del Usuario",
+        "genero": "MASCULINO",
+        "rol": "JUGADOR",
+        "edad": 33
+    },
+    {
+        "usuario": "nombre_de_usuario101",
+        "email": "correo_electronico101@example.com",
+        "nombre": "Nombre del Usuario",
+        "fechaNacimiento": "1990-01-01",
+        "apellido": "Apellido del Usuario",
+        "genero": "MASCULINO",
+        "rol": "JUGADOR",
+        "edad": 33
+    }
+]
+```
+
+
+
+
+
 **Modificar Datos de un Usuario**
 
 ```bash
@@ -430,7 +469,7 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
 - [ ] Ver perfil de un arbitro
 - [ ] Ver ranking de los equipos
 - [ ] Buscar Equipo por nombre
-- [ ] Buscar Jugador por nombre
+- [x] Buscar Jugador por nombre
 - [ ] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
 

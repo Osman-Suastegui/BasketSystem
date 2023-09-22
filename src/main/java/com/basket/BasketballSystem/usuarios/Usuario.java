@@ -73,6 +73,7 @@ public class Usuario {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
+    @JsonIgnore
     public String getPassword(){
         return password;
     }

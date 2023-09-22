@@ -39,4 +39,11 @@ public class UsuarioController {
         return usuarioService.actualizarUsuario(usuarioId, nuevoNombre, nuevoApellido);
     }
 
+
+    @GetMapping("obtenerJugador")
+    public List<Usuario> obtenerJugador(@RequestParam(name = "usuario",required = false) String usuario) {
+        return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
+    }
+
+
 }

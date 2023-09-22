@@ -103,4 +103,9 @@ public class UsuarioService {
 
 
 
+
+
+    public List<Usuario> buscarUsuariosPorLetrasEnNombre(String usuario) {
+        return usuarioRepository.findByUsuarioContaining(usuario);
+    }
 }
