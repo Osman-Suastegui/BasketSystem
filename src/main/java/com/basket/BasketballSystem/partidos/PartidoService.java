@@ -4,16 +4,15 @@ import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.temporadas.TemporadaRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +24,9 @@ public class PartidoService {
 
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
+
+    @Autowired
+    TemporadaRepository temporadaRepository;
     public List<Map<String,Object>>  obtenerPartidosArbitro(String idArbitro) {
         Usuario arbitro = usuarioRepository.findById(idArbitro).orElse(null);
         if(arbitro == null) throw new BadRequestException("El arbitro no existe");
@@ -104,4 +106,26 @@ public class PartidoService {
         return partidosMap;
     }
 
+    public List<Map<String, Object>> obtenerPartidosTemporada(Long idTemporada) {
+        Optional<Temporada> temporada = temporadaRepository.findById(idTemporada);
+        if (!temporada.isPresent()) throw new BadRequestException("La temporada no existe");
+
+        List<Partido> partidos = partidoRepository.findAllByTemporada(temporada.get());
+
+        List<Map<String, Object>> partidosMap = new ArrayList<>();
+
+        for (Partido partido : partidos) {
+            Map<String, Object> p = new HashMap<>();
+            p.put("idPartido", partido.getClavePartido());
+            p.put("arbitro", partido.getArbitro().getUsuario());
+            p.put("fechaInicio", partido.getFechaInicio());
+            p.put("temporadaId", partido.getTemporada().getClaveTemporada());
+            p.put("equipo1", partido.getEquipo1().getNombre());
+            p.put("equipo2", partido.getEquipo2().getNombre());
+            partidosMap.add(p);
+        }
+
+        return partidosMap;
+
+    }
 }

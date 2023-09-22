@@ -27,5 +27,13 @@ public class PartidoController {
         return partidoService.obtenerPartidosJugador(idJugador);
     }
 
+//    obtenerPartidosTemporada
+    @RequestMapping ("/obtenerPartidosTemporada")
+    public List<Map<String,Object>>  obtenerPartidosTemporada(@RequestParam("idTemporada") Long idTemporada){
+
+        return partidoService.obtenerPartidosTemporada(idTemporada);
+    }
+
+
 
 }

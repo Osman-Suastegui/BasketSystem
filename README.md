@@ -470,6 +470,24 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
     }
 ]
 ```
+### Obtener partidos de una temporada
+```bash
+GET Partido/obtenerPartidosTemporada?idTemporada=1
+```
+**parámetros**
+- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener los partidos.
+```bash
+    [
+        {
+        "temporadaId": 1,
+        "arbitro": "Manuel321",
+        "fechaInicio": "2023-09-22T02:17:07.000+00:00",
+        "equipo2": "el real madrid",
+        "equipo1": "Chivas",
+        "idPartido": 1
+        }
+  ]
+```
 
 
 - [x] Registrar Administradores de Ligas
@@ -504,7 +522,7 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
 - [ ] Arbitro finaliza un partido
 - [x] Obtener Arbitro de una temporada
 - [x] Asginar Arbitro a una temporada
-- [ ] Ver calendario de partidos
+- [x] Ver calendario de partidos
 - [x] Ver jugadores
 - [ ] Ver estadísticas de puntos de un jugador por temporada
 - [ ] Ver estadísticas de asistencias de un jugador por temporada
@@ -518,7 +536,7 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
 - [x] Buscar Jugador por nombre
 - [ ] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
-- [ ] obtener partidos de una temporada
+- [x] obtener partidos de una temporada
 - [ ] generar partidos de una temporada
 
 
