@@ -8,7 +8,9 @@ import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.temporadas.TemporadaRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
+import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -36,8 +38,8 @@ public class PartidoService {
              collect(Collectors.toList());
 
         partidosFiltrados.sort((partido1, partido2) -> {
-            Timestamp fechaInicio1 = partido1.getFechaInicio();
-            Timestamp fechaInicio2 = partido2.getFechaInicio();
+            Date fechaInicio1 = partido1.getFechaInicio();
+            Date fechaInicio2 = partido2.getFechaInicio();
             return fechaInicio1.compareTo(fechaInicio2);
         });
 
@@ -84,8 +86,8 @@ public class PartidoService {
 
         // Ordenar partidos por fecha de inicio
         partidosFiltrados.sort((partido1, partido2) -> {
-            Timestamp fechaInicio1 = partido1.getFechaInicio();
-            Timestamp fechaInicio2 = partido2.getFechaInicio();
+            Date fechaInicio1 = partido1.getFechaInicio();
+            Date fechaInicio2 = partido2.getFechaInicio();
             return fechaInicio1.compareTo(fechaInicio2);
         });
 
@@ -127,5 +129,13 @@ public class PartidoService {
 
         return partidosMap;
 
+    }
+
+      public ResponseEntity<String> agendarPartido(Partido partido) {
+        Optional<Partido> p = partidoRepository.findById(partido.getClavePartido());
+        if (!p.isPresent()) throw new BadRequestException("El partido no existe");
+        p.get().setFechaInicio(partido.getFechaInicio());
+        partidoRepository.save(p.get());
+        return ResponseEntity.ok("Partido actualizado exitosamente.");
     }
 }

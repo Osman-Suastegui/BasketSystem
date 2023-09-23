@@ -488,6 +488,20 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
         }
   ]
 ```
+### Agendar partido
+```bash
+PUT /Partido/agendar
+```
+**Parámetros:**
+
+- `clavePartido` (**requerido**): El identificador del partido
+- `fechaInicio` (**requerido**): La fecha de inicio del partido
+```bash
+{
+    "clavePartido":1,
+    "fechaInicio": "2023-09-21 20:17:45"
+}
+```
 
 
 - [x] Registrar Administradores de Ligas
@@ -511,8 +525,8 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
 - [x] Modificar jugadores de equipos
 - [x] Asignar Equipos a temporada
 - [x] Modificar Equipos de una temporada
-- [ ] Agendar partidos dentro de una temporada
-- [ ] Reagendar partido dentro de una temporada
+- [x] Agendar partidos dentro de una temporada
+- [x] Reagendar partido dentro de una temporada
 - [ ] Asignar arbitro a un partido
 - [ ] Arbitro da por iniciado un partido
 - [ ] Arbitro registra datos de un partido

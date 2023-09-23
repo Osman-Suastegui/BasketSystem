@@ -1,9 +1,9 @@
 package com.basket.BasketballSystem.partidos;
 
+import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -33,6 +33,12 @@ public class PartidoController {
 
         return partidoService.obtenerPartidosTemporada(idTemporada);
     }
+
+    @PutMapping("/agendar")
+    public ResponseEntity<String> agendarPartido(@RequestBody Partido partido){
+        return partidoService.agendarPartido(partido);
+    }
+
 
 
 

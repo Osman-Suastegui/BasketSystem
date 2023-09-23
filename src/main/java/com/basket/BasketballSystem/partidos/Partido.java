@@ -3,6 +3,7 @@ package com.basket.BasketballSystem.partidos;
 import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.usuarios.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -36,7 +37,9 @@ public class Partido {
     private Usuario arbitro;
 
     @Column(name = "fecha_inicio")
-    private Timestamp fechaInicio;
+    @Temporal(TemporalType.TIMESTAMP) // Indica que es un campo de fecha y hora
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date fechaInicio;
 
     @ManyToOne
     @JoinColumn(name = "resultado")
@@ -70,11 +73,15 @@ public class Partido {
         return arbitro;
     }
 
-    public Timestamp getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
     public String getGanador() {
         if(ganador == null) return "";
         return ganador.getNombre();
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 }
