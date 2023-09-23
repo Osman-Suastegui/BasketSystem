@@ -292,6 +292,34 @@ PUT /Temporadas/modificarDatosTemporada
 }
 ```
 
+**Buscar una Temporada por nombre**
+```bash
+GET /Temporadas/buscarTemporadasPorNombre?nombreTemporada=z
+```
+**Parámetros:**
+- `nombreTemporada` (**requerido**): El nombre de la temporada que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "claveTemporada": 37,
+        "nombreTemporada": "Temporada 2023-2024"
+    },
+    {
+        "claveTemporada": 38,
+        "nombreTemporada": "Temporada 2023-2024"
+    },
+    {
+        "claveTemporada": 39,
+        "nombreTemporada": "Temporada 2023-2024"
+    }
+]
+```
+
+
+
+
 **Asignar Equipo a una Temporada**
 ```bash
 POST /EquipoTemporada/crearEquipoTemporada
@@ -564,7 +592,7 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
 - [x] Buscar Equipo por nombre
 - [x] Buscar Jugador por nombre
 - [x] Buscar liga por nombre
-- [ ] Buscar Temporada por nombre
+- [x] Buscar Temporada por nombre
 - [x] obtener partidos de una temporada
 - [ ] generar partidos de una temporada
 

@@ -14,7 +14,8 @@ public class Temporada {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long claveTemporada;
 
-    @Column(name = "nombre_temporada")
+    //añadele el valor unique
+    @Column(name = "nombre_temporada", unique = true)
     private String nombreTemporada;
 
     @ManyToOne

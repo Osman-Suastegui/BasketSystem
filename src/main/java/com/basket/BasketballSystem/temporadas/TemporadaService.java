@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TemporadaService {
@@ -89,4 +92,29 @@ public class TemporadaService {
         temporada.getArbitros().forEach(arbitro -> arbitro.setPassword(null));
         return temporada.getArbitros();
     }
+
+    public List<Map<String,Object>> buscarTemporadasPorNombre(String nombreTemporada) {
+
+        List<Temporada> temporadas = temporadaRepository.findByNombreTemporadaContaining(nombreTemporada);
+
+        List<Map<String,Object>> temporadasMap = new ArrayList<>();
+
+
+        for(Temporada temporada: temporadas){
+            Map<String,Object> t = new HashMap<>();
+
+            t.put("claveTemporada",temporada.getClaveTemporada());
+            t.put("nombreTemporada",temporada.getNombreTemporada());
+            temporadasMap.add(t);
+        }
+
+
+        return temporadasMap;
+
+
+    }
+
+
+
+
 }
