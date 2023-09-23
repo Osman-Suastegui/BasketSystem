@@ -52,9 +52,16 @@ GET /Ligas/buscarLigaPorNombre?nombre=liga
 Resultado:
 [
     {
-        "nombre": "Liga de Baloncesto",
-        "administradores": [],
-        "temporadas": []
+        "idLiga": 3,
+        "nombre": "Liga de Baloncesto"
+    },
+    {
+        "idLiga": 2,
+        "nombre": "liga de basket nba"
+    },
+    {
+        "idLiga": 1,
+        "nombre": "NuevoNombreDeLaLiga2"
     }
 ]
 ```
@@ -534,7 +541,7 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
 - [ ] Ver ranking de los equipos
 - [ ] Buscar Equipo por nombre
 - [x] Buscar Jugador por nombre
-- [ ] Buscar liga por nombre
+- [x] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
 - [x] obtener partidos de una temporada
 - [ ] generar partidos de una temporada
