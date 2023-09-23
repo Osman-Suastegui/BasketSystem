@@ -52,9 +52,16 @@ GET /Ligas/buscarLigaPorNombre?nombre=liga
 Resultado:
 [
     {
-        "nombre": "Liga de Baloncesto",
-        "administradores": [],
-        "temporadas": []
+        "idLiga": 3,
+        "nombre": "Liga de Baloncesto"
+    },
+    {
+        "idLiga": 2,
+        "nombre": "liga de basket nba"
+    },
+    {
+        "idLiga": 1,
+        "nombre": "NuevoNombreDeLaLiga2"
     }
 ]
 ```
@@ -149,6 +156,28 @@ GET /Equipo/{nombreEquipo}/jugadores
     }
 ]
 ```
+**Buscar Equipos por Nombre**
+```bash
+GET /Equipo/buscarEquipoPorNombre?nombre=e
+```
+**Parámetros:**
+- `nombre` (**requerido**): El nombre del equipo que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "nombre": "equipe"
+    },
+    {
+        "nombre": "equipes"
+    },
+    {
+        "nombre": "NombreDelEquipo"
+    }
+]
+```
+
 
 **Crear un Equipo**
 ```bash
@@ -262,6 +291,34 @@ PUT /Temporadas/modificarDatosTemporada
   "estado": "FINALIZADA"
 }
 ```
+
+**Buscar una Temporada por nombre**
+```bash
+GET /Temporadas/buscarTemporadasPorNombre?nombreTemporada=z
+```
+**Parámetros:**
+- `nombreTemporada` (**requerido**): El nombre de la temporada que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "claveTemporada": 37,
+        "nombreTemporada": "Temporada 2023-2024"
+    },
+    {
+        "claveTemporada": 38,
+        "nombreTemporada": "Temporada 2023-2024"
+    },
+    {
+        "claveTemporada": 39,
+        "nombreTemporada": "Temporada 2023-2024"
+    }
+]
+```
+
+
+
 
 **Asignar Equipo a una Temporada**
 ```bash
@@ -546,10 +603,10 @@ PUT /Partido/agendar
 - [ ] Ver perfil de un equipo
 - [ ] Ver perfil de un arbitro
 - [ ] Ver ranking de los equipos
-- [ ] Buscar Equipo por nombre
+- [x] Buscar Equipo por nombre
 - [x] Buscar Jugador por nombre
-- [ ] Buscar liga por nombre
-- [ ] Buscar Temporada por nombre
+- [x] Buscar liga por nombre
+- [x] Buscar Temporada por nombre
 - [x] obtener partidos de una temporada
 - [ ] generar partidos de una temporada
 

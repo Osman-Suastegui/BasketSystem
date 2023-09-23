@@ -51,6 +51,11 @@ public class EquipoController {
         return ResponseEntity.ok("Jugador eliminado exitosamente.");
     }
 
+    @GetMapping("/buscarEquipoPorNombre")
+    public List<Map<String,Object>> buscarEquipoPorNombre(@RequestParam(name = "nombre",required = false) String nombre) {
+        return equipoService.buscarEquipoPorNombre(nombre);
+    }
+
 
 
 }

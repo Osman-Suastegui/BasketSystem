@@ -5,6 +5,7 @@ import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoService;
+import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.ligas.LigaRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
@@ -13,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EquipoService {
@@ -119,4 +119,22 @@ public class EquipoService {
         return ResponseEntity.ok("Jugador eliminado exitosamente.");
     }
 
+    public List<Map<String,Object>> buscarEquipoPorNombre(String nombre) {
+
+        List<Equipo> equipos = equipoRepository.findByNombreContaining(nombre);
+
+        List<Map<String,Object>> equiposMap = new ArrayList<>();
+
+
+        for(Equipo equipo: equipos){
+            Map<String,Object> e = new HashMap<>();
+            e.put("nombre",equipo.getNombre());
+            equiposMap.add(e);
+        }
+
+
+        return equiposMap;
+
+
+    }
 }

@@ -54,5 +54,11 @@ public class TemporadaController {
         return TemporadaService.obtenerArbitros(temporadaId);
     }
 
+    @GetMapping("/buscarTemporadasPorNombre")
+        public List<Map<String,Object>> buscarTemporadasPorNombre(@RequestParam(name = "nombreTemporada",required = false) String nombreTemporada) {
+        return TemporadaService.buscarTemporadasPorNombre(nombreTemporada);
+    }
+
+
 
 }

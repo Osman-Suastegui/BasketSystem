@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.equipos;
 
+import com.basket.BasketballSystem.ligas.Liga;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,4 +13,7 @@ public interface EquipoRepository extends JpaRepository<Equipo, String> {
 
     @Query("SELECT e FROM Equipo e WHERE e.admin_equipo.usuario = :idAdminEquipo")
     Optional<Equipo> findByidAdminEquipo(@Param("idAdminEquipo") String idAdminEquipo);
+
+    List<Equipo> findByNombreContaining(String nombre);
+
 }
