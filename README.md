@@ -9,8 +9,49 @@ Servicio Web de Sistema de Baloncesto en Spring Boot
 Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de baloncesto.
 
 # Uso
+
+### Ligas
+
+- [Obtener Temporadas de una Liga](#obtener-temporadas-de-una-liga)
+- [Buscar Liga por Nombre](#buscar-liga-por-nombre)
+- [Modificar Datos de una Liga](#modificar-datos-de-una-liga)
+- [Asignarle Administradores a una Liga](#asignarle-administradores-a-una-liga)
+- [Crear Liga](#crear-liga)
+
+### Equipos
+
+- [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
+- [Buscar Equipos por Nombre](#buscar-equipos-por-nombre)
+- [Crear un Equipo](#crear-un-equipo)
+- [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
+- [Eliminar Jugadores de un Equipo](#eliminar-jugadores-de-un-equipo)
+
+### Temporadas
+
+- [Crear una Temporada](#crear-una-temporada)
+- [Asignar Temporada a una Liga](#asignar-temporada-a-una-liga)
+- [Modificar Datos de una Temporada](#modificar-datos-de-una-temporada)
+- [Buscar una Temporada por nombre](#buscar-una-temporada-por-nombre)
+- [Asignar Equipo a una Temporada](#asignar-equipo-a-una-temporada)
+- [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-temporada)
+
+### Usuarios
+
+- [Registrar Usuarios](#registrar-usuarios)
+- [Buscar Jugador por Usuario](#buscar-jugador-por-usuario)
+- [Modificar Datos de un Usuario](#modificar-datos-de-un-usuario)
+
+### Arbitros
+
+- [Agregar arbitro a una temporada](#agregar-arbitro-a-una-temporada)
+- [Obtener arbitros de una temporada](#obtener-arbitros-de-una-temporada)
+- [Obtener partidos de un arbitro (calendario)](#obtener-partidos-de-un-arbitro-calendario)
+- [Obtener partidos de un jugador (calendario)](#obtener-partidos-de-un-jugador-calendario)
+- [Obtener partidos de una temporada](#obtener-partidos-de-una-temporada)
+- [Agendar partido](#agendar-partido)
+
 ## Ligas
-**Obtener Temporadas de una Liga**
+### Obtener Temporadas de una Liga
 
 
 ```bash
@@ -39,7 +80,7 @@ Resultado:
     }
 ]
 ```
-**Buscar Liga por Nombre**
+### Buscar Liga por Nombre
 
 ```bash
 GET /Ligas/buscarLigaPorNombre?nombre=liga
@@ -70,7 +111,7 @@ Resultado:
 
 
 
-**Modificar Datos de una Liga**
+### Modificar Datos de una Liga
 
 ```bash
 PUT /Ligas/actualizarLiga
@@ -90,7 +131,7 @@ PUT /Ligas/actualizarLiga
 
 
 
-**Asignarle Administradores a una Liga**
+### Asignarle Administradores a una Liga
 
 ```bash
 POST /Ligas/asignarAdmin
@@ -107,7 +148,7 @@ POST /Ligas/asignarAdmin
     "idUsuario": "user"
 }
 ```
-**Crear Liga**
+### Crear Liga
 
 ```bash
 POST /Ligas/crearLiga
@@ -125,7 +166,7 @@ POST /Ligas/crearLiga
 
 
 ## Equipos
-**Obtener Jugadores por Nombre del Equipo**
+### Obtener Jugadores por Nombre del Equipo
 ```bash
 GET /Equipo/{nombreEquipo}/jugadores
 ```
@@ -156,7 +197,7 @@ GET /Equipo/{nombreEquipo}/jugadores
     }
 ]
 ```
-**Buscar Equipos por Nombre**
+### Buscar Equipos por Nombre
 ```bash
 GET /Equipo/buscarEquipoPorNombre?nombre=e
 ```
@@ -179,7 +220,7 @@ Resultado:
 ```
 
 
-**Crear un Equipo**
+### Crear un Equipo
 ```bash
 POST /Equipo/crearEquipo
 ```
@@ -197,7 +238,7 @@ POST /Equipo/crearEquipo
 }
 ```
 
-**Asignarle Jugadores a un Equipo**
+### Asignarle Jugadores a un Equipo
 ```bash
 POST /jugadores-equipo/crearJugadoresEquipo
 ```
@@ -218,7 +259,7 @@ POST /jugadores-equipo/crearJugadoresEquipo
 }
 ```
 
-**Eliminar Jugadores de un Equipo**
+### Eliminar Jugadores de un Equipo
 ```bash
 DELETE /Equipo/eliminarJugador
 ```
@@ -243,7 +284,7 @@ DELETE /Equipo/eliminarJugador
 
 
 ## Temporadas
-**Crear una Temporada**
+### Crear una Temporada
 ```bash
 POST /Temporadas/crearTemporada
 ```
@@ -266,7 +307,7 @@ POST /Temporadas/crearTemporada
     "rama": "MASCULINO"
 }
 ```
-**ASIGNAR TEMPORADA A UNA LIGA**
+### ASIGNAR TEMPORADA A UNA LIGA
 ```bash
 PUT /Temporadas/asignarLiga
 ```
@@ -277,7 +318,7 @@ PUT /Temporadas/asignarLiga
 }
 ```
 
-**Modificar Datos de una Temporada**
+### Modificar Datos de una Temporada
 ```bash
 PUT /Temporadas/modificarDatosTemporada
 ```
@@ -292,7 +333,7 @@ PUT /Temporadas/modificarDatosTemporada
 }
 ```
 
-**Buscar una Temporada por nombre**
+### Buscar una Temporada por nombre
 ```bash
 GET /Temporadas/buscarTemporadasPorNombre?nombreTemporada=z
 ```
@@ -320,7 +361,7 @@ Resultado:
 
 
 
-**Asignar Equipo a una Temporada**
+### Asignar Equipo a una Temporada
 ```bash
 POST /EquipoTemporada/crearEquipoTemporada
 ```
@@ -339,7 +380,7 @@ POST /EquipoTemporada/crearEquipoTemporada
 }
 ```
 
-**Eliminar Equipos de una Temporada**
+### Eliminar Equipos de una Temporada
 ```bash
 DELETE /EquipoTemporada/eliminarEquipoTemporada
 ```
@@ -362,7 +403,7 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
 
 
 ## Usuarios
-**Registrar Usuarios**
+### Registrar Usuarios
 ```bash
 POST /usuarios/registrarUsuario
 ```
@@ -391,7 +432,7 @@ POST /usuarios/registrarUsuario
 }
 ```
 
-**Buscar Jugador por Usuario**
+### Buscar Jugador por Usuario
 ```bash
 GET /usuarios/obtenerJugador?usuario=nombre_de_usuario
 ```
@@ -429,7 +470,7 @@ Resultado:
 
 
 
-**Modificar Datos de un Usuario**
+### Modificar Datos de un Usuario
 
 ```bash
 PUT /usuarios/ActualizarUsuario
@@ -449,7 +490,7 @@ PUT /usuarios/ActualizarUsuario
 ```
 
 ## Arbitros
-### agregar arbitro a una temporada
+### Agregar arbitro a una temporada
 ```bash
 POST /Temporadas/agregarArbitro
 ```
@@ -464,7 +505,7 @@ POST /Temporadas/agregarArbitro
     "arbitroId": "usuario1"
 }
 ```
-### obtener arbitros de una temporada
+### Obtener arbitros de una temporada
 ```bash
 GET /Temporadas/obtenerArbitros?idTemporada=1
 ```
