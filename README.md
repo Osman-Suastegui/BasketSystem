@@ -156,6 +156,28 @@ GET /Equipo/{nombreEquipo}/jugadores
     }
 ]
 ```
+**Buscar Equipos por Nombre**
+```bash
+GET /Equipo/buscarEquipoPorNombre?nombre=e
+```
+**Parámetros:**
+- `nombre` (**requerido**): El nombre del equipo que deseas buscar.
+
+```bash
+Resultado:
+[
+    {
+        "nombre": "equipe"
+    },
+    {
+        "nombre": "equipes"
+    },
+    {
+        "nombre": "NombreDelEquipo"
+    }
+]
+```
+
 
 **Crear un Equipo**
 ```bash
@@ -539,7 +561,7 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
 - [ ] Ver perfil de un equipo
 - [ ] Ver perfil de un arbitro
 - [ ] Ver ranking de los equipos
-- [ ] Buscar Equipo por nombre
+- [x] Buscar Equipo por nombre
 - [x] Buscar Jugador por nombre
 - [x] Buscar liga por nombre
 - [ ] Buscar Temporada por nombre
