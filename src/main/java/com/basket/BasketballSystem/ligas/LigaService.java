@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LigaService {
@@ -93,8 +92,22 @@ public class LigaService {
         return ResponseEntity.ok("Liga actualizada exitosamente.");
     }
 
-    public List<Liga> buscarLigaPorNombre(String nombre) {
+    public List<Map<String,Object>> buscarLigaPorNombre(String nombre) {
 
-        return ligaRepository.findByNombreContaining(nombre);
+            List<Liga> ligas = ligaRepository.findByNombreContaining(nombre);
+
+        List<Map<String,Object>> ligasMap = new ArrayList<>();
+
+
+        for(Liga liga: ligas){
+            Map<String,Object> l = new HashMap<>();
+
+            l.put("idLiga",liga.getId());
+            l.put("nombre",liga.getNombre());
+            ligasMap.add(l);
+        }
+
+
+        return ligasMap;
     }
 }

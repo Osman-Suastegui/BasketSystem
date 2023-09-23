@@ -54,6 +54,10 @@ public class Liga {
         this.nombre = nombre;
     }
 
+    public Long getId() {
+        return id;
+    }
+
 
     // Getters y setters
 }
