@@ -125,16 +125,24 @@ public class EquipoService {
 
         List<Map<String,Object>> equiposMap = new ArrayList<>();
 
-
         for(Equipo equipo: equipos){
             Map<String,Object> e = new HashMap<>();
             e.put("nombre",equipo.getNombre());
             equiposMap.add(e);
         }
-
-
         return equiposMap;
+    }
+
+    public Map<String,Object>verPerfilEquipo(String nombreEquipo) {
+        Equipo equipo;
+        equipo = equipoRepository.findByNombre(nombreEquipo);
+
+        Map<String,Object> equipoFinal = new HashMap<>();
+
+        equipoFinal.put("nombre",equipo.getNombre());
+        equipoFinal.put("usuario",equipo.getNombre_Admin_equipo());
 
 
+        return equipoFinal;
     }
 }

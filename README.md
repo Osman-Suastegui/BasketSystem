@@ -197,6 +197,24 @@ GET /Equipo/{nombreEquipo}/jugadores
     }
 ]
 ```
+
+### Ver Perfil de un equipo
+```bash
+GET /Equipo/verPerfilEquipo?nombreEquipo=equipe
+```
+
+**Parámetros:**
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas buscar.
+
+```bash
+Resultado:
+{
+    "usuario": "Manuel",
+    "nombre": "equipe"
+}
+```
+
+
 ### Buscar Equipos por Nombre
 ```bash
 GET /Equipo/buscarEquipoPorNombre?nombre=e
@@ -660,8 +678,8 @@ PUT /Partido/agendar
 - [ ] Ver estadísticas de asistencias de un jugador por temporada
 - [ ] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
 - [ ] Ver estadísticas de equipo por temporada
-- [ ] Ver perfil de un jugador
-- [ ] Ver perfil de un equipo
+- [x] Ver perfil de un jugador
+- [x] Ver perfil de un equipo
 - [ ] Ver perfil de un arbitro
 - [ ] Ver ranking de los equipos
 - [x] Buscar Equipo por nombre
