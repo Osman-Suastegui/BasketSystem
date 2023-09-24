@@ -465,7 +465,27 @@ Resultado:
     }
 ]
 ```
+## Ver pefil de un jugador
+```bash
+GET /usuarios/verPefilJuador?usuario=nombre_de_usuario10
+```
+**Parámetros:**
 
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas buscar.
+
+```bash
+Resultado:
+{
+    "usuario": "nombre_de_usuario10",
+    "email": "correo_electronico10@example.com",
+    "nombre": "Nombre del Usuario",
+    "fechaNacimiento": "1990-01-01",
+    "apellido": "Apellido del Usuario",
+    "genero": "MASCULINO",
+    "rol": "JUGADOR",
+    "edad": 33
+}
+```
 
 
 

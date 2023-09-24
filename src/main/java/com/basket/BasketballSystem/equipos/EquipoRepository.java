@@ -16,4 +16,7 @@ public interface EquipoRepository extends JpaRepository<Equipo, String> {
 
     List<Equipo> findByNombreContaining(String nombre);
 
+
+
+
 }

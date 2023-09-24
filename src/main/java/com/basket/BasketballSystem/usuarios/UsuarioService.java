@@ -38,10 +38,7 @@ public class UsuarioService {
         }
 
     public ResponseEntity<String> registrarUsuario(Usuario usuario) {
-        // Verifica si el usuario ya existe por nombre de usuario
-        if (usuarioRepository.findByUsuario(usuario.getUsuario()).isPresent()) {
-            return ResponseEntity.badRequest().body("El nombre de usuario ya existe.");
-        }
+
 
         // Verifica si el correo electrónico ya existe
         if (usuarioRepository.findByEmail(usuario.getEmail()).isPresent()) {
@@ -107,5 +104,9 @@ public class UsuarioService {
 
     public List<Usuario> buscarUsuariosPorLetrasEnNombre(String usuario) {
         return usuarioRepository.findByUsuarioContaining(usuario);
+    }
+
+    public Usuario verPefilJuador(String usuario) {
+        return usuarioRepository.findByUsuario(usuario);
     }
 }

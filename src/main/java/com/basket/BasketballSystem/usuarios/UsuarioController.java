@@ -45,5 +45,12 @@ public class UsuarioController {
         return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
     }
 
+    @GetMapping("verPefilJuador")
+    public Usuario verPefilJuador(@RequestParam(name = "usuario",required = false) String usuario) {
+        return usuarioService.verPefilJuador(usuario);
+    }
+
+
+
 
 }

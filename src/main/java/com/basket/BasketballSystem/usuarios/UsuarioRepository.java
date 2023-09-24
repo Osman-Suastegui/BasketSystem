@@ -10,12 +10,14 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
-    Optional<Object> findByUsuario(String usuario);
+
 
     Optional<Object> findByEmail(String email);
 
 
     @Query("SELECT u FROM Usuario u WHERE u.usuario LIKE %:usuario%")
     List<Usuario> findByUsuarioContaining(@Param("usuario") String usuario);
+
+    Usuario findByUsuario(String usuario);
 
 }
