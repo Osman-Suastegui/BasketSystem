@@ -15,4 +15,5 @@ public interface PartidoRepository extends JpaRepository<Partido,Long> {
     List<Partido> findAllByEquipo1InOrEquipo2In(List<Equipo> equipos1,List<Equipo> equipos2);
 
     List<Partido> findAllByTemporada(Temporada temporada);
+
 }

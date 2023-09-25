@@ -21,6 +21,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 ### Equipos
 
 - [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
+- [Ver_perfil_de_un_equipo](#ver-perfil-de-un-equipo)   
 - [Buscar Equipos por Nombre](#buscar-equipos-por-nombre)
 - [Crear un Equipo](#crear-un-equipo)
 - [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
@@ -483,7 +484,7 @@ Resultado:
     }
 ]
 ```
-## Ver pefil de un jugador
+### Ver perfil de un jugador
 ```bash
 GET /usuarios/verPefilJuador?usuario=nombre_de_usuario10
 ```
@@ -674,7 +675,7 @@ PUT /Partido/agendar
 - [x] Asginar Arbitro a una temporada
 - [x] Ver calendario de partidos
 - [x] Ver jugadores
-- [ ] Ver estadísticas de puntos de un jugador por temporada
+- [x] Ver estadísticas de puntos de un jugador por temporada
 - [ ] Ver estadísticas de asistencias de un jugador por temporada
 - [ ] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
 - [ ] Ver estadísticas de equipo por temporada
