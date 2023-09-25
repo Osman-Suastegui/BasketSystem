@@ -17,7 +17,8 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Modificar Datos de una Liga](#modificar-datos-de-una-liga)
 - [Asignarle Administradores a una Liga](#asignarle-administradores-a-una-liga)
 - [Crear Liga](#crear-liga)
-
+### Jugadores
+- [Ver estadisticas de jugador por temporada](#ver-estadisticas-de-jugador-por-temporada)
 ### Equipos
 
 - [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
@@ -164,7 +165,26 @@ POST /Ligas/crearLiga
     "nombre": "Liga de Baloncesto"
 }
 ```
+## Jugadores
+### Ver estadisticas de jugador por temporada
+```bash
+GET estadisticas/jugador-temporada?idJugador=usuario1&idTemporada=1
+```
+**Parámetros:**
+- `idJugador` (**requerido**): El identificador del jugador del que deseas obtener las estadisticas.
+- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener las estadisticas.
 
+**Resultado:**
+```bash
+{
+    "totalPuntosPorTemporada": 19,
+    "tirosDe3puntosPorTemporada": 4,
+    "tirosDe2puntosPorTemporada": 3,
+    "tirosLibresPorTemporada": 1
+    "asistenciasPorTemporada": 2,
+    "faltasPorTemporada": 5,
+}
+```
 
 ## Equipos
 ### Obtener Jugadores por Nombre del Equipo
@@ -676,8 +696,12 @@ PUT /Partido/agendar
 - [x] Ver calendario de partidos
 - [x] Ver jugadores
 - [x] Ver estadísticas de puntos de un jugador por temporada
-- [ ] Ver estadísticas de asistencias de un jugador por temporada
-- [ ] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
+- [x] Ver estadísticas de asistencias de un jugador por temporada
+- [x] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
+- [x] Ver estadísticas de tiros de 2 puntos de un jugador por temporada
+- [x] Ver estadísticas de tiros libres de un jugador por temporada
+- [x] Ver estadísticas de faltas de un jugador por temporada
+- [x] Ver estadísticas de asistencias de un jugador por temporada
 - [ ] Ver estadísticas de equipo por temporada
 - [x] Ver perfil de un jugador
 - [x] Ver perfil de un equipo

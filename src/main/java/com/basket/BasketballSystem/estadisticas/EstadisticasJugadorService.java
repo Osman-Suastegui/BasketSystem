@@ -24,26 +24,36 @@ public class EstadisticasJugadorService {
     PartidoRepository partidoRepository;
     @Autowired
     TemporadaRepository temporadaRepository;
-    public int cantidadPuntosPorTemporada(Long idTemporada,String idJugador){
+  
+    public Map<String, Object> jugadorTemporadaEstadisticas(Long idTemporada, String idJugador) {
         Optional<Temporada> temporada = temporadaRepository.findById(idTemporada);
         if(!temporada.isPresent()) new BadRequestException("La temporada no existe");
         List<Partido> partidos = partidoRepository.findAllByTemporada(temporada.get());
 
-        int totalPuntos = 0;
+        int totalPuntosPorTemporada = 0;
+        int tirosDe3puntos = 0;
+        int tirosDe2puntos = 0;
+        int tirosLibres = 0;
+        int asistencias = 0;
+        int faltas = 0;
 
         for (Partido partido : partidos) {
             JugadorPartido jugadorPartido = jugadorPartidoRepository.findByPartidoAndJugador(partido.getClavePartido(), idJugador);
             if(jugadorPartido == null)continue;
-            totalPuntos += jugadorPartido.getTirosDe2Puntos() * 2 + jugadorPartido.getTirosDe3Puntos() * 3 + jugadorPartido.getTirosLibres();
-
+            tirosDe3puntos += jugadorPartido.getTirosDe3Puntos();
+            tirosDe2puntos += jugadorPartido.getTirosDe2Puntos();
+            tirosLibres += jugadorPartido.getTirosLibres();
+            asistencias += jugadorPartido.getAsistencias();
+            faltas += jugadorPartido.getFaltas();
         }
-        return totalPuntos;
-    }
-
-    public Map<String, Object> jugadorTemporadaEstadisticas(Long temporada, String idJugador) {
-        int totalPuntos =  cantidadPuntosPorTemporada(temporada,idJugador);
+        totalPuntosPorTemporada = tirosDe3puntos*3 + tirosDe2puntos*2 + tirosLibres;
         Map<String,Object> estadisticas = new HashMap<>();
-        estadisticas.put("totalPuntosPorTemporada",totalPuntos);
+        estadisticas.put("totalPuntosPorTemporada",totalPuntosPorTemporada);
+        estadisticas.put("tirosDe3puntosPorTemporada",tirosDe3puntos);
+        estadisticas.put("tirosDe2puntosPorTemporada",tirosDe2puntos);
+        estadisticas.put("tirosLibresPorTemporada",tirosLibres);
+        estadisticas.put("asistenciasPorTemporada",asistencias);
+        estadisticas.put("faltasPorTemporada",faltas);
         return estadisticas;
     }
 }
