@@ -19,10 +19,11 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Crear Liga](#crear-liga)
 ### Jugadores
 - [Ver estadisticas de jugador por temporada](#ver-estadisticas-de-jugador-por-temporada)
+- [Ver estadisticas de jugador general](#ver-estadisticas-de-jugador-general)
 ### Equipos
 
 - [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
-- [Ver_perfil_de_un_equipo](#ver-perfil-de-un-equipo)   
+- [Ver perfil de un equipo](#ver-perfil-de-un-equipo)   
 - [Buscar Equipos por Nombre](#buscar-equipos-por-nombre)
 - [Crear un Equipo](#crear-un-equipo)
 - [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
@@ -183,6 +184,26 @@ GET estadisticas/jugador-temporada?idJugador=usuario1&idTemporada=1
     "tirosLibresPorTemporada": 1
     "asistenciasPorTemporada": 2,
     "faltasPorTemporada": 5,
+}
+```
+
+### Ver estadisticas de jugador general
+```bash
+GET /estadisticas/jugador-general?idJugador=usuario1
+```
+**Parámetros:**
+- `idJugador` (**requerido**): El identificador del jugador del que deseas obtener las estadisticas.
+
+**Resultado:**
+
+```bash
+{
+    "tirosDe3puntosGenerales": 4,
+    "tirosDe2puntosGenerales": 3,
+    "totalPuntosGenerales": 19,
+    "tirosLibresGenerales": 1,
+    "asistenciasGenerales": 2,
+    "faltasGenerales": 5
 }
 ```
 

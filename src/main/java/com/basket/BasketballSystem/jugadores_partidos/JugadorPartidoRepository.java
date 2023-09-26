@@ -12,4 +12,7 @@ public interface JugadorPartidoRepository extends JpaRepository<JugadorPartido, 
 
     @Query("SELECT jp FROM JugadorPartido jp WHERE jp.partido.clavePartido = ?1 AND jp.jugador.usuario = ?2")
     JugadorPartido findByPartidoAndJugador(Long partidoId, String jugadorId);
+
+    @Query("SELECT jp FROM JugadorPartido jp WHERE jp.jugador.usuario = ?1")
+    List<JugadorPartido> findByJugador(String idJugador);
 }

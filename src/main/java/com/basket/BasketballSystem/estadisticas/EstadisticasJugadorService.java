@@ -7,6 +7,7 @@ import com.basket.BasketballSystem.partidos.Partido;
 import com.basket.BasketballSystem.partidos.PartidoRepository;
 import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.temporadas.TemporadaRepository;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,34 @@ public class EstadisticasJugadorService {
         estadisticas.put("tirosLibresPorTemporada",tirosLibres);
         estadisticas.put("asistenciasPorTemporada",asistencias);
         estadisticas.put("faltasPorTemporada",faltas);
+        return estadisticas;
+    }
+
+    public Map<String, Object> jugadorGeneralEstadisticas(String idJugador) {
+        List<JugadorPartido> juegosJugador = jugadorPartidoRepository.findByJugador(idJugador);
+        int totalPuntosPorTemporada = 0;
+        int tirosDe3puntos = 0;
+        int tirosDe2puntos = 0;
+        int tirosLibres = 0;
+        int asistencias = 0;
+        int faltas = 0;
+
+        for(JugadorPartido j: juegosJugador){
+            tirosDe3puntos += j.getTirosDe3Puntos();
+            tirosDe2puntos += j.getTirosDe2Puntos();
+            tirosLibres += j.getTirosLibres();
+            asistencias += j.getAsistencias();
+            faltas += j.getFaltas();
+        }
+        totalPuntosPorTemporada = tirosDe3puntos * 3 + tirosDe2puntos * 2 + tirosLibres;
+
+        Map<String,Object> estadisticas = new HashMap<>();
+        estadisticas.put("totalPuntosGenerales",totalPuntosPorTemporada);
+        estadisticas.put("tirosDe3puntosGenerales",tirosDe3puntos);
+        estadisticas.put("tirosDe2puntosGenerales",tirosDe2puntos);
+        estadisticas.put("tirosLibresGenerales",tirosLibres);
+        estadisticas.put("asistenciasGenerales",asistencias);
+        estadisticas.put("faltasGenerales",faltas);
         return estadisticas;
     }
 }
