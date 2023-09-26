@@ -133,16 +133,5 @@ public class EquipoService {
         return equiposMap;
     }
 
-    public Map<String,Object>verPerfilEquipo(String nombreEquipo) {
-        Equipo equipo;
-        equipo = equipoRepository.findByNombre(nombreEquipo);
 
-        Map<String,Object> equipoFinal = new HashMap<>();
-
-        equipoFinal.put("nombre",equipo.getNombre());
-        equipoFinal.put("usuario",equipo.getNombre_Admin_equipo());
-
-
-        return equipoFinal;
-    }
 }

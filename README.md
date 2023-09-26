@@ -23,7 +23,6 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 ### Equipos
 
 - [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
-- [Ver perfil de un equipo](#ver-perfil-de-un-equipo)   
 - [Buscar Equipos por Nombre](#buscar-equipos-por-nombre)
 - [Crear un Equipo](#crear-un-equipo)
 - [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
@@ -41,7 +40,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 ### Usuarios
 
 - [Registrar Usuarios](#registrar-usuarios)
-- [Buscar Jugador por Usuario](#buscar-jugador-por-usuario)
+- [Buscar Jugador por Usuario](#buscar-USUARIO-por-nombre-de-usuario-y-rol)
 - [Modificar Datos de un Usuario](#modificar-datos-de-un-usuario)
 
 ### Arbitros
@@ -239,23 +238,6 @@ GET /Equipo/{nombreEquipo}/jugadores
     }
 ]
 ```
-
-### Ver Perfil de un equipo
-```bash
-GET /Equipo/verPerfilEquipo?nombreEquipo=equipe
-```
-
-**Parámetros:**
-- `nombreEquipo` (**requerido**): El nombre del equipo que deseas buscar.
-
-```bash
-Resultado:
-{
-    "usuario": "Manuel",
-    "nombre": "equipe"
-}
-```
-
 
 ### Buscar Equipos por Nombre
 ```bash
@@ -492,13 +474,14 @@ POST /usuarios/registrarUsuario
 }
 ```
 
-### Buscar Jugador por Usuario
+### Buscar Usuario por Nombre de Usuario y Rol
 ```bash
-GET /usuarios/obtenerJugador?usuario=nombre_de_usuario
+GET /usuarios/obtenerJugador?usuario=A&rol=JUGADOR
 ```
 **Parámetros:**
 
 - `usuario` (**requerido**): El nombre de usuario del usuario que deseas buscar.
+- `rol` (**requerido**): El rol del usuario que deseas buscar.
 
 ```bash
 Resultado:
@@ -524,27 +507,6 @@ Resultado:
         "edad": 33
     }
 ]
-```
-### Ver perfil de un jugador
-```bash
-GET /usuarios/verPefilJuador?usuario=nombre_de_usuario10
-```
-**Parámetros:**
-
-- `usuario` (**requerido**): El nombre de usuario del usuario que deseas buscar.
-
-```bash
-Resultado:
-{
-    "usuario": "nombre_de_usuario10",
-    "email": "correo_electronico10@example.com",
-    "nombre": "Nombre del Usuario",
-    "fechaNacimiento": "1990-01-01",
-    "apellido": "Apellido del Usuario",
-    "genero": "MASCULINO",
-    "rol": "JUGADOR",
-    "edad": 33
-}
 ```
 
 
@@ -724,12 +686,12 @@ PUT /Partido/agendar
 - [x] Ver estadísticas de faltas de un jugador por temporada
 - [x] Ver estadísticas de asistencias de un jugador por temporada
 - [ ] Ver estadísticas de equipo por temporada
-- [x] Ver perfil de un jugador
+- [x] Ver perfil de un jugador (cualquier usuario)
 - [x] Ver perfil de un equipo
-- [ ] Ver perfil de un arbitro
+- [x] Ver perfil de un arbitro (cualquier usuario)
 - [ ] Ver ranking de los equipos
 - [x] Buscar Equipo por nombre
-- [x] Buscar Jugador por nombre
+- [x] Buscar Jugador por nombre (cualquier usuario)
 - [x] Buscar liga por nombre
 - [x] Buscar Temporada por nombre
 - [x] obtener partidos de una temporada

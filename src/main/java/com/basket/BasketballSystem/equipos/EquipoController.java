@@ -56,10 +56,7 @@ public class EquipoController {
         return equipoService.buscarEquipoPorNombre(nombre);
     }
 
-    @GetMapping("verPerfilEquipo")
-    public Map<String,Object>verPerfilEquipo(@RequestParam("nombreEquipo") String nombreEquipo) {
-        return equipoService.verPerfilEquipo(nombreEquipo);
-    }
+
 
 
 

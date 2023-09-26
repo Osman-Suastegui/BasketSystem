@@ -40,15 +40,16 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("obtenerJugador")
-    public List<Usuario> obtenerJugador(@RequestParam(name = "usuario",required = false) String usuario) {
-        return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
+
+    @GetMapping("/obtenerJugador")
+    public List<Usuario> obtenerJugador(
+            @RequestParam(name = "usuario", required = false) String usuario,
+            @RequestParam(name = "rol", required = false) Rol rol
+    ) {
+        return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario, rol);
     }
 
-    @GetMapping("verPefilJuador")
-    public Usuario verPefilJuador(@RequestParam(name = "usuario",required = false) String usuario) {
-        return usuarioService.verPefilJuador(usuario);
-    }
+
 
 
 

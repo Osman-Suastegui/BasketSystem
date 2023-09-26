@@ -99,14 +99,14 @@ public class UsuarioService {
     }
 
 
-
-
-
-    public List<Usuario> buscarUsuariosPorLetrasEnNombre(String usuario) {
-        return usuarioRepository.findByUsuarioContaining(usuario);
+    public List<Usuario> buscarUsuariosPorLetrasEnNombre(String usuario, Rol rol) {
+            if (rol == null ){
+                rol = Rol.JUGADOR;
+            }
+        return usuarioRepository.findByUsuarioContainingAndRol(usuario, rol);
     }
 
-    public Usuario verPefilJuador(String usuario) {
-        return usuarioRepository.findByUsuario(usuario);
-    }
 }
+
+
+

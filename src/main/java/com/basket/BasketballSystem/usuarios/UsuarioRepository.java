@@ -15,9 +15,10 @@ public interface UsuarioRepository extends JpaRepository<Usuario, String> {
     Optional<Object> findByEmail(String email);
 
 
-    @Query("SELECT u FROM Usuario u WHERE u.usuario LIKE %:usuario%")
-    List<Usuario> findByUsuarioContaining(@Param("usuario") String usuario);
+    List<Usuario> findByUsuarioContainingAndRol(String usuario, Rol rol);
+
 
     Usuario findByUsuario(String usuario);
+
 
 }
