@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
+import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.partidos.Partido;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
@@ -68,6 +69,10 @@ public class JugadorPartido {
 
     public void setJugador(Usuario jugador) {
         this.jugador = jugador;
+    }
+
+    public String getEquipo() {
+        return equipo;
     }
 
 

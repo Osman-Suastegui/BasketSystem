@@ -37,6 +37,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Asignar Equipo a una Temporada](#asignar-equipo-a-una-temporada)
 - [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-temporada)
 
+
 ### Usuarios
 
 - [Registrar Usuarios](#registrar-usuarios)
@@ -48,10 +49,13 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Agregar arbitro a una temporada](#agregar-arbitro-a-una-temporada)
 - [Obtener arbitros de una temporada](#obtener-arbitros-de-una-temporada)
 - [Obtener partidos de un arbitro (calendario)](#obtener-partidos-de-un-arbitro-calendario)
+- [Arbitro registra datos de un partido](#arbitro-registra-datos-de-un-partido)
 - [Obtener partidos de un jugador (calendario)](#obtener-partidos-de-un-jugador-calendario)
 - [Obtener partidos de una temporada](#obtener-partidos-de-una-temporada)
 - [Agendar partido](#agendar-partido)
 - [Asignar arbitro a un partido](#asignar-arbitro-a-un-partido)
+
+
 
 ## Ligas
 ### Obtener Temporadas de una Liga
@@ -590,6 +594,31 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
     }
 ]
 ```
+
+### Arbitro registra datos de un partido
+```bash
+PUT /JugadorPartido/agregarJugadorPartido
+```
+**Parámetros:**
+- `idPartido` (**requerido**): El identificador del partido al que deseas agregarle un jugador.
+- `idJugador` (**requerido**): El identificador del jugador que deseas agregar al partido.
+- `equipo` (**requerido**): El nombre del equipo al que pertenece el jugador.
+- `posicion` (**requerido**): La posicion del jugador en el partido.
+
+```bash
+{
+  "equipo": "equipe",
+  "jugador": {
+    "usuario": "nombre_de_usuario"
+  },
+  "posicion": "base",
+  "partido": {
+    "clavePartido": 1
+  }
+}
+```
+
+
 ### obtener partidos de un jugador (calendario)
 ```bash
 Get Partido/obtenerPartidosJugador?idJugador=usuario1
@@ -689,7 +718,7 @@ PUT /Partido/asignarArbitro
 - [x] Reagendar partido dentro de una temporada
 - [x] Asignar arbitro a un partido
 - [ ] Arbitro da por iniciado un partido
-- [ ] Arbitro registra datos de un partido
+- [x] Arbitro registra datos de un partido
 - [ ] Arbitro modifica datos de un partido
 - [ ] Arbitro da por terminado algunos de los tiempos del partido
 - [ ] Arbitro inicia algunos de los tiempos del partido
