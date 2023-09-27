@@ -40,6 +40,14 @@ public class PartidoController {
     }
 
 
+    @PutMapping("/asignarArbitro")
+        public ResponseEntity<String> asignarArbitro(@RequestBody Partido partido){
+        Long idPartido = partido.getClavePartido();
+        String idArbitro = partido.getArbitro().getUsuario();
+        return partidoService.asignarArbitro(idPartido,idArbitro);
+
+    }
+
 
 
 }

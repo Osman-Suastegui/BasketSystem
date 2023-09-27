@@ -138,4 +138,17 @@ public class PartidoService {
         partidoRepository.save(p.get());
         return ResponseEntity.ok("Partido actualizado exitosamente.");
     }
+
+
+    public ResponseEntity<String> asignarArbitro(Long idPartido, String idArbitro) {
+        Optional<Partido> p = partidoRepository.findById(idPartido);
+        if (!p.isPresent()) throw new BadRequestException("El partido no existe");
+        Optional<Usuario> arbitro = usuarioRepository.findById(idArbitro);
+        if (!arbitro.isPresent()) throw new BadRequestException("El arbitro no existe");
+        if (!arbitro.get().getRol().toString().equals("ARBITRO")) throw new BadRequestException("El usuario no es un arbitro");
+
+        p.get().setArbitro(arbitro.get());
+        partidoRepository.save(p.get());
+        return ResponseEntity.ok("Arbitro asignado exitosamente.");
+    }
 }

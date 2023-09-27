@@ -81,6 +81,10 @@ public class Partido {
         return ganador.getNombre();
     }
 
+    public void setArbitro(Usuario arbitro) {
+        this.arbitro = arbitro;
+    }
+
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
