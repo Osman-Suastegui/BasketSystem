@@ -47,6 +47,13 @@ public class JugadorPartido {
     // Getters y setters
 
 
+    public JugadorPartido(Partido partido, Usuario jugador, String equipo, String posicion) {
+        this.partido = partido;
+        this.jugador = jugador;
+        this.equipo = equipo;
+        this.posicion = posicion;
+    }
+
     public Long getClave() {
         return clave;
     }

@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.jugadores_equipos;
 
 import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -20,4 +21,8 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
 
 
     List<JugadoresEquipo> findAllByJugador(Usuario jugador);
+
+
+    JugadoresEquipo findByJugadorAndEquipo_Nombre(Usuario jugador, String nombreEquipo);
+
 }

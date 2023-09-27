@@ -603,7 +603,6 @@ PUT /JugadorPartido/agregarJugadorPartido
 - `idPartido` (**requerido**): El identificador del partido al que deseas agregarle un jugador.
 - `idJugador` (**requerido**): El identificador del jugador que deseas agregar al partido.
 - `equipo` (**requerido**): El nombre del equipo al que pertenece el jugador.
-- `posicion` (**requerido**): La posicion del jugador en el partido.
 
 ```bash
 {
@@ -611,7 +610,6 @@ PUT /JugadorPartido/agregarJugadorPartido
   "jugador": {
     "usuario": "nombre_de_usuario"
   },
-  "posicion": "base",
   "partido": {
     "clavePartido": 1
   }
