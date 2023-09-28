@@ -39,6 +39,14 @@ public class PartidoController {
         return partidoService.agendarPartido(partido);
     }
 
+    @PostMapping("/generarPartidosTemporada")
+    public ResponseEntity<String> generarPartidosTemporada(@RequestBody Map<String, Object> temporada) {
+        Integer idTemporada = (Integer) temporada.get("idTemporada");
+        Long idTemporadaLong = idTemporada.longValue();
+        return partidoService.generarPartidosTemporada(idTemporadaLong);
+    }
+
+
 
     @PutMapping("/asignarArbitro")
         public ResponseEntity<String> asignarArbitro(@RequestBody Partido partido){

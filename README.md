@@ -36,6 +36,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Buscar una Temporada por nombre](#buscar-una-temporada-por-nombre)
 - [Asignar Equipo a una Temporada](#asignar-equipo-a-una-temporada)
 - [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-temporada)
+- [Generar partidos de una temporada](#generar-partidos-de-una-temporada)
 
 
 ### Usuarios
@@ -445,6 +446,19 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
   "equipo": {
     "nombre": "equipes"
   }
+}
+```
+### Generar partidos de una temporada
+```bash
+POST Partido/generarPartidosTemporada
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas generarle los partidos.
+
+**Resultado:**
+```bash
+{
+    "temporadaId": 1
 }
 ```
 

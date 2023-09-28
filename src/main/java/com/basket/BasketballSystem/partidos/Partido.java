@@ -4,6 +4,7 @@ import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -30,7 +31,8 @@ public class Partido {
     private Equipo equipo2;
 
     @Column(name = "fase")
-    private String fase;
+    @Enumerated(EnumType.STRING)
+    private Fase fase;
 
     @ManyToOne
     @JoinColumn(name = "arbitro")
@@ -65,7 +67,7 @@ public class Partido {
         return equipo2;
     }
 
-    public String getFase() {
+    public Fase getFase() {
         return fase;
     }
 
@@ -80,6 +82,10 @@ public class Partido {
         if(ganador == null) return "";
         return ganador.getNombre();
     }
+    @JsonIgnore
+    public Equipo obtenerEquipoGanador(){
+        return ganador;
+    }
 
 
 
@@ -90,4 +96,22 @@ public class Partido {
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
+
+    public void setTemporada(Temporada temporada) {
+        this.temporada = temporada;
+    }
+
+    public void setEquipo1(Equipo equipo1) {
+        this.equipo1 = equipo1;
+    }
+
+    public void setEquipo2(Equipo equipo2) {
+        this.equipo2 = equipo2;
+    }
+
+    public void setFase(Fase fase) {
+        this.fase = fase;
+    }
+
+
 }
