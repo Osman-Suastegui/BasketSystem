@@ -54,6 +54,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Obtener partidos de una temporada](#obtener-partidos-de-una-temporada)
 - [Agendar partido](#agendar-partido)
 - [Asignar arbitro a un partido](#asignar-arbitro-a-un-partido)
+- [Arbitro modifica datos de un partido](#arbitro-modifica-datos-de-un-partido)
 
 
 
@@ -688,6 +689,28 @@ PUT /Partido/asignarArbitro
 }
 ```
 
+### Arbitro modifica datos de un partido
+```bash
+PUT /JugadorPartido/actualizarJugadorPartido
+```
+**Parámetros:**
+- `clavePartido` (**requerido**): El identificador del partido
+- `equipo` (**requerido**): El nombre del equipo 
+- `jugador` (**requerido**): El identificador del jugador
+- `descripcion` (**requerido**): La descripcion de la estadistica
+
+```bash
+{
+  "equipo": "equipe",
+  "jugador": {
+    "usuario": "nombre_de_usuario10"
+  },
+  "partido": {
+    "clavePartido": 1
+  },
+  "descripcion": "tirosDe2Puntos"
+}
+```
 
 
 
@@ -717,7 +740,7 @@ PUT /Partido/asignarArbitro
 - [x] Asignar arbitro a un partido
 - [ ] Arbitro da por iniciado un partido
 - [x] Arbitro registra datos de un partido
-- [ ] Arbitro modifica datos de un partido
+- [x] Arbitro modifica datos de un partido
 - [ ] Arbitro da por terminado algunos de los tiempos del partido
 - [ ] Arbitro inicia algunos de los tiempos del partido
 - [ ] Arbitro finaliza un partido

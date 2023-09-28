@@ -44,14 +44,28 @@ public class JugadorPartido {
     @Column(name = "posicion")
     private String posicion;
 
-    // Getters y setters
 
+    @Transient
+    private String descripcion; // Este campo no se persistirá en la base de datos
+
+    // Getters y setters para todos los campos, incluido "descripcion"
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
     public JugadorPartido(Partido partido, Usuario jugador, String equipo, String posicion) {
         this.partido = partido;
         this.jugador = jugador;
         this.equipo = equipo;
         this.posicion = posicion;
+    }
+
+    public JugadorPartido() {
     }
 
     public Long getClave() {
