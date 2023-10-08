@@ -5,88 +5,47 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "usuarios")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Usuario {
     @Id
+    @NotEmpty(message = "el usuario no puede estar vacio") @NotNull(message = "el usuario no puede ser nulo") @ NotBlank(message = "el usuario no puede estar en blanco")
     private String usuario;
 
     @Column(unique = true)
+    @NotEmpty(message = "el email no puede estar vacio") @NotNull(message = "el email no puede ser nulo") @NotBlank(message = "el email no puede estar en blanco")
     private String email;
+    @NotEmpty(message = "la contraseña no puede estar vacio") @NotNull(message = "la contraseña no puede ser nulo") @NotBlank(message = "la contraseña no puede estar en blanco")
 
     private String password;
-    private String nombre;
-    private LocalDate fechaNacimiento;
+    @NotEmpty(message = "el nombre no puede estar vacio") @NotNull(message = "el nombre no puede ser nulo") @NotBlank(message = "el nombre no puede estar en blanco")
 
-    private String apellido;
+    private String nombre;
+
+    private LocalDate fechaNacimiento;
+    @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @NotBlank(message = "el apellido no puedo estar en blanco")
+    String apellido;
     @Enumerated(EnumType.STRING)
     private Genero genero;
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    public Usuario() {
-    }
-
-    public Usuario(String usuario, String email, String password, String nombre, LocalDate fechaNacimiento, String apellido, Genero genero, Rol rol) {
-        this.usuario = usuario;
-        this.email = email;
-        this.password = password;
-        this.nombre = nombre;
-        this.fechaNacimiento = fechaNacimiento;
-        this.apellido = apellido;
-        this.genero = genero;
-        this.rol = rol;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public Genero getGenero() {
-        return genero;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-    public Integer getEdad(){
+    public Integer getEdad() {
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
     }
 
     @JsonIgnore
-    public String getPassword(){
+    public String getPassword() {
         return password;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
     }
 }
