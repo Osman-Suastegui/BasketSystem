@@ -4,6 +4,7 @@ package com.basket.BasketballSystem.usuarios;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN_LIGA')")
+
 public class UsuarioController {
 
     private UsuarioService usuarioService;
@@ -20,13 +23,14 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    @RequestMapping()
+    @RequestMapping("/getAllUsuarios")
     public List<Usuario> getAllUsuarios() {
 
         return usuarioService.getAllUsuarios();
     }
 
     @PostMapping("RegistrarUsuario")
+
     public ResponseEntity<String> registrarUsuario(@RequestBody @Validated Usuario usuario) {
         return usuarioService.registrarUsuario(usuario);
     }
