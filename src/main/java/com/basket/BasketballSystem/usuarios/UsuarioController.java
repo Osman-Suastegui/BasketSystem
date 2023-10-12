@@ -12,8 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
-@PreAuthorize("hasAnyRole('ROLE_ADMIN_LIGA')")
-
 public class UsuarioController {
 
     private UsuarioService usuarioService;
@@ -29,13 +27,9 @@ public class UsuarioController {
         return usuarioService.getAllUsuarios();
     }
 
-    @PostMapping("RegistrarUsuario")
-
-    public ResponseEntity<String> registrarUsuario(@RequestBody @Validated Usuario usuario) {
-        return usuarioService.registrarUsuario(usuario);
-    }
 
     @PutMapping("ActualizarUsuario")
+    @PreAuthorize("hasAnyRole('ROLE_JUGADOR', 'ROLE_ADMIN_EQUIPO', 'ROLE_ADMIN_LIGA', 'ROLE_ARBITRO')")
     public ResponseEntity<String> actualizarUsuario(@RequestBody Usuario usuario) {
         String usuarioId = usuario.getUsuario(); // Obtener el ID del usuario
         String nuevoNombre = usuario.getNombre(); // Obtener el nuevo nombre
@@ -47,10 +41,11 @@ public class UsuarioController {
 
 
     @GetMapping("/obtenerJugador")
-    public List<Usuario> obtenerJugador(
+    public List<UsuarioResponse> obtenerJugador(
             @RequestParam(name = "usuario", required = false) String usuario,
             @RequestParam(name = "rol", required = false) Rol rol
     ) {
+
         return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario, rol);
     }
 

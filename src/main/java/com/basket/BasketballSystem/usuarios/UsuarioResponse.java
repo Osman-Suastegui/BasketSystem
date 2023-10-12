@@ -1,7 +1,5 @@
-package com.basket.BasketballSystem.auth;
+package com.basket.BasketballSystem.usuarios;
 
-import com.basket.BasketballSystem.usuarios.Genero;
-import com.basket.BasketballSystem.usuarios.Rol;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
@@ -11,23 +9,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 @Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-
-public class RegisterRequest {
+@AllArgsConstructor
+@Builder
+public class UsuarioResponse {
 
     @NotEmpty(message = "el usuario no puede estar vacio") @NotNull(message = "el usuario no puede ser nulo") @NotBlank(message = "el usuario no puede estar en blanco")
 
     private String usuario;
-
-    @NotEmpty(message = "la contraseña no puede estar vacio") @NotNull(message = "la contraseña no puede ser nulo") @NotBlank(message = "la contraseña no puede estar en blanco")
-
-    private String password;
 
     @NotEmpty(message = "el email no puede estar vacio") @NotNull(message = "el email no puede ser nulo") @NotBlank(message = "el email no puede estar en blanco")
 

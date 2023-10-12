@@ -40,7 +40,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 
 
 ### Usuarios
-
+- [Log in Usuario](#log-in-usuario)
 - [Registrar Usuarios](#registrar-usuarios)
 - [Buscar Jugador por Usuario](#buscar-USUARIO-por-nombre-de-usuario-y-rol)
 - [Modificar Datos de un Usuario](#modificar-datos-de-un-usuario)
@@ -465,9 +465,34 @@ POST Partido/generarPartidosTemporada
 
 
 ## Usuarios
+
+### Log in Usuario
+```bash
+POST /auth/login
+```
+**Parámetros:**
+
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas loguear.
+- `password` (**requerido**): La contraseña del usuario que deseas loguear.
+
+```bash
+{
+    "usuario": "nombre_de_usuario",
+    "password": "contrasena_segura"
+}
+```
+**Respuesta**
+```bash
+{
+    "token": "token"
+}
+```
+
+
 ### Registrar Usuarios
 ```bash
-POST /usuarios/registrarUsuario
+POST /auth/register
+}
 ```
 **Parámetros:**
 
@@ -491,6 +516,12 @@ POST /usuarios/registrarUsuario
     "apellido": "Apellido del Usuario",
     "genero": "MASCULINO", 
     "rol": "JUGADOR" 
+}
+```
+**Respuesta**
+```bash
+{
+    "token": "token"
 }
 ```
 
@@ -779,7 +810,7 @@ PUT /JugadorPartido/actualizarJugadorPartido
 - [x] Buscar liga por nombre
 - [x] Buscar Temporada por nombre
 - [x] obtener partidos de una temporada
-- [ ] generar partidos de una temporada
+- [x] generar partidos de una temporada
 
 
 
