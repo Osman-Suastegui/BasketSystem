@@ -1,7 +1,8 @@
 package com.basket.BasketballSystem.usuarios;
 
 
-import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.usuarios.DTO.ActualizarUsuarioRequest;
+import com.basket.BasketballSystem.usuarios.DTO.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,12 +31,8 @@ public class UsuarioController {
 
     @PutMapping("ActualizarUsuario")
     @PreAuthorize("hasAnyRole('ROLE_JUGADOR', 'ROLE_ADMIN_EQUIPO', 'ROLE_ADMIN_LIGA', 'ROLE_ARBITRO')")
-    public ResponseEntity<String> actualizarUsuario(@RequestBody Usuario usuario) {
-        String usuarioId = usuario.getUsuario(); // Obtener el ID del usuario
-        String nuevoNombre = usuario.getNombre(); // Obtener el nuevo nombre
-        String nuevoApellido = usuario.getApellido(); // Obtener el nuevo apellido
-
-        return usuarioService.actualizarUsuario(usuarioId, nuevoNombre, nuevoApellido);
+    public ResponseEntity<String> actualizarUsuario(@Validated @RequestBody ActualizarUsuarioRequest req) {
+        return usuarioService.actualizarUsuario(req);
     }
 
 

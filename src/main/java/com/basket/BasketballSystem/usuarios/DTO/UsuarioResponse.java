@@ -1,5 +1,7 @@
-package com.basket.BasketballSystem.usuarios;
+package com.basket.BasketballSystem.usuarios.DTO;
 
+import com.basket.BasketballSystem.usuarios.Genero;
+import com.basket.BasketballSystem.usuarios.Rol;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
