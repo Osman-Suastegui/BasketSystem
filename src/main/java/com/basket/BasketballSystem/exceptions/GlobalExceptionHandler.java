@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         List<ErrorResponse> errorResponses = new ArrayList<>();
         errorResponses.add(errorResponse);
-        return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST)
+        return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
