@@ -12,13 +12,13 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ActualizarUsuarioRequest {
-    @NotEmpty(message = "el usuario no puede estar vacio") @NotNull(message = "el usuario no puede ser nulo") @NotBlank(message = "el usuario no puede estar en blanco")
+    @NotBlank(message = "el usuario no puede estar en blanco")
 
     private String usuario;
-    @NotEmpty(message = "el nombre no puede estar vacio") @NotNull(message = "el nombre no puede ser nulo") @ NotBlank(message = "el nombre no puede estar en blanco")
+    @NotBlank(message = "el nombre no puede estar en blanco")
 
     private String nombre;
-    @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @ NotBlank(message = "el apellido no puede estar en blanco")
+    @NotBlank(message = "el apellido no puede estar en blanco")
     private String apellido;
 
 
