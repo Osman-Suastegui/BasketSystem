@@ -20,10 +20,11 @@ import java.util.List;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
+    public ResponseEntity<List<ErrorResponse>> handleBadRequestException(BadRequestException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
-
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        List<ErrorResponse> errorResponses = new ArrayList<>();
+        errorResponses.add(errorResponse);
+        return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST)
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
@@ -40,11 +41,13 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(BadCredentialsException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ResponseEntity<ErrorResponse> handleAuthenticationException(BadCredentialsException ex) {
-
+    public ResponseEntity<List<ErrorResponse>> handleAuthenticationException(BadCredentialsException ex) {
 
         ErrorResponse errorResponse = new ErrorResponse("Usuario o contraseña incorrectos");
-        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+        List<ErrorResponse> errorResponses = new ArrayList<>();
+        errorResponses.add(errorResponse);
+        return new ResponseEntity<>(errorResponses, HttpStatus.BAD_REQUEST);
+
     }
 
 }
