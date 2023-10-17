@@ -23,6 +23,7 @@ public class UsuarioController {
     }
 
     @RequestMapping("/getAllUsuarios")
+    @PreAuthorize("hasAnyRole('ROLE_JUGADOR', 'ROLE_ADMIN_EQUIPO', 'ROLE_ADMIN_LIGA', 'ROLE_ARBITRO')")
     public List<Usuario> getAllUsuarios() {
 
         return usuarioService.getAllUsuarios();
@@ -46,6 +47,10 @@ public class UsuarioController {
         return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario, rol);
     }
 
+    @GetMapping("/obtenerTipoUser")
+    public ResponseEntity<String> obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
+        return usuarioService.obtenerTipoUser(usuario);
+    }
 
 
 

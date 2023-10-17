@@ -44,6 +44,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Registrar Usuarios](#registrar-usuarios)
 - [Buscar Jugador por Usuario](#buscar-USUARIO-por-nombre-de-usuario-y-rol)
 - [Modificar Datos de un Usuario](#modificar-datos-de-un-usuario)
+- [Obtener Tipo de jugador](#obtener-tipo-de-jugador)
 
 ### Arbitros
 
@@ -559,8 +560,21 @@ Resultado:
     }
 ]
 ```
+### Obtener Tipo de jugador
 
+```bash
+GET http://localhost:8080/usuarios/obtenerTipoUser?usuario=jarcor022
+```
+**Parámetros:**
 
+- `usuario` (**requerido**): El nombre de usuario del usuario que deseas buscar.
+
+```bash
+Resultado:
+{
+    "rol": "JUGADOR"
+}
+```
 
 
 ### Modificar Datos de un Usuario

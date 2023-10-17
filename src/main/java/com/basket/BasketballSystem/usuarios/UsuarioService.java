@@ -59,6 +59,15 @@ public class UsuarioService {
         return usuariosResponse;
     }
 
+    public ResponseEntity<String> obtenerTipoUser(String usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario);
+        if (usuarioOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("El usuario no existe.");
+        }
+        Rol userRol = usuarioOptional.get().getRol();
+        return ResponseEntity.ok(userRol.toString());
+    }
+
 }
 
 
