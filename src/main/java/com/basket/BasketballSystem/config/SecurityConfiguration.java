@@ -32,7 +32,7 @@ public class SecurityConfiguration {
     private final  JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final CorsFilter corsFilter;
-    private static final String[] WHITE_LIST_URL = {"/auth/**","/Partido/**","/usuarios/**"};
+    private static final String[] WHITE_LIST_URL = {"/auth/**","/Partido/**","/usuarios/**","/JugadorPartido/**"};
     @Bean
     public SecurityFilterChain  securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)

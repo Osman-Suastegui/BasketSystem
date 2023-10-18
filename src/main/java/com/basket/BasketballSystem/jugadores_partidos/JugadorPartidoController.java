@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
+import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoDTO;
 import com.basket.BasketballSystem.partidos.Partido;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,10 @@ public class JugadorPartidoController {
     }
 
     @PutMapping("/actualizarJugadorPartido")
-    public ResponseEntity<String> actualizarJugadorPartido(@RequestBody JugadorPartido jugadorPartido){
-        Long jugadorPartidoId = jugadorPartido.getPartido().getClavePartido();
-        String jugadorUsuario = jugadorPartido.getJugador().getUsuario(); // Debe ser un objeto Usuario, no una cadena
-        String equipo = jugadorPartido.getEquipo();
-        String descripcion = jugadorPartido.getDescripcion();
+    public ResponseEntity<String> actualizarJugadorPartido(@RequestBody actualizarJugadorPartidoDTO jugadorPartidoDTO){
 
-        return jugadorPartidoService.actualizarJugadorPartido(jugadorPartidoId, jugadorUsuario, equipo, descripcion);
+
+        return jugadorPartidoService.actualizarJugadorPartido(jugadorPartidoDTO);
     }
 
 

@@ -5,6 +5,7 @@ import com.basket.BasketballSystem.equipos.EquipoRepository;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoService;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoDTO;
 import com.basket.BasketballSystem.partidos.Partido;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,26 +47,13 @@ public class JugadorPartidoService {
         return ResponseEntity.ok("Jugador agregado al partido");
     }
 
-    public ResponseEntity<String> actualizarJugadorPartido(Long jugadorPartidoId, String jugadorUsuario,String equipo,String descripcion) {
+    public ResponseEntity<String> actualizarJugadorPartido(actualizarJugadorPartidoDTO jugadorPartidoDTO) {
 
+        String jugadorUsuario = jugadorPartidoDTO.getJugador();
+        Long jugadorPartidoId = jugadorPartidoDTO.getClavePartido();
+        String descripcion = jugadorPartidoDTO.getDescripcion();
 
-
-        if (equipo == null) {
-            return ResponseEntity.badRequest().body("El jugador debe pertenecer a un equipo");
-        }
-        if (jugadorUsuario == null) {
-            return ResponseEntity.badRequest().body("El jugador no puede ser nulo");
-        }
-        if(jugadorPartidoId == null){
-            return ResponseEntity.badRequest().body("El partido del jugador no puede ser nula");
-        }
-        if(descripcion == null){
-            return ResponseEntity.badRequest().body("La descripcion no puede ser nula");
-        }
-
-        JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndPartidoAndEquipo(jugadorUsuario, jugadorPartidoId, equipo);
-
-
+        JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndPartido(jugadorUsuario, jugadorPartidoId);
 
         switch (descripcion) {
             case "tirosDe2Puntos" -> {
@@ -83,8 +71,6 @@ public class JugadorPartidoService {
             case "faltas" -> jugadorPartido.setFaltas(jugadorPartido.getFaltas() + 1);
             case "asistencias" -> jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + 1);
         }
-
-
 
         jugadorPartidoRepository.save(jugadorPartido);
         return ResponseEntity.ok("Jugador agregado al partido");

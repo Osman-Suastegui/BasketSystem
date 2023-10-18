@@ -754,20 +754,14 @@ PUT /JugadorPartido/actualizarJugadorPartido
 ```
 **Parámetros:**
 - `clavePartido` (**requerido**): El identificador del partido
-- `equipo` (**requerido**): El nombre del equipo 
 - `jugador` (**requerido**): El identificador del jugador
 - `descripcion` (**requerido**): La descripcion de la estadistica
 
 ```bash
 {
-  "equipo": "equipe",
-  "jugador": {
-    "usuario": "nombre_de_usuario10"
-  },
-  "partido": {
-    "clavePartido": 1
-  },
-  "descripcion": "tirosDe2Puntos"
+    "clavePartido":9,
+    "jugador":"daniel",
+    "descripcion":"tirosDe3Puntos"
 }
 ```
 

@@ -19,8 +19,8 @@ public interface JugadorPartidoRepository extends JpaRepository<JugadorPartido, 
     List<JugadorPartido> findByJugador(String idJugador);
 
     //hazme usando el JPA repository que te de el jugador de un partido en base a su usuario, el partido y el equipo que sea del JPA
-    @Query("SELECT jp FROM JugadorPartido jp WHERE jp.jugador.usuario = ?1 AND jp.partido.clavePartido = ?2 AND jp.equipo = ?3")
-    JugadorPartido findByJugadorAndPartidoAndEquipo(String usuario, Long clavePartido, String equipo);
+    @Query("SELECT jp FROM JugadorPartido jp WHERE jp.jugador.usuario = ?1 AND jp.partido.clavePartido = ?2")
+    JugadorPartido findByJugadorAndPartido(String usuario, Long clavePartido);
 
 
 }
