@@ -44,6 +44,9 @@ public class JugadorPartido {
     @Column(name = "posicion")
     private String posicion;
 
+    @Column(name="enBanca")
+    private Boolean enBanca;
+
 
     @Transient
     private String descripcion; // Este campo no se persistirá en la base de datos

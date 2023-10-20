@@ -58,8 +58,8 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Asignar arbitro a un partido](#asignar-arbitro-a-un-partido)
 - [Arbitro modifica datos de un partido](#arbitro-modifica-datos-de-un-partido)
 
-
-
+### Partidos
+- [Obtener todos los jugadores de un partido y equipo](#obtener-todos-los-jugadores-de-un-partido-y-un-equipo)
 ## Ligas
 ### Obtener Temporadas de una Liga
 
@@ -764,6 +764,40 @@ PUT /JugadorPartido/actualizarJugadorPartido
     "descripcion":"tirosDe3Puntos"
 }
 ```
+
+## Partidos
+
+### Obtener todos los jugadores de un partido y un equipo
+
+```bash
+  GET /JugadorPartido/obtenerJugadoresDePartidoyEquipo?clavePartido=9&nombreEquipo=chivas&enBanca=0
+```
+**Parámetros:**
+- `clavePartido` (**requerido**): El identificador del partido
+- `nombreEquipo` (**requerido**): El nombre del equipo
+- `enBanca` (**opcional**): este parametro toma 2 valores 1 o 0  si es 1 retorna todos los jugadores que estan en banca si es 0 retorna los que no estan en banca si no se especifica el campo retorna ambos
+
+```bash
+[
+  { 
+    "jugador":"daniel",
+    "asistencias":3,
+    "faltas":6,
+    "tirosDe2Puntos":2,
+    "tirosDe3Puntos":10,
+    "tirosLibres":2
+  },
+  { 
+    "jugador":"daniel2",
+    "asistencias":13,
+    "faltas":2,
+    "tirosDe2Puntos":1,
+    "tirosDe3Puntos":7,
+    "tirosLibres":3
+  }
+]
+```
+
 
 
 
