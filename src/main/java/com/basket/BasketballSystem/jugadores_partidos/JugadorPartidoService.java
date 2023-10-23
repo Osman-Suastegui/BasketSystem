@@ -1,16 +1,15 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
-import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.equipos.EquipoRepository;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoService;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
 import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoDTO;
-import com.basket.BasketballSystem.partidos.Partido;
-import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -74,6 +73,30 @@ public class JugadorPartidoService {
 
         jugadorPartidoRepository.save(jugadorPartido);
         return ResponseEntity.ok("Jugador agregado al partido");
+
+    }
+
+    public List<ObtenerJugadoresDePartidoyEquipoResponse> obtenerJugadoresDePartidoyEquipo(String nombreEquipo,Long clavePartido,Boolean enBancaFiltro){
+      List<JugadorPartido> jugadorPartido = new ArrayList<>();
+        List<ObtenerJugadoresDePartidoyEquipoResponse> jugadoresPartidoResponse = new ArrayList<>();
+        jugadorPartido = jugadorPartidoRepository.findAllByEquipoAndPartidoAndNombre2(nombreEquipo,clavePartido,enBancaFiltro);
+
+        for (JugadorPartido jp: jugadorPartido) {
+            ObtenerJugadoresDePartidoyEquipoResponse jpResponse = new ObtenerJugadoresDePartidoyEquipoResponse();
+
+            jpResponse.setJugador(jp.getJugador().getUsuario());
+            jpResponse.setTirosDe3Puntos(jp.getTirosDe3Puntos());
+            jpResponse.setTirosDe2Puntos(jp.getTirosDe2Puntos());
+            jpResponse.setTirosLibres(jp.getTirosLibres());
+            jpResponse.setFaltas(jp.getFaltas());
+            jpResponse.setAsistencias(jp.getAsistencias());
+
+            jugadoresPartidoResponse.add(jpResponse);
+
+        }
+
+
+        return jugadoresPartidoResponse;
 
     }
 }
