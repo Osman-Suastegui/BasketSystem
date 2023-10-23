@@ -17,6 +17,10 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Modificar Datos de una Liga](#modificar-datos-de-una-liga)
 - [Asignarle Administradores a una Liga](#asignarle-administradores-a-una-liga)
 - [Crear Liga](#crear-liga)
+- [Obtener Ligas de un Adninistrador de Ligas](#obtener-ligas-de-un-administrador-de-ligas)
+- [Obtener Admins que no esten en una liga](#Obtener-Admins-que-no-estan-en-una-liga)
+- [Obtener Admins que estan en una liga]
+
 ### Jugadores
 - [Ver estadisticas de jugador por temporada](#ver-estadisticas-de-jugador-por-temporada)
 - [Ver estadisticas de jugador general](#ver-estadisticas-de-jugador-general)
@@ -37,7 +41,8 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Asignar Equipo a una Temporada](#asignar-equipo-a-una-temporada)
 - [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-temporada)
 - [Generar partidos de una temporada](#generar-partidos-de-una-temporada)
-
+- [Obtener Todos los datos de las  Temporadas de una liga](#obtener-temporadas-de-una-liga)
+- [Obtener nombre de temporadas de una liga](#obtener-temporadas-de-una-liga-1)
 
 ### Usuarios
 - [Log in Usuario](#log-in-usuario)
@@ -173,6 +178,70 @@ POST /Ligas/crearLiga
     "nombre": "Liga de Baloncesto"
 }
 ```
+
+### Obtener Ligas de un administrador de ligas
+
+```bash
+GET /Ligas/obtenerLigasDeAdmin?usuario=Jesus123
+```
+**Parámetros:**
+- `usuario` (**requerido**): El nombre de usuario 
+
+**Resultado:**
+```bash
+[
+    {
+        "idLiga": 1,
+        "nombreLiga": "NuevoNombreDeLaLiga2",
+        "idTemporada": 1,
+        "nombreTemporada": "Temporada de Prueba"
+    },
+    {
+        "idLiga": 1,
+        "nombreLiga": "NuevoNombreDeLaLiga2",
+        "idTemporada": 22,
+        "nombreTemporada": "Temporada de Prueba"
+    }
+]
+```
+
+### Obtener Admins que no estan en una liga
+
+```bash
+GET /Ligas/obtenerAdminsNoEnLiga?idLiga=1
+```
+**Parámetros:**
+- `idLiga` (**requerido**): El identificador de la liga de la que deseas obtener los administradores.
+
+
+**Resultado:**
+```bash
+[
+    {
+        "usuario": "Jesus123"
+    }
+]
+```
+### Obtener Admins que estan en una liga
+
+```bash
+GET /Ligas/obtenerAdminsDeLiga?idLiga=1
+```
+**Parámetros:**
+- `idLiga` (**requerido**): El identificador de la liga de la que deseas obtener los administradores.
+
+```bash
+Resultado:
+[
+    {
+        "usuario": "Jesus123"
+    }
+]
+```
+
+
+
+
 ## Jugadores
 ### Ver estadisticas de jugador por temporada
 ```bash
@@ -463,7 +532,27 @@ POST Partido/generarPartidosTemporada
 }
 ```
 
+### Obtener Temporadas de una liga
+```bash
+GET /Temporadas/obtenerTemporadasDeLiga?idLiga=1
+```
+**Parámetros:**
 
+- `idLiga` (**requerido**): El id de la liga a ver temporadas.
+
+**Respuesta**
+```bash
+[
+    {
+        "idTemporada": 1,
+        "nombreTemporada": "Temporada de Prueba"
+    },
+    {
+        "idTemporada": 22,
+        "nombreTemporada": "Temporada de Prueba"
+    }
+]
+```
 
 ## Usuarios
 
@@ -764,6 +853,24 @@ PUT /JugadorPartido/actualizarJugadorPartido
     "descripcion":"tirosDe3Puntos"
 }
 ```
+
+### Obtener Arbitros que no estan en una temporada
+```bash
+GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
+```
+**Parámetros:**
+
+- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener los arbitros.
+
+**Respuesta**
+```bash
+[
+    {
+        "usuario": "usuario1"
+    }
+]
+```
+
 
 
 

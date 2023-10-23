@@ -39,8 +39,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(req ->
                 req.requestMatchers(WHITE_LIST_URL)
                     .permitAll()
-                    .requestMatchers("/Ligas/**").hasRole(ADMIN_EQUIPO.name())
-                    .requestMatchers("/Equipos/**").hasRole(ADMIN_EQUIPO.name())
                     .anyRequest()
                     .authenticated()
                 )

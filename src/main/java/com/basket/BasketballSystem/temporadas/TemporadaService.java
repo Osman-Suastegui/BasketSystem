@@ -1,8 +1,10 @@
 package com.basket.BasketballSystem.temporadas;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.ligas.DTO.obtenerLigasDeAdminResponse;
 import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.ligas.LigaRepository;
+import com.basket.BasketballSystem.temporadas.DTO.obtenerTemporadasDeLigaResponse;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.apache.catalina.Store;
@@ -73,16 +75,22 @@ public class TemporadaService {
     }
 
 
-    public ResponseEntity<String> agregarArbitro(Long temporadaId, String arbitroId) {
+    public ResponseEntity<Map<String, Object>>agregarArbitro(Long temporadaId, String arbitroId) {
         Temporada temporada = temporadaRepository.findById(temporadaId).orElse(null);
         Usuario arbitro = usuarioRepository.findById(arbitroId).orElse(null);
-
-        if (temporada == null) return ResponseEntity.badRequest().body("La temporada no existe");
-        if (arbitro == null) return ResponseEntity.badRequest().body("El arbitro no existe");
+        Map<String, Object> arbitroTemp = new HashMap<>();
+        if (temporada == null) throw new BadRequestException("La temporada no existe");
+        if (arbitro == null) throw new BadRequestException("El arbitro no existe");
 
         temporada.getArbitros().add(arbitro);
         temporadaRepository.save(temporada);
-        return ResponseEntity.ok("Arbitro agregado exitosamente.");
+
+
+
+        arbitroTemp.put("message", "Arbitro agregado exitosamente.");
+
+
+        return ResponseEntity.ok(arbitroTemp);
 
     }
 
@@ -114,6 +122,34 @@ public class TemporadaService {
 
     }
 
+
+    public List<obtenerTemporadasDeLigaResponse> obtenerTemporadasDeLiga(Long idLiga) {
+        if (idLiga == null) {
+            throw new BadRequestException("La liga no puede ser nulo");
+        }
+
+        List<Object[]> TemporadasDeLiga = temporadaRepository.findTemporadasForLiga(idLiga);
+
+        List<obtenerTemporadasDeLigaResponse> TemporadasLigaRes = new ArrayList<>();
+
+        for (Object[] temp: TemporadasDeLiga) {
+            obtenerTemporadasDeLigaResponse temResponse = new obtenerTemporadasDeLigaResponse();
+
+            temResponse.setIdTemporada((Long) temp[0]);
+            temResponse.setNombreTemporada((String) temp[1]);
+            TemporadasLigaRes.add(temResponse);
+        }
+
+        // Llama a la consulta personalizada para obtener las ligas del administrador
+        return TemporadasLigaRes;
+
+    }
+
+
+    public List<String> obtenerArbitrosNoEnTemporada(Long temporadaId) {
+       List<String> arbitros = temporadaRepository.findArbitrosNotInTemporada(temporadaId);
+       return arbitros;
+    }
 
 
 
