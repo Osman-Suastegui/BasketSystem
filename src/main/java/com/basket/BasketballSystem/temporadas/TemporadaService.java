@@ -27,20 +27,18 @@ public class TemporadaService {
     @Autowired
     LigaRepository ligaRepository;
 
-    public ResponseEntity<String> crearTemporada(Temporada temporada) {
+    public ResponseEntity<Map<String, Object>> crearTemporada(Temporada temporada) {
+        Map<String, Object> tempNew = new HashMap<>();
 
         if (temporada.getNombreTemporada() == null || temporada.getNombreTemporada().isEmpty())
-            return ResponseEntity.badRequest().body("El nombre de la temporada no puede ser nulo");
+            throw new BadRequestException("El nombre de la temporada no puede ser nulo");
         if (temporada.getFechaInicio() == null)
-            return ResponseEntity.badRequest().body("La fecha de inicio de la temporada no puede ser nula");
+            throw new BadRequestException("La fecha de inicio de la temporada no puede ser nula");
         if (temporada.getFechaTermino() == null)
-            return ResponseEntity.badRequest().body("La fecha de fin de la temporada no puede ser nula");
+            throw new BadRequestException("La fecha de termino de la temporada no puede ser nula");
         if (temporada.getFechaInicio().isAfter(temporada.getFechaTermino()))
-            return ResponseEntity.badRequest().body("La fecha de inicio no puede ser posterior a la fecha de fin");
-        if (temporada.getCantidadEquipos() == null)
-            return ResponseEntity.badRequest().body("La cantidad de equipos no puede ser nula");
-        if (temporada.getCantidadEquipos() < 2)
-            return ResponseEntity.badRequest().body("La cantidad de equipos no puede ser menor a 2");
+            throw new BadRequestException("La fecha de inicio no puede ser mayor a la fecha de termino");
+
 
         if (temporada.getCantidadEliminados() == null) {
             temporada.setCantidadEliminados(0);
@@ -50,20 +48,32 @@ public class TemporadaService {
         }
 
         temporadaRepository.save(temporada);
-        return ResponseEntity.ok("Temporada creada exitosamente.");
+
+
+
+        tempNew.put("claveTemporada", temporada.getClaveTemporada().toString());
+
+        tempNew.put("message", "Temporada creada Exitosamente.");
+        return ResponseEntity.ok(tempNew);
 
     }
 
 
-    public ResponseEntity<String> asignarLiga(Long temporadaId, Long ligaId) {
+    public ResponseEntity<Map<String, Object>> asignarLiga(Long temporadaId, Long ligaId) {
         Temporada temporada = temporadaRepository.findById(temporadaId).orElse(null);
         Liga liga = ligaRepository.findById(ligaId).orElse(null);
-        if (liga == null) return ResponseEntity.badRequest().body("La liga no existe");
-        if (temporada == null) return ResponseEntity.badRequest().body("La temporada no existe");
+
+        if (liga == null) throw new BadRequestException("La liga no existe");
+        if (temporada == null) throw new BadRequestException("La temporada no existe");
 
         temporada.setLiga(liga);
         temporadaRepository.save(temporada);
-        return ResponseEntity.ok("Liga asignada exitosamente.");
+
+        Map<String, Object> tempNew = new HashMap<>();
+        tempNew.put("message", "Temporada asignada Exitosamente.");
+
+        return ResponseEntity.ok(tempNew);
+
     }
 
     public ResponseEntity<String> modificarDatosTemporada(Long temporadaId, Estado estado) {

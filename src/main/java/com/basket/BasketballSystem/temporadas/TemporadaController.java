@@ -21,14 +21,17 @@ public class TemporadaController {
     @Autowired
     TemporadaService TemporadaService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PostMapping("/crearTemporada")
-    public ResponseEntity<String> crearTemporada(@RequestBody Temporada temporada) {
+    public ResponseEntity<Map<String, Object>> crearTemporada(@RequestBody Temporada temporada) {
 
 
         return TemporadaService.crearTemporada(temporada);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PutMapping("/asignarLiga")
-    public ResponseEntity<String> asignarLiga(@RequestBody Map<String, Object> requestMap) {
+    public ResponseEntity<Map<String, Object>> asignarLiga(@RequestBody Map<String, Object> requestMap) {
         Long ligaId = Long.parseLong(requestMap.get("ligaId").toString());
         Long temporadaId = Long.parseLong(requestMap.get("temporadaId").toString());
 
