@@ -43,6 +43,8 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Generar partidos de una temporada](#generar-partidos-de-una-temporada)
 - [Obtener Todos los datos de las  Temporadas de una liga](#obtener-temporadas-de-una-liga)
 - [Obtener nombre de temporadas de una liga](#obtener-temporadas-de-una-liga-1)
+- [Obtener equipos de una temporada](#obtener-equipos-de-una-temporada)
+- [Obtener Equipos no en temporada](#obtener-equipos-no-en-temporada)
 
 ### Usuarios
 - [Log in Usuario](#log-in-usuario)
@@ -553,6 +555,38 @@ GET /Temporadas/obtenerTemporadasDeLiga?idLiga=1
     }
 ]
 ```
+### Obtener equipos de una temporada
+```bash
+GET EquipoTemporada/obtenerEquiposTemporada?temporadaId=1
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas obtener los equipos.
+
+**Respuesta**
+```bash
+{
+    "nombreEquipo": "equipe"
+}
+```
+
+### Obtener Equipos no en temporada
+```bash
+GET /EquipoTemporada/obtenerEquiposNoEnTemporada?temporadaId=1
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas obtener los equipos.
+
+**Respuesta**
+```bash
+[
+    {
+        "nombre": "equipe"
+    }
+]
+```
+
+
+
 
 ## Usuarios
 
