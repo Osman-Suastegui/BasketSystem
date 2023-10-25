@@ -3,7 +3,9 @@ package com.basket.BasketballSystem.jugadores_partidos;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoDTO;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.ActualizarJugadorPartidoResponse;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -46,33 +48,48 @@ public class JugadorPartidoService {
         return ResponseEntity.ok("Jugador agregado al partido");
     }
 
-    public ResponseEntity<String> actualizarJugadorPartido(actualizarJugadorPartidoDTO jugadorPartidoDTO) {
+    public ActualizarJugadorPartidoResponse agregarPunto(actualizarJugadorPartidoRequest jugadorPartidoDTO) {
 
         String jugadorUsuario = jugadorPartidoDTO.getJugador();
         Long jugadorPartidoId = jugadorPartidoDTO.getClavePartido();
         String descripcion = jugadorPartidoDTO.getDescripcion();
 
         JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndPartido(jugadorUsuario, jugadorPartidoId);
+        ActualizarJugadorPartidoResponse actJugPartido = new ActualizarJugadorPartidoResponse();
 
         switch (descripcion) {
             case "tirosDe2Puntos" -> {
                 jugadorPartido.setTirosDe2Puntos(jugadorPartido.getTirosDe2Puntos() + 1);
                 jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
+                actJugPartido.setDescripcion("tirosDe2Puntos");
             }
             case "tirosDe3Puntos" -> {
                 jugadorPartido.setTirosDe3Puntos(jugadorPartido.getTirosDe3Puntos() + 1);
                 jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
+                actJugPartido.setDescripcion("tirosDe3Puntos");
             }
             case "tirosLibres" -> {
                 jugadorPartido.setTirosLibres(jugadorPartido.getTirosLibres() + 1);
                 jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
+                actJugPartido.setDescripcion("tirosLibres");
             }
-            case "faltas" -> jugadorPartido.setFaltas(jugadorPartido.getFaltas() + 1);
-            case "asistencias" -> jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + 1);
+            case "faltas" -> {
+                jugadorPartido.setFaltas(jugadorPartido.getFaltas() + 1);
+                actJugPartido.setDescripcion("faltas");
+            }
+            case "asistencias" -> {
+                jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + 1);
+                actJugPartido.setDescripcion("asistencias");
+            }
         }
 
         jugadorPartidoRepository.save(jugadorPartido);
-        return ResponseEntity.ok("Jugador agregado al partido");
+
+        actJugPartido.setJugador(jugadorPartido.getJugador().getUsuario());
+
+
+        return actJugPartido;
+
 
     }
 

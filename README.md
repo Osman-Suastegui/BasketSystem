@@ -872,23 +872,34 @@ PUT /Partido/asignarArbitro
 ```
 
 ### Arbitro modifica datos de un partido
-```bash
-PUT /JugadorPartido/actualizarJugadorPartido
-```
-**Parámetros:**
-- `clavePartido` (**requerido**): El identificador del partido
-- `jugador` (**requerido**): El identificador del jugador
-- `descripcion` (**requerido**): La descripcion de la estadistica
+**Arbitro modifica datos de un partido (WebSocket)
+Actualización en tiempo real de estadísticas de un partido
+Para permitir al árbitro modificar datos de un partido en tiempo real a través de WebSocket, se utiliza un mensaje con el siguiente formato:**
 
 ```bash
+/app/agregarPunto
+```
+**Parametros**
+
+
+- `clavePartido` (**requerido**): El identificador del partido.
+
+- `jugador` (**requerido**): El identificador del jugador.
+
+- `descripcion` (**requerido**): La descripción de la estadística que se va a actualizar.
+
+
+```bash
+
 {
-    "clavePartido":9,
-    "jugador":"daniel",
-    "descripcion":"tirosDe3Puntos"
+    "clavePartido": 9,
+    "jugador": "daniel",
+    "descripcion": "tirosDe3Puntos"
 }
 ```
 
-<<<<<<< HEAD
+
+
 ### Obtener Arbitros que no estan en una temporada
 ```bash
 GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
@@ -903,11 +914,12 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
     {
         "usuario": "usuario1"
     }
-=======
+]
+```
+
 ## Partidos
 
 ### Obtener todos los jugadores de un partido y un equipo
-
 ```bash
   GET /JugadorPartido/obtenerJugadoresDePartidoyEquipo?clavePartido=9&nombreEquipo=chivas&enBanca=0
 ```
@@ -934,7 +946,6 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
     "tirosDe3Puntos":7,
     "tirosLibres":3
   }
->>>>>>> 62caf29dca911bdf004d55fa1d8811489965264b
 ]
 ```
 
