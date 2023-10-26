@@ -122,7 +122,11 @@ public class PartidoService {
         for (Partido partido : partidos) {
             Map<String, Object> p = new HashMap<>();
             p.put("idPartido", partido.getClavePartido());
-            p.put("arbitro", partido.getArbitro().getUsuario());
+            if (partido.getArbitro() != null) {
+                p.put("arbitro", partido.getArbitro().getUsuario());
+            } else {
+                p.put("arbitro", "Sin asignar"); // Otra opción, puedes definir un valor por defecto
+            }
             p.put("fechaInicio", partido.getFechaInicio());
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
             p.put("equipo1", partido.getEquipo1().getNombre());
@@ -156,7 +160,7 @@ public class PartidoService {
     }
 
 
-    public ResponseEntity<String> generarPartidosTemporada(Long idTemporada) {
+    public ResponseEntity<Map<String, Object>>  generarPartidosTemporada(Long idTemporada) {
 //        -se checa si ya hay 8 equipos en la temporada si no es asi se manda un error
 //        tomamos los equipos de la temporada y generamos 4 partidos ya que son 8 equipos
 //        se registran los partidos en la bd
@@ -182,6 +186,9 @@ public class PartidoService {
                 Fase cuartosDeFinal = Fase.CUARTOS_DE_FINAL;
                 partido.setFase(cuartosDeFinal);
                 partidoRepository.save(partido);
+                //cambia el estado de la temporada a activa
+                temporadaRepository.updateTemporadaEstado(idTemporada,"ACTIVA");
+
             }
 
         } else if (partidos.size() == 4 && cantidadPartidosTerminados == 4) {
@@ -221,8 +228,10 @@ public class PartidoService {
             }
             throw new BadRequestException("Los partidos ya estan generados debe esperar a que haya un resultado para volver a generarlos");
         }
+        Map<String, Object> partidoMes = new HashMap<>();
+        partidoMes.put("message", "Se han generado los partidos exitosamente.");
 
-        return ResponseEntity.ok("Se han generado los partidos exitosamente");
+        return ResponseEntity.ok(partidoMes);
 
     }
 }

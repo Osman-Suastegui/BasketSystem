@@ -28,7 +28,7 @@ public class PartidoController {
         return partidoService.obtenerPartidosJugador(idJugador);
     }
 
-//    obtenerPartidosTemporada
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @RequestMapping ("/obtenerPartidosTemporada")
     public List<Map<String,Object>>  obtenerPartidosTemporada(@RequestParam("idTemporada") Long idTemporada){
 
@@ -40,8 +40,9 @@ public class PartidoController {
         return partidoService.agendarPartido(partido);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PostMapping("/generarPartidosTemporada")
-    public ResponseEntity<String> generarPartidosTemporada(@RequestBody Map<String, Object> temporada) {
+    public ResponseEntity<Map<String, Object>> generarPartidosTemporada(@RequestBody Map<String, Object> temporada) {
         Integer idTemporada = (Integer) temporada.get("idTemporada");
         Long idTemporadaLong = idTemporada.longValue();
         return partidoService.generarPartidosTemporada(idTemporadaLong);

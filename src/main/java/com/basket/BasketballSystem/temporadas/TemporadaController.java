@@ -45,8 +45,17 @@ public class TemporadaController {
         Estado estado = Estado.valueOf(requestMap.get("estado").toString());
 
         return TemporadaService.modificarDatosTemporada(temporadaId, estado);
-
     }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
+    @DeleteMapping("/eliminarArbitro")
+    public ResponseEntity<Map<String, Object>> eliminarArbitro(
+            @RequestParam("temporadaId") Long temporadaId,
+            @RequestParam("arbitroId") String arbitroId) {
+        return TemporadaService.eliminarArbitroDeTemporada(temporadaId, arbitroId);
+    }
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @GetMapping("/obtenerArbitrosNoEnTemporada")
@@ -77,5 +86,14 @@ public class TemporadaController {
     public List<obtenerTemporadasDeLigaResponse> obtenerTemporadasDeLiga(@RequestParam(name = "idLiga", required = false) Long idLiga){
         return TemporadaService.obtenerTemporadasDeLiga(idLiga);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
+    @GetMapping("/obtenerEstadoTemporada")
+    public ResponseEntity<Map<String, Object>> obtenerEstadoTemporada(@RequestParam(name = "idTemporada", required = false) Long idTemporada){
+        return TemporadaService.obtenerEstadoTemporada(idTemporada);
+    }
+
+
+
 
 }
