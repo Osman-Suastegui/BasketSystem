@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -131,6 +133,12 @@ public class PartidoService {
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
             p.put("equipo1", partido.getEquipo1().getNombre());
             p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("ganador", partido.getGanador());
+            if (partido.getGanador().isEmpty()) {
+                p.put("ganador", "Sin concluir");
+            } else {
+                p.put("ganador", partido.getGanador());
+            }
             partidosMap.add(p);
         }
 
@@ -138,25 +146,47 @@ public class PartidoService {
 
     }
 
-    public ResponseEntity<String> agendarPartido(Partido partido) {
-        Optional<Partido> p = partidoRepository.findById(partido.getClavePartido());
-        if (!p.isPresent()) throw new BadRequestException("El partido no existe");
-        p.get().setFechaInicio(partido.getFechaInicio());
-        partidoRepository.save(p.get());
-        return ResponseEntity.ok("Partido actualizado exitosamente.");
+    public ResponseEntity<Map<String, Object>> agendarPartido(long clavePartido, String fechaInicio) {
+        Optional<Partido> partidoOptional = partidoRepository.findById(clavePartido);
+        if (partidoOptional.isEmpty()) {
+            throw new BadRequestException("El partido no existe");
+        }
+
+        Partido partido = partidoOptional.get();
+
+        try {
+            // Formatear la fecha y hora en el formato correcto
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            Date fechaHora = sdf.parse(fechaInicio);
+
+
+
+            partido.setFechaInicio(fechaHora);
+
+            partidoRepository.save(partido);
+
+            Map<String, Object> agendaPartido = new HashMap<>();
+            agendaPartido.put("message", "Partido agendado exitosamente.");
+
+            return ResponseEntity.ok(agendaPartido);
+        } catch (ParseException e) {
+            throw new BadRequestException("Error al analizar la fecha y hora.");
+        }
     }
 
-    public ResponseEntity<String> asignarArbitro(Long idPartido, String idArbitro) {
+    public ResponseEntity<Map<String, Object>> asignarArbitro(Long idPartido, String idArbitro) {
         Optional<Partido> p = partidoRepository.findById(idPartido);
         if (!p.isPresent()) throw new BadRequestException("El partido no existe");
         Optional<Usuario> arbitro = usuarioRepository.findById(idArbitro);
         if (!arbitro.isPresent()) throw new BadRequestException("El arbitro no existe");
-        if (!arbitro.get().getRol().toString().equals("ARBITRO"))
-            throw new BadRequestException("El usuario no es un arbitro");
 
         p.get().setArbitro(arbitro.get());
         partidoRepository.save(p.get());
-        return ResponseEntity.ok("Arbitro asignado exitosamente.");
+
+        Map<String, Object> arbitroPartido = new HashMap<>();
+        arbitroPartido.put("message", "Arbitro asignado exitosamente.");
+
+        return ResponseEntity.ok(arbitroPartido);
     }
 
 

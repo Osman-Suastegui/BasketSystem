@@ -36,8 +36,11 @@ public class PartidoController {
     }
 
     @PutMapping("/agendar")
-    public ResponseEntity<String> agendarPartido(@RequestBody Partido partido){
-        return partidoService.agendarPartido(partido);
+    public ResponseEntity<Map<String, Object>> agendarPartido(@RequestBody Partido partido){
+        Long idPartido = partido.getClavePartido();
+        String fecha = partido.getFechaInicio().toString();
+        System.out.println("Fecha recibida en el controlador: " + fecha);
+        return partidoService.agendarPartido(idPartido,fecha);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
@@ -52,7 +55,7 @@ public class PartidoController {
 
 
     @PutMapping("/asignarArbitro")
-        public ResponseEntity<String> asignarArbitro(@RequestBody Partido partido){
+        public ResponseEntity<Map<String, Object>> asignarArbitro(@RequestBody Partido partido){
         Long idPartido = partido.getClavePartido();
         String idArbitro = partido.getArbitro().getUsuario();
         return partidoService.asignarArbitro(idPartido,idArbitro);
