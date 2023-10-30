@@ -44,7 +44,7 @@ public class TemporadaService {
             temporada.setCantidadEliminados(0);
         }
         if (temporada.getEstado() == null) {
-            temporada.setEstado(Estado.ACTIVA);
+            temporada.setEstado(Estado.INACTIVA);
         }
 
         temporadaRepository.save(temporada);
@@ -161,6 +161,23 @@ public class TemporadaService {
        return arbitros;
     }
 
+
+    public ResponseEntity<Map<String, Object>> obtenerEstadoTemporada(Long idTemporada) {
+        Temporada temporada = temporadaRepository.findById(idTemporada).orElse(null);
+        Map<String, Object> arbitroTemp = new HashMap<>();
+
+        arbitroTemp.put("estado", temporada.getEstado().toString());
+        return ResponseEntity.ok(arbitroTemp);
+
+    }
+
+
+    public ResponseEntity<Map<String, Object>> eliminarArbitroDeTemporada(Long temporadaId, String nombreArbitro) {
+        temporadaRepository.deleteArbitroFromTemporada(temporadaId, nombreArbitro);
+        Map<String, Object> arbitroTemp = new HashMap<>();
+        arbitroTemp.put("message", "Arbitro eliminado exitosamente.");
+        return ResponseEntity.ok(arbitroTemp);
+    }
 
 
 }

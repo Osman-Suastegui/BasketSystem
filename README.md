@@ -19,7 +19,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Crear Liga](#crear-liga)
 - [Obtener Ligas de un Adninistrador de Ligas](#obtener-ligas-de-un-administrador-de-ligas)
 - [Obtener Admins que no esten en una liga](#Obtener-Admins-que-no-estan-en-una-liga)
-- [Obtener Admins que estan en una liga]
+- [Obtener Admins que estan en una liga](#Obtener-Admins-que-estan-en-una-liga)
 
 ### Jugadores
 - [Ver estadisticas de jugador por temporada](#ver-estadisticas-de-jugador-por-temporada)
@@ -45,6 +45,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Obtener nombre de temporadas de una liga](#obtener-temporadas-de-una-liga-1)
 - [Obtener equipos de una temporada](#obtener-equipos-de-una-temporada)
 - [Obtener Equipos no en temporada](#obtener-equipos-no-en-temporada)
+- [Eliminar un arbitro de una temporada](#eliminar-un-arbitro-de-una-temporada)
 
 ### Usuarios
 - [Log in Usuario](#log-in-usuario)
@@ -585,6 +586,39 @@ GET /EquipoTemporada/obtenerEquiposNoEnTemporada?temporadaId=1
 ]
 ```
 
+### Eliminar un arbitro de una temporada
+```bash
+http://localhost:8080/Temporadas/eliminarArbitro?temporadaId=27&arbitroId=nombre_de_usuario101
+```
+**Parámetros:**
+- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas eliminar el arbitro.
+
+**Respuesta**
+```bash
+{
+    "message": "Arbitro eliminado exitosamente."
+}
+```
+
+
+
+
+
+
+
+### Obtener Estado de una temporada
+```bash
+GET /Temporadas/obtenerEstadoTemporada?idTemporada=1
+```
+**Parámetros:**
+- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener el estado.
+
+**Respuesta**
+```bash
+{
+    "estado": "En Curso"
+}
+```
 
 
 
