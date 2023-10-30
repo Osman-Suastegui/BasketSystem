@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -41,7 +42,7 @@ public class Partido {
     @Column(name = "fecha_inicio")
     @Temporal(TemporalType.TIMESTAMP) // Indica que es un campo de fecha y hora
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date fechaInicio;
+    private Instant fechaInicio;
 
     @ManyToOne
     @JoinColumn(name = "resultado")
@@ -75,7 +76,7 @@ public class Partido {
         return arbitro;
     }
 
-    public Date getFechaInicio() {
+    public Instant getFechaInicio() {
         return fechaInicio;
     }
     public String getGanador() {
@@ -93,7 +94,7 @@ public class Partido {
         this.arbitro = arbitro;
     }
 
-    public void setFechaInicio(Date fechaInicio) {
+    public void setFechaInicio(Instant fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 

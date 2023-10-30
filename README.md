@@ -530,7 +530,7 @@ POST Partido/generarPartidosTemporada
 **Resultado:**
 ```bash
 {
-    "temporadaId": 1
+    "idTemporada": 1
 }
 ```
 

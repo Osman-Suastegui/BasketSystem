@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class AuthenticationService {
         }
         if (registerRequest.getFechaNacimiento() == null)
             throw new BadRequestException("La fecha de nacimiento no puede ser nula.");
+        userRepository.findById(registerRequest.getUsuario()).ifPresent(user -> {throw new BadRequestException("El usuario ya existe.");});
 
         Usuario user = Usuario.builder()
                 .usuario(registerRequest.getUsuario())

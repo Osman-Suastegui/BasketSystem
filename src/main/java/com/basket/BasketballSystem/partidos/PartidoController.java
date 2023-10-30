@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +16,8 @@ public class PartidoController {
     PartidoService partidoService;
 
     @RequestMapping ("/obtenerPartidosArbitro")
-    public List<Map<String,Object>>  obtenerPartidosArbitro(@RequestParam("idArbitro") String idArbitro){
-
-        return partidoService.obtenerPartidosArbitro(idArbitro);
+    public List<Map<String,Object>>  obtenerPartidosArbitro(@RequestParam("idArbitro") String idArbitro, @RequestParam(value = "estatusPartido",required = false) String estatusPartido){
+        return partidoService.obtenerPartidosArbitro(idArbitro,estatusPartido);
     }
 
     @RequestMapping ("/obtenerPartidosJugador")
