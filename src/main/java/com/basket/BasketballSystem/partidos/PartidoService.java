@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -197,14 +198,21 @@ public class PartidoService {
         Partido partido = partidoOptional.get();
 
         try {
+            System.out.println(fechaInicio);
             // Formatear la fecha y hora en el formato correcto
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date fechaHora = sdf.parse(fechaInicio);
 
+            // Agregar una hora a la fecha
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaHora);
+            calendar.add(Calendar.HOUR, 1);
 
+            Date fechaConUnaHoraMas = calendar.getTime();
+            Instant fechaInicioInstant = fechaConUnaHoraMas.toInstant();
 
-            partido.setFechaInicio(fechaHora.toInstant());
-
+            partido.setFechaInicio(fechaInicioInstant);
+            System.out.println("fecha inicio instant: " + fechaInicioInstant);
             partidoRepository.save(partido);
 
             Map<String, Object> agendaPartido = new HashMap<>();

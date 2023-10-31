@@ -32,12 +32,12 @@ public class PartidoController {
 
         return partidoService.obtenerPartidosTemporada(idTemporada);
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PutMapping("/agendar")
-    public ResponseEntity<Map<String, Object>> agendarPartido(@RequestBody Partido partido){
-        Long idPartido = partido.getClavePartido();
-        String fecha = partido.getFechaInicio().toString();
-        System.out.println("Fecha recibida en el controlador: " + fecha);
+    public ResponseEntity<Map<String, Object>> agendarPartido(@RequestBody Map<String, Object> partido){
+        Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
+        String fecha = partido.get("fechaInicio").toString();
+        System.out.println("fecha recibida:" + fecha);
         return partidoService.agendarPartido(idPartido,fecha);
     }
 
