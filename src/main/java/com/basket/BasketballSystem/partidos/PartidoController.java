@@ -51,7 +51,7 @@ public class PartidoController {
 
 
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PutMapping("/asignarArbitro")
         public ResponseEntity<Map<String, Object>> asignarArbitro(@RequestBody Partido partido){
         Long idPartido = partido.getClavePartido();
