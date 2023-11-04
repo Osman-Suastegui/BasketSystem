@@ -1,6 +1,8 @@
 package com.basket.BasketballSystem.equipos;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.temporadas.Categoria;
+import com.basket.BasketballSystem.temporadas.Rama;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -19,13 +21,22 @@ public class Equipo {
     @ManyToOne
     @JoinColumn(name="admin_equipo")
     private Usuario admin_equipo;
+    @Column(name = "rama")
+    @Enumerated(EnumType.STRING)
+    private Rama rama;
+
+    @Column(name = "categoria")
+    @Enumerated(EnumType.STRING)
+    private Categoria categoria;
 
     @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
     private List<JugadoresEquipo> jugadores;
 
-    public Equipo(String nombre, Usuario admin_equipo) {
+    public Equipo(String nombre, Usuario admin_equipo, Rama rama, Categoria categoria) {
         this.nombre = nombre;
         this.admin_equipo = admin_equipo;
+        this.rama = rama;
+        this.categoria = categoria;
     }
 
     public Equipo() {
@@ -58,6 +69,22 @@ public class Equipo {
     }
 
 
+
+    public void setRama(Rama rama) {
+        this.rama = rama;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public Rama getRama() {
+        return rama;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
 
 
 

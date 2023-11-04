@@ -25,4 +25,15 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
 
     JugadoresEquipo findByJugadorAndEquipo_Nombre(Usuario jugador, String nombreEquipo);
 
+    @Query("SELECT u FROM Usuario u " +
+            "WHERE u.rol = 'jugador' " +
+            "AND u.usuario NOT IN (" +
+            "    SELECT je.jugador.usuario FROM JugadoresEquipo je WHERE je.equipo.nombre = :equipoNombre" +
+            ")")
+    List<Usuario> findJugadoresNotInEquipo(@Param("equipoNombre") String equipoNombre);
+
+
+
+
+
 }

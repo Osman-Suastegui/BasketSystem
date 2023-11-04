@@ -31,6 +31,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Crear un Equipo](#crear-un-equipo)
 - [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
 - [Eliminar Jugadores de un Equipo](#eliminar-jugadores-de-un-equipo)
+- [Obtener jugadores que no estan en un determinado equipo]
 
 ### Temporadas
 
@@ -353,10 +354,12 @@ POST /Equipo/crearEquipo
 
 ```bash
 {
-    "nombre": "NombreDelEquipo",
+    "nombre": "tiburoones jaja",
     "admin_equipo": {
         "usuario": "Manuel321"
-    }
+    },
+    "rama": "MASCULINO",
+    "categoria": "SENIOR"
 }
 ```
 
@@ -396,7 +399,38 @@ DELETE /Equipo/eliminarJugador
 }
 ```
 
+### Obtener jugadores que no estan en un determinado equipo
+```bash
+GET /Equipo/obtenerJugadoresParaEquipo?nombreEquipo=equipe
+```
+**Parámetros:**
+- `nombreEquipo` (**requerido**): El nombre del equipo del que deseas obtener los jugadores.
 
+**Respuesta**
+```bash
+[
+    {
+        "usuario": "gabygabss",
+        "email": "gabyjefedegrupo@gmail.com",
+        "nombre": "gaby ",
+        "fechaNacimiento": "2002-07-12",
+        "apellido": "beltran mirafuente",
+        "genero": "FEMENINO",
+        "rol": "JUGADOR",
+        "enabled": true,
+        "authorities": [
+            {
+                "authority": "ROLE_JUGADOR"
+            }
+        ],
+        "username": "gabygabss",
+        "accountNonExpired": true,
+        "credentialsNonExpired": true,
+        "accountNonLocked": true,
+        "edad": 21
+    }
+]
+```
 
 
 

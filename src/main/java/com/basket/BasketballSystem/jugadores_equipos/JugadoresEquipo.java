@@ -40,7 +40,7 @@ public class JugadoresEquipo {
     }
 
 
-
+    //lo voy a descomentar dia 04/11/23
     @JsonIgnore
     public String getNombreEquipo() {
         return equipo.getNombre();
@@ -54,6 +54,8 @@ public class JugadoresEquipo {
     public String getPosicion() {
         return posicion;
     }
+
+    //lo voy a descomentar dia 04/11/23
     @JsonIgnore
     public Equipo getEquipo() {
         return equipo;

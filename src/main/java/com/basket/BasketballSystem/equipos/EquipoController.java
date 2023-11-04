@@ -5,6 +5,7 @@ import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class EquipoController {
         this.equipoService = equipoService;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @RequestMapping("/obtenerEquipoAdminEquipo")
     public Equipo obtenerEquipoAdminEquipo(@RequestParam("idAdminEquipo") String idAdminEquipo) {
         return equipoService.obtenerEquipoAdminEquipo(idAdminEquipo);
@@ -30,26 +32,34 @@ public class EquipoController {
         return equipoService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @PostMapping("/crearEquipo")
-    public ResponseEntity<String> crearEquipo(@RequestBody Equipo equipo) {
+    public ResponseEntity<Map<String, Object>> crearEquipo(@RequestBody Equipo equipo) {
 
         return equipoService.crearEquipo(equipo);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @PostMapping("/agregarJugador")
-    public ResponseEntity<String> crearJugadoresEquipo( @RequestBody JugadoresEquipo jugadoresEquipo){
+    public ResponseEntity<Map<String, Object>> crearJugadoresEquipo( @RequestBody JugadoresEquipo jugadoresEquipo){
         return equipoService.agregarJugador(jugadoresEquipo);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @DeleteMapping("/eliminarJugador")
-    public ResponseEntity<String> eliminarJugador(@RequestBody Map<String, String> requestMap) {
+    public ResponseEntity<Map<String, Object>> eliminarJugador(@RequestBody Map<String, String> requestMap) {
         String nombreEquipo = requestMap.get("nombreEquipo");
         String nombreJugador = requestMap.get("nombreJugador");
 
-        equipoService.eliminarJugador(nombreEquipo, nombreJugador);
-
-        return ResponseEntity.ok("Jugador eliminado exitosamente.");
+        return equipoService.eliminarJugador(nombreEquipo, nombreJugador);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+    @GetMapping("/obtenerJugadoresParaEquipo")
+    public List<Usuario> obtenerJugadoresParaEquipo(@RequestParam(name = "nombreEquipo",required = false) String nombreEquipo) {
+        return equipoService.obtenerJugadoresParaEquipo(nombreEquipo);
+    }
+
 
     @GetMapping("/buscarEquipoPorNombre")
     public List<Map<String,Object>> buscarEquipoPorNombre(@RequestParam(name = "nombre",required = false) String nombre) {

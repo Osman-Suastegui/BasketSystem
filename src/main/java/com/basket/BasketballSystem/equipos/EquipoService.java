@@ -4,9 +4,7 @@ package com.basket.BasketballSystem.equipos;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoService;
-import com.basket.BasketballSystem.ligas.Liga;
-import com.basket.BasketballSystem.ligas.LigaRepository;
+
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -35,6 +33,9 @@ public class EquipoService {
 
     public Equipo obtenerEquipoAdminEquipo(String idAdminEquipo){
         //System.out.println("idAdminEquipo: " + idAdminEquipo);
+        if(equipoRepository.findByidAdminEquipo(idAdminEquipo).orElse(null) == null){
+            throw new BadRequestException("No tiene un equipo asignado");
+        }
         return equipoRepository.findByidAdminEquipo(idAdminEquipo).orElse(null);
 
     }
@@ -52,57 +53,66 @@ public class EquipoService {
     }
 
 
-    public ResponseEntity<String> crearEquipo(Equipo equipo) {
-        if (equipo == null) {
-            return ResponseEntity.badRequest().body("El objeto Equipo no puede ser nulo");
-        }
+    public ResponseEntity<Map<String, Object>> crearEquipo(Equipo equipo) {
 
         if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
-            return ResponseEntity.badRequest().body("El nombre del equipo no puede ser nulo o vacío");
+            throw new BadRequestException("El nombre del equipo no puede ser nulo o vacío");
         }
 
         String adminEquipo = equipo.getUsuario_Admin_equipo();
         if (adminEquipo == null) {
-            return ResponseEntity.badRequest().body("El usuario administrador del equipo no puede ser nulo");
+            throw new BadRequestException("El usuario administrador del equipo no puede ser nulo");
         }
 
         if (equipoRepository.findById(equipo.getNombre()).isPresent()) {
-            return ResponseEntity.badRequest().body("El equipo ya existe");
+            throw new BadRequestException("El equipo ya existe");
+        }
+
+        if(equipo.getRama() == null){
+            throw new BadRequestException("La rama no puede ser nula");
+        }
+
+        if(equipo.getCategoria() == null){
+            throw new BadRequestException("La categoria no puede ser nula");
         }
 
         equipoRepository.save(equipo);
-        return ResponseEntity.ok("Equipo creado correctamente");
+        Map<String, Object> team = new HashMap<>();
+
+        team.put("message", "Equipo Creado Exitosamente.");
+
+        return ResponseEntity.ok(team);
     }
 
 
-    public ResponseEntity<String> agregarJugador(JugadoresEquipo jugadoresEquipo) {
+    public ResponseEntity<Map<String, Object>> agregarJugador(JugadoresEquipo jugadoresEquipo) {
         if (jugadoresEquipo == null) {
-            return ResponseEntity.badRequest().body("El objeto JugadoresEquipo no puede ser nulo");
+            throw new BadRequestException("El jugador no puede ser nulo");
         }
 
         if (jugadoresEquipo.getNombreEquipo() == null || jugadoresEquipo.getNombreEquipo().isEmpty()) {
-            return ResponseEntity.badRequest().body("El equipo no puede ser nulo");
+            throw new BadRequestException("El nombre del equipo no puede ser nulo o vacío");
         }
 
         if (jugadoresEquipo.getJugador().getUsuario() == null) {
-            return ResponseEntity.badRequest().body("El usuario no puede ser nulo");
+            throw new BadRequestException("El usuario del jugador no puede ser nulo");
         }
 
         if (jugadoresEquipo.getPosicion() == null || jugadoresEquipo.getPosicion().isEmpty()) {
-            return ResponseEntity.badRequest().body("La posición no puede ser nula o vacía");
+            throw new BadRequestException("La posición del jugador no puede ser nula o vacía");
         }
 
 
 
         Optional<Equipo> equipo = equipoRepository.findById(jugadoresEquipo.getNombreEquipo());
         if(!equipo.isPresent()){
-            return ResponseEntity.badRequest().body("El equipo no existe");
+            throw new BadRequestException("El equipo no existe");
         }
 
 
         for (JugadoresEquipo jugador : equipo.get().getJugadores()) {
             if(jugador.getJugador().getUsuario().equals(jugadoresEquipo.getJugador().getUsuario())){
-                return ResponseEntity.badRequest().body("El usuario ya se encuentra en el equipo");
+                throw new BadRequestException("El jugador ya existe en el equipo");
             }
         }
 
@@ -110,13 +120,19 @@ public class EquipoService {
         equipo.get().addJugador(jugadoresEquipo);
         equipoRepository.save(equipo.get());
 
+        Map<String, Object> team = new HashMap<>();
 
-        return ResponseEntity.ok("Jugador asignado correctamente");
+        team.put("message", "Jugador asignado correctamente.");
+
+        return ResponseEntity.ok(team);
     }
     @Transactional
-    public ResponseEntity<String> eliminarJugador(String nombreEquipo, String nombreJugador) {
+    public ResponseEntity<Map<String, Object>> eliminarJugador(String nombreEquipo, String nombreJugador) {
         jugadoresEquipoRepository.deleteByJugadorAndEquipo(nombreEquipo, nombreJugador);
-        return ResponseEntity.ok("Jugador eliminado exitosamente.");
+        Map<String, Object> team = new HashMap<>();
+
+        team.put("message", "Jugador eliminado exitosamente.");
+        return ResponseEntity.ok(team);
     }
 
     public List<Map<String,Object>> buscarEquipoPorNombre(String nombre) {
@@ -132,6 +148,14 @@ public class EquipoService {
         }
         return equiposMap;
     }
+
+
+    public List<Usuario> obtenerJugadoresParaEquipo(String nombreEquipo) {
+        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipo(nombreEquipo);
+            return jugadores;
+    }
+
+
 
 
 }
