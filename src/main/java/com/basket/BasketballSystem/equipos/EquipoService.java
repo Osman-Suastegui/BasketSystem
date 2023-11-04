@@ -2,6 +2,7 @@ package com.basket.BasketballSystem.equipos;
 
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 
@@ -18,6 +19,7 @@ import java.util.*;
 public class EquipoService {
     @Autowired
     EquipoRepository equipoRepository;
+
 
     @Autowired
     UsuarioRepository usuarioRepository;
@@ -85,46 +87,53 @@ public class EquipoService {
     }
 
 
-    public ResponseEntity<Map<String, Object>> agregarJugador(JugadoresEquipo jugadoresEquipo) {
-        if (jugadoresEquipo == null) {
-            throw new BadRequestException("El jugador no puede ser nulo");
+    public ResponseEntity<Map<String, Object>> agregarJugador(JugadoresEquipoDTO jugadoresEquipoDTO) {
+        // Crear una instancia de JugadoresEquipo
+        JugadoresEquipo jugadoresEquipo = new JugadoresEquipo();
+        //valida que la posicion no sea nula
+        if(jugadoresEquipoDTO.getPosicion() == null){
+            throw new BadRequestException("La posicion no puede ser nula");
         }
+        jugadoresEquipo.setPosicion(jugadoresEquipoDTO.getPosicion());
 
-        if (jugadoresEquipo.getNombreEquipo() == null || jugadoresEquipo.getNombreEquipo().isEmpty()) {
-            throw new BadRequestException("El nombre del equipo no puede ser nulo o vacío");
-        }
+        // Buscar y configurar el equipo
+        String equipoNombre = jugadoresEquipoDTO.getEquipoNombre();
+        Equipo equipo = equipoRepository.findByNombre(equipoNombre);
 
-        if (jugadoresEquipo.getJugador().getUsuario() == null) {
-            throw new BadRequestException("El usuario del jugador no puede ser nulo");
-        }
-
-        if (jugadoresEquipo.getPosicion() == null || jugadoresEquipo.getPosicion().isEmpty()) {
-            throw new BadRequestException("La posición del jugador no puede ser nula o vacía");
-        }
-
-
-
-        Optional<Equipo> equipo = equipoRepository.findById(jugadoresEquipo.getNombreEquipo());
-        if(!equipo.isPresent()){
+        if (equipo == null) {
             throw new BadRequestException("El equipo no existe");
         }
 
+        // Buscar y configurar el jugador
+        String jugadorUsuario = jugadoresEquipoDTO.getJugadorUsuario();
 
-        for (JugadoresEquipo jugador : equipo.get().getJugadores()) {
-            if(jugador.getJugador().getUsuario().equals(jugadoresEquipo.getJugador().getUsuario())){
+        Usuario jugador = usuarioRepository.findByUsuario(jugadorUsuario).orElse(null);
+        if (jugador == null) {
+            throw new BadRequestException("El usuario del jugador no existe");
+        }
+
+        if (jugador == null) {
+            throw new BadRequestException("El usuario del jugador no existe");
+        }
+
+        jugadoresEquipo.setEquipo(equipo);
+        jugadoresEquipo.setJugador(jugador);
+
+        // Verificar si el jugador ya existe en el equipo
+        for (JugadoresEquipo jugadorEnEquipo : equipo.getJugadores()) {
+            if (jugadorEnEquipo.getJugador().getUsuario().equals(jugadorUsuario)) {
                 throw new BadRequestException("El jugador ya existe en el equipo");
             }
         }
 
+        // Guardar la instancia de JugadoresEquipo en el repositorio
+        equipo.addJugador(jugadoresEquipo);
+        equipoRepository.save(equipo);
 
-        equipo.get().addJugador(jugadoresEquipo);
-        equipoRepository.save(equipo.get());
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Jugador asignado correctamente");
 
-        Map<String, Object> team = new HashMap<>();
-
-        team.put("message", "Jugador asignado correctamente.");
-
-        return ResponseEntity.ok(team);
+        return ResponseEntity.ok(response);
     }
     @Transactional
     public ResponseEntity<Map<String, Object>> eliminarJugador(String nombreEquipo, String nombreJugador) {

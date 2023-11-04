@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.equipos;
 
+import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.validation.Valid;
@@ -27,6 +28,8 @@ public class EquipoController {
     public Equipo obtenerEquipoAdminEquipo(@RequestParam("idAdminEquipo") String idAdminEquipo) {
         return equipoService.obtenerEquipoAdminEquipo(idAdminEquipo);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @GetMapping("/{nombreEquipo}/jugadores")
     public List<JugadoresEquipo> obtenerJugadoresPorNombreDelEquipo(@PathVariable String nombreEquipo) {
         return equipoService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
@@ -41,16 +44,16 @@ public class EquipoController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @PostMapping("/agregarJugador")
-    public ResponseEntity<Map<String, Object>> crearJugadoresEquipo( @RequestBody JugadoresEquipo jugadoresEquipo){
-        return equipoService.agregarJugador(jugadoresEquipo);
+    public ResponseEntity<Map<String, Object>> crearJugadoresEquipo(@RequestBody JugadoresEquipoDTO jugadoresEquipoDTO) {
+        return equipoService.agregarJugador(jugadoresEquipoDTO);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @DeleteMapping("/eliminarJugador")
-    public ResponseEntity<Map<String, Object>> eliminarJugador(@RequestBody Map<String, String> requestMap) {
-        String nombreEquipo = requestMap.get("nombreEquipo");
-        String nombreJugador = requestMap.get("nombreJugador");
-
+    public ResponseEntity<Map<String, Object>> eliminarJugador(
+            @RequestParam String nombreEquipo,
+            @RequestParam String nombreJugador
+    ) {
         return equipoService.eliminarJugador(nombreEquipo, nombreJugador);
     }
 
