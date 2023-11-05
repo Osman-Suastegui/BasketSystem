@@ -5,6 +5,7 @@ import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
 import com.basket.BasketballSystem.temporadas.Temporada;
 import com.basket.BasketballSystem.temporadas.TemporadaRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
@@ -70,7 +71,6 @@ public class PartidoService {
         for (Partido partido : partidosFiltrados) {
             Map<String, Object> p = new HashMap<>();
             p.put("idPartido", partido.getClavePartido());
-            p.put("arbitro", arbitro.getUsuario());
             p.put("fechaInicio", partido.getFechaInicio());
             Instant fechaInicioPartido = partido.getFechaInicio();
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
@@ -313,5 +313,21 @@ public class PartidoService {
 
         return ResponseEntity.ok(partidoMes);
 
+    }
+
+    public ResponseEntity<PartidoResponse> obtenerPartido(Long idPartido) {
+         Optional<Partido> partido = partidoRepository.findById(idPartido);
+            if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+            PartidoResponse partidoResponse = new PartidoResponse();
+            partidoResponse.setClavePartido(partido.get().getClavePartido());
+            partidoResponse.setFase(partido.get().getFase().toString());
+            partidoResponse.setFechaInicio(partido.get().getFechaInicio().toString());
+            partidoResponse.setEquipo1(partido.get().getEquipo1().getNombre());
+            partidoResponse.setEquipo2(partido.get().getEquipo2().getNombre());
+            partidoResponse.setArbitro(partido.get().getArbitro().getUsuario());
+            partidoResponse.setResultado(partido.get().getGanador());
+            partidoResponse.setClaveTemporada(partido.get().getTemporada().getClaveTemporada());
+            return ResponseEntity.ok(partidoResponse);
     }
 }

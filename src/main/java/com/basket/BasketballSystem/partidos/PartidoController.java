@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.partidos;
 
+import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
 import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,6 @@ public class PartidoController {
     public ResponseEntity<Map<String, Object>> agendarPartido(@RequestBody Map<String, Object> partido){
         Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
         String fecha = partido.get("fechaInicio").toString();
-        System.out.println("fecha recibida:" + fecha);
         return partidoService.agendarPartido(idPartido,fecha);
     }
 
@@ -59,6 +59,12 @@ public class PartidoController {
         return partidoService.asignarArbitro(idPartido,idArbitro);
 
     }
+
+    @GetMapping("/obtenerPartido")
+    public ResponseEntity<PartidoResponse> obtenerPartido(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerPartido(idPartido);
+    }
+
 
 
 
