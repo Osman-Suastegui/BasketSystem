@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
+import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
@@ -11,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -23,16 +26,16 @@ public class JugadorPartidoService {
     JugadoresEquipoRepository jugadoresEquipoRepository;
 
 
-    public ResponseEntity<String> agregarJugadorPartido(JugadorPartido jugadorPartido) {
+    public ResponseEntity<Map<String, Object>> agregarJugadorPartido(JugadorPartido jugadorPartido) {
 
         if (jugadorPartido.getEquipo() == null) {
-            return ResponseEntity.badRequest().body("El jugador debe pertenecer a un equipo");
+            throw new BadRequestException("El equipo no puede ser nulo");
         }
         if (jugadorPartido.getJugador() == null) {
-            return ResponseEntity.badRequest().body("El jugador no puede ser nulo");
+            throw new BadRequestException("El jugador no puede ser nulo");
         }
         if(jugadorPartido.getPartido() == null){
-            return ResponseEntity.badRequest().body("El partido del jugador no puede ser nula");
+            throw new BadRequestException("El partido no puede ser nulo");
         }
 
         JugadoresEquipo jugadoresEquipo = jugadoresEquipoRepository.findByJugadorAndEquipo_Nombre(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
@@ -43,9 +46,15 @@ public class JugadorPartidoService {
         jugadorPartido.setTirosLibres(0);
         jugadorPartido.setTirosDe3Puntos(0);
         jugadorPartido.setFaltas(0);
+        jugadorPartido.setEnBanca(true);
 
         jugadorPartidoRepository.save(jugadorPartido);
-        return ResponseEntity.ok("Jugador agregado al partido");
+
+        Map<String, Object> jugadorpart = new HashMap<>();
+        jugadorpart.put("message", "Jugador agregado al partido");
+
+
+        return ResponseEntity.ok(jugadorpart);
     }
 
     public ActualizarJugadorPartidoResponse agregarPunto(actualizarJugadorPartidoRequest jugadorPartidoDTO) {
@@ -115,5 +124,11 @@ public class JugadorPartidoService {
 
         return jugadoresPartidoResponse;
 
+    }
+
+    public List<String> obtenerJugadoresNoEnPartido(String nombreEquipo, Long clavePartido) {
+        List<String> jugadoresNoEnPartido = new ArrayList<>();
+        jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido);
+        return jugadoresNoEnPartido;
     }
 }

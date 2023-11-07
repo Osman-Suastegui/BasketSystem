@@ -16,6 +16,9 @@ public interface PartidoRepository extends JpaRepository<Partido,Long> {
 
     List<Partido> findAllByEquipo1InOrEquipo2In(List<Equipo> equipos1,List<Equipo> equipos2);
 
+    @Query("SELECT p FROM Partido p WHERE p.equipo1.nombre = :nombreEquipo OR p.equipo2.nombre = :nombreEquipo")
+    List<Partido> findByEquipo1NombreOrEquipo2Nombre(String nombreEquipo);
+
     List<Partido> findAllByTemporada(Temporada temporada);
 //        contar los partidos de una temporada
 

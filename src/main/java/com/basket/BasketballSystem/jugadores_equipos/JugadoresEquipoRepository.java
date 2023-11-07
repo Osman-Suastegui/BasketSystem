@@ -32,6 +32,12 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
             ")")
     List<Usuario> findJugadoresNotInEquipo(@Param("equipoNombre") String equipoNombre);
 
+    @Query(value= "SELECT je.jugador FROM jugadores_equipos je " +
+            "WHERE je.nombre_equipo = ?1 " +
+            "AND je.jugador NOT IN " +
+            "(SELECT jp.jugador FROM jugadores_partidos jp " +
+            "WHERE jp.clave_partido = ?2 AND jp.equipo = ?1)", nativeQuery = true)
+    List<String> findJugadoresNoEnPartidos(String nombreEquipo, Long clavePartido);
 
 
 

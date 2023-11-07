@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.partidos;
 
 import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.equipos.EquipoRepository;
 import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
@@ -28,6 +29,9 @@ public class PartidoService {
     PartidoRepository partidoRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
+
+    @Autowired
+    EquipoRepository equipoRepository;
 
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
@@ -111,7 +115,81 @@ public class PartidoService {
         partidosMap.addAll(partidosProximosMap);
         return partidosMap;
     }
+    public List<Map<String, Object>> obtenerPartidosEquipo(String idEquipo, String estatusPartido) {
+        final int duracionPartido = 40; // 40 minutos dura un partido ??
+//        ESTATUS PARTIDO enCurso, finalizado, proximo
+        List<Map<String, Object>> partidosFinalizadosMap = new ArrayList<>();
+        List<Map<String, Object>> partidosEnCursoMap = new ArrayList<>();
+        List<Map<String, Object>> partidosProximosMap = new ArrayList<>();
+        // Obtén la fecha y hora actual
+        Instant horaAcutal = Instant.now();
 
+        Duration durationPartido = Duration.ofMinutes(duracionPartido);
+        System.out.println("nombre Partido " + idEquipo + " fin");
+        Equipo equipo = equipoRepository.findByNombre(idEquipo);
+
+
+        String nombreEquipo = equipo.getNombre();
+
+        List<Partido> partidos = partidoRepository.findByEquipo1NombreOrEquipo2Nombre(nombreEquipo);
+        List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getGanador().isEmpty() && partido.getFechaInicio() != null ).
+                collect(Collectors.toList());
+
+        partidosFiltrados.sort((partido1, partido2) -> {
+            Instant fechaInicio1 = partido1.getFechaInicio();
+            Instant fechaInicio2 = partido2.getFechaInicio();
+            return fechaInicio1.compareTo(fechaInicio2);
+        });
+
+
+        List<Map<String, Object>> partidosMap = new ArrayList<>();
+
+        for (Partido partido : partidosFiltrados) {
+            Map<String, Object> p = new HashMap<>();
+            p.put("idPartido", partido.getClavePartido());
+            p.put("fechaInicio", partido.getFechaInicio());
+            Instant fechaInicioPartido = partido.getFechaInicio();
+            Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
+
+            p.put("temporadaId", partido.getTemporada().getClaveTemporada());
+            p.put("equipo1", partido.getEquipo1().getNombre());
+            p.put("equipo2", partido.getEquipo2().getNombre());
+
+            if (fechaInicioPartido.isBefore(horaAcutal) && fechaEndPartido.isAfter(horaAcutal)){
+                p.put("estatus", "enCurso");
+                partidosEnCursoMap.add(p);
+            }
+            else if (fechaInicioPartido.isAfter(horaAcutal)) {
+                p.put("estatus", "proximos");
+                partidosProximosMap.add(p);
+            }
+            else{
+                p.put("estatus", "finalizados");
+                partidosFinalizadosMap.add(p);
+
+            }
+
+
+
+        }
+
+        if (estatusPartido.equals("enCurso")){
+            System.out.println("EN CURSO");
+            return partidosEnCursoMap;
+        }else if(estatusPartido.equals("finalizados")){
+            System.out.println("FINALIZADOS");
+            return partidosFinalizadosMap;
+        }else if (estatusPartido.equals("proximos")){
+            System.out.println("PROXIMOS");
+            return partidosProximosMap;
+        }
+
+//        retornamos todos los partidos
+        partidosMap.addAll(partidosEnCursoMap);
+        partidosMap.addAll(partidosFinalizadosMap);
+        partidosMap.addAll(partidosProximosMap);
+        return partidosMap;
+   }
 
     public List<Map<String, Object>> obtenerPartidosJugador(String idJugador) {
         Usuario jugador = usuarioRepository.findById(idJugador).orElse(null);
@@ -329,5 +407,16 @@ public class PartidoService {
             partidoResponse.setResultado(partido.get().getGanador());
             partidoResponse.setClaveTemporada(partido.get().getTemporada().getClaveTemporada());
             return ResponseEntity.ok(partidoResponse);
+    }
+
+    public ResponseEntity<Map<String, Object>> obtenerEquipo1Equipo2(Long idPartido) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        Map<String, Object> equipo1Equipo2 = new HashMap<>();
+        equipo1Equipo2.put("equipo1", partido.get().getEquipo1().getNombre());
+        equipo1Equipo2.put("equipo2", partido.get().getEquipo2().getNombre());
+
+        return ResponseEntity.ok(equipo1Equipo2);
     }
 }

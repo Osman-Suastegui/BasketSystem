@@ -21,6 +21,13 @@ public class PartidoController {
         return partidoService.obtenerPartidosArbitro(idArbitro,estatusPartido);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+    @RequestMapping ("/obtenerPartidosEquipo")
+    public List<Map<String,Object>>  obtenerPartidosEquipo(@RequestParam("idEquipo") String idEquipo, @RequestParam(value = "estatusPartido",required = false) String estatusPartido ){
+        return partidoService.obtenerPartidosEquipo(idEquipo,estatusPartido);
+    }
+
+
     @RequestMapping ("/obtenerPartidosJugador")
     public List<Map<String,Object>>  obtenerPartidosJugador(@RequestParam("idJugador") String idJugador){
 
@@ -63,6 +70,12 @@ public class PartidoController {
     @GetMapping("/obtenerPartido")
     public ResponseEntity<PartidoResponse> obtenerPartido(@RequestParam("clavePartido") Long idPartido){
         return partidoService.obtenerPartido(idPartido);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+    @GetMapping("/obtenerEquipo1Equipo2")
+    public ResponseEntity<Map<String, Object>> obtenerEquipo1Equipo2(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerEquipo1Equipo2(idPartido);
     }
 
 

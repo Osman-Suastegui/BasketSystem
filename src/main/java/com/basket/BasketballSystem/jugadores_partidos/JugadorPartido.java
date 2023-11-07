@@ -157,6 +157,11 @@ public class JugadorPartido {
         this.posicion = posicion;
     }
 
+
+    public void setEnBanca(Boolean enBanca) {
+        this.enBanca = enBanca;
+    }
+
     @Override
     public String toString() {
         return "JugadorPartido{" +

@@ -70,6 +70,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 ### Partidos
 - [Obtener todos los jugadores de un partido y equipo](#obtener-todos-los-jugadores-de-un-partido-y-un-equipo)
 - [Obtener partido por id](#obtener-partido-por-id)
+- [Obtener los partidos de un equipo](#obtener-los-partidos-de-un-equipo)
 ## Ligas
 ### Obtener Temporadas de una Liga
 
@@ -1038,6 +1039,27 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
     "claveTemporada": 1,
     "fase": "CUARTOS_DE_FINAL"
 }
+```
+
+### Obtener los partidos de un equipo
+```bash
+  GET Partido/obtenerPartidosEquipo?idEquipo=equipo12&estatusPartido=proximos
+```
+
+**Parámetros:**
+- `idEquipo` (**requerido**): El identificador del equipo
+- `estatusPartido` (**requerido**): El estatus del partido puede ser proximo, en curso o finalizado
+
+```bash
+[
+    {
+        "temporadaId": 27,
+        "fechaInicio": "2023-11-24T15:30:45Z",
+        "equipo2": "equipo13",
+        "equipo1": "equipo12",
+        "idPartido": 9
+    }
+]
 ```
 
 
