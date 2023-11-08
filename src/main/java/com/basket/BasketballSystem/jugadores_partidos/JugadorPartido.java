@@ -158,6 +158,7 @@ public class JugadorPartido {
     }
 
 
+
     public void setEnBanca(Boolean enBanca) {
         this.enBanca = enBanca;
     }
@@ -177,5 +178,9 @@ public class JugadorPartido {
                 ", asistencias=" + asistencias +
                 ", posicion='" + posicion + '\'' +
                 '}';
+    }
+
+    public Boolean getEnBanca() {
+        return enBanca;
     }
 }

@@ -32,6 +32,7 @@ public class JugadorPartidoController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @GetMapping("/obtenerJugadoresNoEnPartido")
     public List<String> obtenerJugadoresNoEnPartido(
             @RequestParam (name="clavePartido",required = true) Long clavePartido,
@@ -39,6 +40,19 @@ public class JugadorPartidoController {
         return jugadorPartidoService.obtenerJugadoresNoEnPartido(nombreEquipo,clavePartido);
 
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+    @PutMapping("/PosicionarJugador")
+    public ResponseEntity<Map<String, Object>> posicionarJugadorEnPartido(
+            @RequestParam (name="clavePartido",required = true) Long clavePartido,
+            @RequestParam (name="usuario",required = true) String usuario,
+
+            @RequestParam (name="enBanca",required = true) Boolean enBanca) {
+        return jugadorPartidoService.posicionarJugadorEnPartido(clavePartido,usuario,enBanca);
+    }
+
+
+
 
 
 

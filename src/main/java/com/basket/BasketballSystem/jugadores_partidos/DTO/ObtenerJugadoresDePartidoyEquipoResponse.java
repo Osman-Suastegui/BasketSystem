@@ -14,5 +14,6 @@ public class ObtenerJugadoresDePartidoyEquipoResponse {
     int tirosDe2Puntos;
     int tirosDe3Puntos;
     int tirosLibres;
+    Boolean enBanca;
 
 }

@@ -7,6 +7,7 @@ import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePart
 import com.basket.BasketballSystem.jugadores_partidos.DTO.ActualizarJugadorPartidoResponse;
 import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoRequest;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -116,6 +117,7 @@ public class JugadorPartidoService {
             jpResponse.setTirosLibres(jp.getTirosLibres());
             jpResponse.setFaltas(jp.getFaltas());
             jpResponse.setAsistencias(jp.getAsistencias());
+            jpResponse.setEnBanca(jp.getEnBanca());
 
             jugadoresPartidoResponse.add(jpResponse);
 
@@ -130,5 +132,13 @@ public class JugadorPartidoService {
         List<String> jugadoresNoEnPartido = new ArrayList<>();
         jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido);
         return jugadoresNoEnPartido;
+    }
+
+    @Transactional
+    public ResponseEntity<Map<String, Object>> posicionarJugadorEnPartido(Long clavePartido, String usuario, Boolean enBanca) {
+        jugadorPartidoRepository.posicionarJugadorEnPartido(clavePartido,usuario,enBanca);
+        Map<String, Object> jugadorpart = new HashMap<>();
+        jugadorpart.put("message", "Jugador actualizado");
+        return ResponseEntity.ok(jugadorpart);
     }
 }
