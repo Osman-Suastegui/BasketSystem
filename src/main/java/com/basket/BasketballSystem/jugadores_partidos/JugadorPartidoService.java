@@ -3,9 +3,7 @@ package com.basket.BasketballSystem.jugadores_partidos;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.ActualizarJugadorPartidoResponse;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoRequest;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,5 +138,41 @@ public class JugadorPartidoService {
         Map<String, Object> jugadorpart = new HashMap<>();
         jugadorpart.put("message", "Jugador actualizado");
         return ResponseEntity.ok(jugadorpart);
+    }
+
+    @Transactional
+    public SacarJugadorPartidoResponse sacarJugadorDePartido(SacarJugadorDePartidoRequest sacarJugadorDePartidoMensaje) {
+        Long clavePartido = sacarJugadorDePartidoMensaje.getClavePartido();
+        String jugador = sacarJugadorDePartidoMensaje.getJugador();
+        String nombreEquipo = sacarJugadorDePartidoMensaje.getNombreEquipo();
+        jugadorPartidoRepository.setEnBanca(true,clavePartido,jugador,nombreEquipo);
+
+        SacarJugadorPartidoResponse sacarJugadorPartidoResponse = new SacarJugadorPartidoResponse();
+        sacarJugadorPartidoResponse.setClavePartido(clavePartido);
+        sacarJugadorPartidoResponse.setJugador(jugador);
+        sacarJugadorPartidoResponse.setNombreEquipo(nombreEquipo);
+        return sacarJugadorPartidoResponse;
+
+
+    }
+
+    @Transactional
+    public MeterJugadorResponse meterJugadorAPartido(MeterJugadorRequest meterJugadorMessage) {
+        Long clavePartido = meterJugadorMessage.getClavePartido();
+        String jugador = meterJugadorMessage.getJugador();
+        String nombreEquipo = meterJugadorMessage.getNombreEquipo();
+
+        jugadorPartidoRepository.setEnBanca(false,clavePartido,jugador,nombreEquipo);
+
+        MeterJugadorResponse meterJugadorResponse = new MeterJugadorResponse();
+        meterJugadorResponse.setClavePartido(clavePartido);
+        meterJugadorResponse.setJugador(jugador);
+        meterJugadorResponse.setNombreEquipo(nombreEquipo);
+        meterJugadorResponse.setTirosDe3Puntos(meterJugadorMessage.getTirosDe3Puntos());
+        meterJugadorResponse.setTirosDe2Puntos(meterJugadorMessage.getTirosDe2Puntos());
+        meterJugadorResponse.setTirosLibres(meterJugadorMessage.getTirosLibres());
+        meterJugadorResponse.setFaltas(meterJugadorMessage.getFaltas());
+        meterJugadorResponse.setAsistencias(meterJugadorMessage.getAsistencias());
+        return meterJugadorResponse;
     }
 }

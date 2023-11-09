@@ -38,6 +38,9 @@ public interface JugadorPartidoRepository extends JpaRepository<JugadorPartido, 
     @Query("UPDATE JugadorPartido jp SET jp.enBanca = ?3 WHERE jp.partido.clavePartido = ?1 AND jp.jugador.usuario = ?2")
     void posicionarJugadorEnPartido(Long clavePartido, String usuario, Boolean enBanca);
 
+    @Modifying
+    @Query("UPDATE JugadorPartido jp SET jp.enBanca = ?1 WHERE jp.partido.clavePartido = ?2 AND jp.jugador.usuario = ?3 AND jp.equipo = ?4")
+    void setEnBanca(Boolean enBanca, Long clavePartido, String jugador, String equipo);
 
 
 }

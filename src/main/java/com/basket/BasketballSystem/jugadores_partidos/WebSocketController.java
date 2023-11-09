@@ -1,7 +1,6 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
-import com.basket.BasketballSystem.jugadores_partidos.DTO.ActualizarJugadorPartidoResponse;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.actualizarJugadorPartidoRequest;
+import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -14,9 +13,24 @@ public class WebSocketController {
 
     @Autowired
     JugadorPartidoService jugadorPartidoService;
-    @MessageMapping("/agregarPunto")
-    @SendTo("/topic/ActualizacionesDePuntos")
+    @MessageMapping("/agregarPunto/{claveDelPartido}")
+    @SendTo("/topic/ActualizacionesDePuntos/{claveDelPartido}")
     public ActualizarJugadorPartidoResponse agregarPunto(actualizarJugadorPartidoRequest actualizarJugadorPartidoMensaje) {
         return jugadorPartidoService.agregarPunto(actualizarJugadorPartidoMensaje);
     }
+
+    @MessageMapping("/sacarJugador/{claveDelPartido}")
+    @SendTo("/topic/sacarJugador/{claveDelPartido}")
+    public SacarJugadorPartidoResponse sacarJugadorDePartido(SacarJugadorDePartidoRequest sacarJugadorDePartidoMensaje) {
+        System.out.println("sacarJugadorDePartidoMensaje = " + sacarJugadorDePartidoMensaje);
+        return jugadorPartidoService.sacarJugadorDePartido(sacarJugadorDePartidoMensaje);
+    }
+
+    @MessageMapping("/meterJugador/{claveDelPartido}")
+    @SendTo("/topic/meterJugador/{claveDelPartido}")
+    public MeterJugadorResponse meterJugadorAPartido(MeterJugadorRequest meterJugadorMessage) {
+        System.out.println("sacarJugadorDePartidoMensaje = " + meterJugadorMessage);
+        return jugadorPartidoService.meterJugadorAPartido(meterJugadorMessage);
+    }
+
 }
