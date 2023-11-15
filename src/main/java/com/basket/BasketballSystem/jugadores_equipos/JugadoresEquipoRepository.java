@@ -2,6 +2,8 @@ package com.basket.BasketballSystem.jugadores_equipos;
 
 import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
+import com.basket.BasketballSystem.temporadas.Rama;
+import com.basket.BasketballSystem.usuarios.Genero;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,10 +29,25 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
 
     @Query("SELECT u FROM Usuario u " +
             "WHERE u.rol = 'jugador' " +
+            "AND u.genero = :genero " +
+            "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', u.fechaNacimiento) BETWEEN :edadMin AND :edadMax " +
             "AND u.usuario NOT IN (" +
             "    SELECT je.jugador.usuario FROM JugadoresEquipo je WHERE je.equipo.nombre = :equipoNombre" +
             ")")
-    List<Usuario> findJugadoresNotInEquipo(@Param("equipoNombre") String equipoNombre);
+    List<Usuario> findJugadoresNotInEquipoWithAgeAndGenderCondition(
+            @Param("edadMin") int edadMin,
+            @Param("edadMax") int edadMax,
+            @Param("genero") Genero genero,  // Asegúrate de utilizar el tipo enumerado correcto
+            @Param("equipoNombre") String equipoNombre
+    );
+
+
+
+
+
+
+
+
 
     @Query(value= "SELECT je.jugador FROM jugadores_equipos je " +
             "WHERE je.nombre_equipo = ?1 " +

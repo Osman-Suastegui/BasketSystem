@@ -6,6 +6,9 @@ import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 
+import com.basket.BasketballSystem.temporadas.Categoria;
+import com.basket.BasketballSystem.temporadas.Rama;
+import com.basket.BasketballSystem.usuarios.Genero;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -160,9 +163,49 @@ public class EquipoService {
 
 
     public List<Usuario> obtenerJugadoresParaEquipo(String nombreEquipo) {
-        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipo(nombreEquipo);
+        Equipo equipo = equipoRepository.findByNombre(nombreEquipo);
+
+         Rama rama = equipo.getRama();
+         String ramaString = rama.toString();
+        Genero genero = ramaString.equals("MASCULINO") ? Genero.MASCULINO : Genero.FEMENINO;
+         Categoria categoria = equipo.getCategoria();
+        int edadInicio = 0;
+        int edadFin = 0;
+        if(categoria == Categoria.PREBENJAMIN) {
+            edadInicio = 6;
+            edadFin = 7;
+        }else if (categoria == Categoria.BENJAMIN) {
+            edadInicio = 8;
+            edadFin = 9;
+        }else if (categoria == Categoria.ALEVIN) {
+            edadInicio = 10;
+            edadFin = 11;
+        }else if (categoria == Categoria.INFANTIL) {
+            edadInicio = 12;
+            edadFin = 13;
+        }else if (categoria == Categoria.CADETE) {
+            edadInicio = 14;
+            edadFin = 15;
+        }else if (categoria == Categoria.JUNIOR) {
+            edadInicio = 16;
+            edadFin = 17;
+        }else if (categoria == Categoria.SUB22) {
+            edadInicio = 18;
+            edadFin = 21;
+        }else if (categoria == Categoria.SENIOR) {
+            edadInicio = 22;
+            edadFin = 200;
+        }else{
+            edadInicio = 0;
+            edadFin = 200;
+        }
+
+        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipoWithAgeAndGenderCondition(edadInicio, edadFin,genero, nombreEquipo);
             return jugadores;
     }
+
+
+
 
 
 

@@ -3,6 +3,10 @@ package com.basket.BasketballSystem.equipos_temporadas;
 import com.basket.BasketballSystem.equipos.Equipo;
 import com.basket.BasketballSystem.equipos.EquipoRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.temporadas.Categoria;
+import com.basket.BasketballSystem.temporadas.Rama;
+import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.temporadas.TemporadaRepository;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,9 @@ import java.util.Map;
 
 @Service
 public class EquipoTemporadaService {
+
+    @Autowired
+    TemporadaRepository TemporadaRepository;
 
 
     @Autowired
@@ -81,11 +88,16 @@ public class EquipoTemporadaService {
 
 
     public List<String> obtenerEquiposNoEnTemporada(Long temporadaId) {
+        Temporada temp = TemporadaRepository.findByClaveTemporada(temporadaId);
+
+        Rama rama = temp.getRama();
+        Categoria categoria = temp.getCategoria();
+
+        List<String> equipos = equipoTemporadaRepository.findEquiposNotInTemporadaAndCategoryAndGender(temporadaId, categoria.toString(), rama.toString());
 
 
-            List<String> equipos = equipoTemporadaRepository.findEquiposNotInTemporada(temporadaId);
-
-
-            return equipos;
+        return equipos;
     }
+
+
 }

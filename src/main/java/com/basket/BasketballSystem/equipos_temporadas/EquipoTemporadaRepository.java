@@ -1,6 +1,8 @@
 package com.basket.BasketballSystem.equipos_temporadas;
 
 import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.temporadas.Categoria;
+import com.basket.BasketballSystem.temporadas.Rama;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,8 +29,13 @@ public interface EquipoTemporadaRepository extends JpaRepository<EquipoTemporada
             "  SELECT et.equipo " +
             "  FROM equipos_temporadas et " +
             "  WHERE et.clave_temporada = :claveTemporada " +
-            ")", nativeQuery = true)
-    List<String> findEquiposNotInTemporada(@Param("claveTemporada") Long claveTemporada);
+            ") AND e.categoria = :categoria AND e.rama = :rama", nativeQuery = true)
+    List<String> findEquiposNotInTemporadaAndCategoryAndGender(
+            @Param("claveTemporada") Long claveTemporada,
+            @Param("categoria") String categoria,
+            @Param("rama") String rama
+    );
+
 
 
 

@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.temporadas;
 
 import com.basket.BasketballSystem.ligas.Liga;
+import com.basket.BasketballSystem.partidos.Partido;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,5 +38,6 @@ public interface TemporadaRepository extends JpaRepository<Temporada, Long> {
     @Query(value = "UPDATE temporadas SET estado = :estado WHERE clave_temporada = :temporadaId", nativeQuery = true)
     void updateTemporadaEstado(@Param("temporadaId") Long temporadaId, @Param("estado") String estado);
 
+    Temporada findByClaveTemporada(Long claveTemporada);
 
 }
