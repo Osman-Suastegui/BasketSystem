@@ -33,8 +33,11 @@ public class Temporada {
     @Column(name = "cantidad_equipos")
     private Integer cantidadEquipos;
 
-    @Column(name = "cantidad_eliminados")
-    private Integer cantidadEliminados;
+    @Column(name = "cantidad_playoffs")
+    private Integer cantidadPlayoffs;
+
+    @Column(name = "cantidad_enfrentamientos_regular")
+    private Integer cantidadEnfrentamientosRegular;
     @ManyToMany
     @JoinTable(
             name = "temporadas_arbitro",
@@ -67,6 +70,10 @@ public class Temporada {
     public Temporada() {
     }
 
+    public int getCantidadEnfrentamientosRegular() {
+        return cantidadEnfrentamientosRegular;
+    }
+
     public Long getClaveTemporada() {
         return claveTemporada;
     }
@@ -92,7 +99,7 @@ public class Temporada {
     }
 
     public Integer getCantidadEliminados() {
-        return cantidadEliminados;
+        return cantidadPlayoffs;
     }
 
     public List<Usuario> getArbitros() {
@@ -104,7 +111,7 @@ public class Temporada {
     }
 
     public void setCantidadEliminados(Integer cantidadEliminados) {
-        this.cantidadEliminados = cantidadEliminados;
+        this.cantidadPlayoffs = cantidadEliminados;
     }
 
     public Categoria getCategoria() {

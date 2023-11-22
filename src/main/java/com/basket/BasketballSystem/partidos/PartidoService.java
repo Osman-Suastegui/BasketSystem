@@ -19,7 +19,6 @@ import java.time.Instant;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -317,6 +316,43 @@ public class PartidoService {
         return ResponseEntity.ok(arbitroPartido);
     }
 
+
+    public ResponseEntity<Map<String,Object>> generarPartidosTemporadaRegular(Long idTemporada, int cantidadEnfrentamientosRegular){
+        Temporada t = temporadaRepository.findById(idTemporada).orElse(null);
+        if(t == null) throw new BadRequestException("La temporada no existe");
+        if(cantidadEnfrentamientosRegular != 1 && cantidadEnfrentamientosRegular != 2) throw new BadRequestException("La cantidad de enfrentamientos debe ser 1 o 2");
+
+        // equipos que participan en la temporada
+        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+        List<Partido> partidos = new ArrayList<>();
+        for(int i = 0 ; i < equipos.size()-1;i++){
+
+            for(int j = i+1; j < equipos.size();j++){
+                Partido partido = new Partido();
+                partido.setEquipo1(equipos.get(i));
+                partido.setEquipo2(equipos.get(j));
+                partido.setTemporada(t);
+                partido.setFase(Fase.REGULAR);
+                partidos.add(partido);
+                if(cantidadEnfrentamientosRegular == 2){
+                    partido = new Partido();
+                    partido.setEquipo1(equipos.get(i));
+                    partido.setEquipo2(equipos.get(j));
+                    partido.setTemporada(t);
+                    partido.setFase(Fase.REGULAR);
+                    partidos.add(partido);
+                }
+
+
+            }
+        }
+
+        for(Partido p : partidos){
+            partidoRepository.save(p);
+        }
+        return ResponseEntity.ok().build();
+
+    }
 
     public ResponseEntity<Map<String, Object>>  generarPartidosTemporada(Long idTemporada) {
 //        -se checa si ya hay 8 equipos en la temporada si no es asi se manda un error
