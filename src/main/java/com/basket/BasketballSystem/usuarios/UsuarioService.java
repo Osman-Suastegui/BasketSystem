@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UsuarioService {
@@ -23,18 +21,21 @@ public class UsuarioService {
         }
 
 
-    public ResponseEntity<String> actualizarUsuario(ActualizarUsuarioRequest req  ) {
+    public ResponseEntity<Map<String, Object>> actualizarUsuario(ActualizarUsuarioRequest req  ) {
         // Verifica si el usuario existe por su ID
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(req.getUsuario());
         if (usuarioOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("El usuario no existe.");
+            throw new BadRequestException("El usuario no existe.");
         }
         Usuario usuario = usuarioOptional.get();
         usuario.setNombre(req.getNombre());
         usuario.setApellido(req.getApellido());
         usuarioRepository.save(usuario);
 
-        return ResponseEntity.ok("Nombre y apellido del usuario actualizados exitosamente.");
+        Map<String, Object> userAct = new HashMap<>();
+        userAct.put("message", "Nombre y apellido del usuario actualizados exitosamente.");
+
+        return ResponseEntity.ok(userAct);
     }
 
 
@@ -66,6 +67,15 @@ public class UsuarioService {
         }
         Rol userRol = usuarioOptional.get().getRol();
         return ResponseEntity.ok(userRol.toString());
+    }
+
+
+    public Usuario obtenerUsuario(String usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario);
+        if (usuarioOptional.isEmpty()) {
+            throw new BadRequestException("El usuario no existe.");
+        }
+        return usuarioOptional.get();
     }
 
 

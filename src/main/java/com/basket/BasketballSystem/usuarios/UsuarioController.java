@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -32,8 +33,13 @@ public class UsuarioController {
 
     @PutMapping("ActualizarUsuario")
     @PreAuthorize("hasAnyRole('ROLE_JUGADOR', 'ROLE_ADMIN_EQUIPO', 'ROLE_ADMIN_LIGA', 'ROLE_ARBITRO')")
-    public ResponseEntity<String> actualizarUsuario(@Validated @RequestBody ActualizarUsuarioRequest req) {
+    public ResponseEntity<Map<String, Object>> actualizarUsuario(@Validated @RequestBody ActualizarUsuarioRequest req) {
         return usuarioService.actualizarUsuario(req);
+    }
+
+    @GetMapping("obtenerUsuario")
+    public Usuario obtenerUsuario(@RequestParam(name = "usuario", required = false) String usuario) {
+        return usuarioService.obtenerUsuario(usuario);
     }
 
 
@@ -51,6 +57,9 @@ public class UsuarioController {
     public ResponseEntity<String> obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
         return usuarioService.obtenerTipoUser(usuario);
     }
+
+
+
 
 
 
