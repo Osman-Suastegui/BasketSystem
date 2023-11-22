@@ -44,9 +44,9 @@ public class Partido {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant fechaInicio;
 
-    @ManyToOne
-    @JoinColumn(name = "resultado")
-    private Equipo ganador;
+
+    @Column(name = "ganador")
+    private String ganador;
 
 
 
@@ -81,14 +81,16 @@ public class Partido {
     }
     public String getGanador() {
         if(ganador == null) return "";
-        return ganador.getNombre();
+        return ganador;
     }
     @JsonIgnore
-    public Equipo obtenerEquipoGanador(){
+    public String obtenerEquipoGanador(){
         return ganador;
     }
 
-
+    public void setGanador(String ganador) {
+        this.ganador = ganador;
+    }
 
     public void setArbitro(Usuario arbitro) {
         this.arbitro = arbitro;

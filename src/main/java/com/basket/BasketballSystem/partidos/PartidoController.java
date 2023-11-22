@@ -86,6 +86,18 @@ public class PartidoController {
         Long idTemporadaLong = idTemporada.longValue();
         return partidoService.generarPartidosTemporadaRegular(idTemporadaLong,cantidadEnfrentamientosRegular);
     }
+    @GetMapping("/rankingTemporadaRegular")
+    public ResponseEntity<Map<String, Integer>> rankingTemporadaRegular(@RequestParam("idTemporada") Long idTemporada){
+        return partidoService.rankingTemporadaRegular(idTemporada);
+    }
+
+//    solo para tesst
+    @PutMapping("/setGanadorAleatorio")
+    public ResponseEntity<Map<String, Object>> setGanadorAleatorio(@RequestBody Map<String, Object> partido){
+        Long idPartido = Long.parseLong(partido.get("idTemporada").toString());
+        partidoService.setGanadorAleatorio(idPartido);
+        return ResponseEntity.ok(Map.of("mensaje", "Ganador asignado"));
+    }
 
 
 

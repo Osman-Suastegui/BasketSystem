@@ -354,78 +354,103 @@ public class PartidoService {
 
     }
 
+//    Metodo en Mantenimiento
     public ResponseEntity<Map<String, Object>>  generarPartidosTemporada(Long idTemporada) {
-//        -se checa si ya hay 8 equipos en la temporada si no es asi se manda un error
-//        tomamos los equipos de la temporada y generamos 4 partidos ya que son 8 equipos
-//        se registran los partidos en la bd
-//        retornamos los 4 partidos al usuario
+////        -se checa si ya hay 8 equipos en la temporada si no es asi se manda un error
+////        tomamos los equipos de la temporada y generamos 4 partidos ya que son 8 equipos
+////        se registran los partidos en la bd
+////        retornamos los 4 partidos al usuario
+//        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+//        if (equipos.size() != 8) throw new BadRequestException("No hay 8 equipos en la temporada");
+//
+//        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+//        int cantidadPartidosTerminados = 0;
+//        for(Partido p :partidos){
+//            if(p.getGanador().length() != 0){
+//                cantidadPartidosTerminados++;
+//            }
+//        }
+//
+//        if (partidos.size() == 0) {
+////            se generan 4 partidos
+//            for(int i = 0 ; i < equipos.size();i +=2){
+//                Partido partido = new Partido();
+//                partido.setTemporada(temporadaRepository.findById(idTemporada).get());
+//                partido.setEquipo1(equipos.get(i));
+//                partido.setEquipo2(equipos.get(i+1));
+//                Fase cuartosDeFinal = Fase.CUARTOS_DE_FINAL;
+//                partido.setFase(cuartosDeFinal);
+//                partidoRepository.save(partido);
+//                //cambia el estado de la temporada a activa
+//                temporadaRepository.updateTemporadaEstado(idTemporada,"ACTIVA");
+//
+//            }
+//
+//        } else if (partidos.size() == 4 && cantidadPartidosTerminados == 4) {
+//        // se generan 2 partidos tomandolos de cuartos de final
+//            List<Equipo> equiposGanadoresCuartosDeFinal = new ArrayList<>();
+//            for(Partido p : partidos){
+//                equiposGanadoresCuartosDeFinal.add(p.obtenerEquipoGanador());
+//            }
+//            for(int i = 0; i  < equiposGanadoresCuartosDeFinal.size(); i +=2){
+//                Partido partido = new Partido();
+//                partido.setTemporada(temporadaRepository.findById(idTemporada).get());
+//                partido.setEquipo1(equiposGanadoresCuartosDeFinal.get(i));
+//                partido.setEquipo2(equiposGanadoresCuartosDeFinal.get(i+1));
+//                Fase semifinal = Fase.SEMIFINAL;
+//                partido.setFase(semifinal);
+//                partidoRepository.save(partido);
+//            }
+//
+//        } else if (partidos.size() == 6 && cantidadPartidosTerminados == 6) {
+////            se genera un partido
+//            List<Equipo> equiposGanadoresSemiFinal = new ArrayList<>();
+//            for(Partido p : partidos){
+//                if(p.getFase() == Fase.SEMIFINAL){
+//                    equiposGanadoresSemiFinal.add(p.obtenerEquipoGanador());
+//                }
+//            }
+//            Partido partido = new Partido();
+//            partido.setTemporada(temporadaRepository.findById(idTemporada).get());
+//            partido.setEquipo1(equiposGanadoresSemiFinal.get(0));
+//            partido.setEquipo2(equiposGanadoresSemiFinal.get(1));
+//            partido.setFase(Fase.FINAL);
+//            partidoRepository.save(partido);
+//
+//        } else {
+//            if(cantidadPartidosTerminados == 7){
+//                throw new BadRequestException("Ya hay un ganador no se pueden generar mas partidos");
+//            }
+//            throw new BadRequestException("Los partidos ya estan generados debe esperar a que haya un resultado para volver a generarlos");
+//        }
+//        Map<String, Object> partidoMes = new HashMap<>();
+//        partidoMes.put("message", "Se han generado los partidos exitosamente.");
+//
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<Map<String,Integer>> rankingTemporadaRegular(Long idTemporada){
         List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
-        if (equipos.size() != 8) throw new BadRequestException("No hay 8 equipos en la temporada");
-
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
-        int cantidadPartidosTerminados = 0;
-        for(Partido p :partidos){
-            if(p.getGanador().length() != 0){
-                cantidadPartidosTerminados++;
-            }
+        Map<String,Integer> equiposPuntos = new HashMap<>();
+        for(Equipo e : equipos){
+            equiposPuntos.put(e.getNombre(),0);
         }
-
-        if (partidos.size() == 0) {
-//            se generan 4 partidos
-            for(int i = 0 ; i < equipos.size();i +=2){
-                Partido partido = new Partido();
-                partido.setTemporada(temporadaRepository.findById(idTemporada).get());
-                partido.setEquipo1(equipos.get(i));
-                partido.setEquipo2(equipos.get(i+1));
-                Fase cuartosDeFinal = Fase.CUARTOS_DE_FINAL;
-                partido.setFase(cuartosDeFinal);
-                partidoRepository.save(partido);
-                //cambia el estado de la temporada a activa
-                temporadaRepository.updateTemporadaEstado(idTemporada,"ACTIVA");
-
-            }
-
-        } else if (partidos.size() == 4 && cantidadPartidosTerminados == 4) {
-        // se generan 2 partidos tomandolos de cuartos de final
-            List<Equipo> equiposGanadoresCuartosDeFinal = new ArrayList<>();
-            for(Partido p : partidos){
-                equiposGanadoresCuartosDeFinal.add(p.obtenerEquipoGanador());
-            }
-            for(int i = 0; i  < equiposGanadoresCuartosDeFinal.size(); i +=2){
-                Partido partido = new Partido();
-                partido.setTemporada(temporadaRepository.findById(idTemporada).get());
-                partido.setEquipo1(equiposGanadoresCuartosDeFinal.get(i));
-                partido.setEquipo2(equiposGanadoresCuartosDeFinal.get(i+1));
-                Fase semifinal = Fase.SEMIFINAL;
-                partido.setFase(semifinal);
-                partidoRepository.save(partido);
-            }
-
-        } else if (partidos.size() == 6 && cantidadPartidosTerminados == 6) {
-//            se genera un partido
-            List<Equipo> equiposGanadoresSemiFinal = new ArrayList<>();
-            for(Partido p : partidos){
-                if(p.getFase() == Fase.SEMIFINAL){
-                    equiposGanadoresSemiFinal.add(p.obtenerEquipoGanador());
+        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        for(Partido p : partidos){
+            if(p.getGanador().length() != 0 ){
+                if(p.getGanador().equals("EMPATE")){
+                    equiposPuntos.put(p.getEquipo1().getNombre(),equiposPuntos.get(p.getEquipo1().getNombre())+1);
+                    equiposPuntos.put(p.getEquipo2().getNombre(),equiposPuntos.get(p.getEquipo2().getNombre())+1);
+                }
+                else if(p.getGanador().equals(p.getEquipo1().getNombre())){
+                    equiposPuntos.put(p.getEquipo1().getNombre(),equiposPuntos.get(p.getEquipo1().getNombre())+3);
+                }else{
+                    equiposPuntos.put(p.getEquipo2().getNombre(),equiposPuntos.get(p.getEquipo2().getNombre())+3);
                 }
             }
-            Partido partido = new Partido();
-            partido.setTemporada(temporadaRepository.findById(idTemporada).get());
-            partido.setEquipo1(equiposGanadoresSemiFinal.get(0));
-            partido.setEquipo2(equiposGanadoresSemiFinal.get(1));
-            partido.setFase(Fase.FINAL);
-            partidoRepository.save(partido);
-
-        } else {
-            if(cantidadPartidosTerminados == 7){
-                throw new BadRequestException("Ya hay un ganador no se pueden generar mas partidos");
-            }
-            throw new BadRequestException("Los partidos ya estan generados debe esperar a que haya un resultado para volver a generarlos");
         }
-        Map<String, Object> partidoMes = new HashMap<>();
-        partidoMes.put("message", "Se han generado los partidos exitosamente.");
-
-        return ResponseEntity.ok(partidoMes);
+//        return equipos puntos
+        return ResponseEntity.ok().body(equiposPuntos);
 
     }
 
@@ -454,5 +479,25 @@ public class PartidoService {
         equipo1Equipo2.put("equipo2", partido.get().getEquipo2().getNombre());
 
         return ResponseEntity.ok(equipo1Equipo2);
+    }
+
+//    METODO PARA TEST NADA MAS
+    public void setGanadorAleatorio(Long idTemporada){
+
+        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        for(Partido p : partidos){
+            if(p.getGanador().length() == 0){
+                Random r = new Random();
+                int random = r.nextInt(3);
+                if(random == 0){
+                    p.setGanador(p.getEquipo1().getNombre());
+                }else if(random == 1){
+                    p.setGanador(p.getEquipo2().getNombre());
+                }else{
+                    p.setGanador("EMPATE");
+                }
+                partidoRepository.save(p);
+            }
+        }
     }
 }
