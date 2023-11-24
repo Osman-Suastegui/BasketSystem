@@ -126,5 +126,21 @@ public class Temporada {
     public void setLiga(Liga ligaId) {
         this.liga = ligaId;
     }
+
+    public void setCantidadEnfrentamientosRegular(Integer cantidadEnfrentamientosRegular) {
+        this.cantidadEnfrentamientosRegular = cantidadEnfrentamientosRegular;
+    }
+
+    public void setCantidadEquipos(Integer cantidadEquipos) {
+        this.cantidadEquipos = cantidadEquipos;
+    }
+
+    public void setCantidadPlayoffs(Integer cantidadPlayoffs) {
+        this.cantidadPlayoffs = cantidadPlayoffs;
+    }
+
+    public Integer getCantidadPlayoffs() {
+        return cantidadPlayoffs;
+    }
 }
 

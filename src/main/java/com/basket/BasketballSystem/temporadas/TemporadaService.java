@@ -4,6 +4,7 @@ import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.ligas.DTO.obtenerLigasDeAdminResponse;
 import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.ligas.LigaRepository;
+import com.basket.BasketballSystem.temporadas.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.temporadas.DTO.obtenerTemporadasDeLigaResponse;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
@@ -50,7 +51,6 @@ public class TemporadaService {
         temporadaRepository.save(temporada);
 
 
-
         tempNew.put("claveTemporada", temporada.getClaveTemporada().toString());
 
         tempNew.put("message", "Temporada creada Exitosamente.");
@@ -85,7 +85,7 @@ public class TemporadaService {
     }
 
 
-    public ResponseEntity<Map<String, Object>>agregarArbitro(Long temporadaId, String arbitroId) {
+    public ResponseEntity<Map<String, Object>> agregarArbitro(Long temporadaId, String arbitroId) {
         Temporada temporada = temporadaRepository.findById(temporadaId).orElse(null);
         Usuario arbitro = usuarioRepository.findById(arbitroId).orElse(null);
         Map<String, Object> arbitroTemp = new HashMap<>();
@@ -94,7 +94,6 @@ public class TemporadaService {
 
         temporada.getArbitros().add(arbitro);
         temporadaRepository.save(temporada);
-
 
 
         arbitroTemp.put("message", "Arbitro agregado exitosamente.");
@@ -111,18 +110,18 @@ public class TemporadaService {
         return temporada.getArbitros();
     }
 
-    public List<Map<String,Object>> buscarTemporadasPorNombre(String nombreTemporada) {
+    public List<Map<String, Object>> buscarTemporadasPorNombre(String nombreTemporada) {
 
         List<Temporada> temporadas = temporadaRepository.findByNombreTemporadaContaining(nombreTemporada);
 
-        List<Map<String,Object>> temporadasMap = new ArrayList<>();
+        List<Map<String, Object>> temporadasMap = new ArrayList<>();
 
 
-        for(Temporada temporada: temporadas){
-            Map<String,Object> t = new HashMap<>();
+        for (Temporada temporada : temporadas) {
+            Map<String, Object> t = new HashMap<>();
 
-            t.put("claveTemporada",temporada.getClaveTemporada());
-            t.put("nombreTemporada",temporada.getNombreTemporada());
+            t.put("claveTemporada", temporada.getClaveTemporada());
+            t.put("nombreTemporada", temporada.getNombreTemporada());
             temporadasMap.add(t);
         }
 
@@ -142,7 +141,7 @@ public class TemporadaService {
 
         List<obtenerTemporadasDeLigaResponse> TemporadasLigaRes = new ArrayList<>();
 
-        for (Object[] temp: TemporadasDeLiga) {
+        for (Object[] temp : TemporadasDeLiga) {
             obtenerTemporadasDeLigaResponse temResponse = new obtenerTemporadasDeLigaResponse();
 
             temResponse.setIdTemporada((Long) temp[0]);
@@ -157,8 +156,8 @@ public class TemporadaService {
 
 
     public List<String> obtenerArbitrosNoEnTemporada(Long temporadaId) {
-       List<String> arbitros = temporadaRepository.findArbitrosNotInTemporada(temporadaId);
-       return arbitros;
+        List<String> arbitros = temporadaRepository.findArbitrosNotInTemporada(temporadaId);
+        return arbitros;
     }
 
 
@@ -180,4 +179,35 @@ public class TemporadaService {
     }
 
 
+    public ResponseEntity<Map<String, Object>> modificarCaracteristicasTemporada(TemporadaRequest request) {
+        Long idTemporada = request.getClaveTemporada();
+        Temporada temporada = temporadaRepository.findById(idTemporada).orElse(null);
+        Map<String, Object> tempNew = new HashMap<>();
+
+        if (temporada == null) throw new BadRequestException("La temporada no existe");
+        if (request.getCantidadEquipos() == null) throw new BadRequestException("La cantidad de equipos no puede ser nula");
+        if (request.getCantidadPlayoffs() == null) throw new BadRequestException("La cantidad de playoffs no puede ser nula");
+        if (request.getCantidadEnfrentamientosRegular() == null)
+            throw new BadRequestException("La cantidad de enfrentamientos regulares no puede ser nula");
+
+        temporada.setCantidadEquipos(request.getCantidadEquipos());
+        temporada.setCantidadPlayoffs(request.getCantidadPlayoffs());
+        temporada.setCantidadEnfrentamientosRegular(request.getCantidadEnfrentamientosRegular());
+        temporadaRepository.save(temporada);
+
+        tempNew.put("message", "Características de la temporada modificada exitosamente.");
+        return ResponseEntity.ok(tempNew);
+    }
+
+    public ResponseEntity<Map<String, Object>> obtenerCaracteristicasTemporada(Long idTemporada) {
+        Temporada temporada = temporadaRepository.findById(idTemporada).orElse(null);
+        Map<String, Object> tempNew = new HashMap<>();
+
+        if (temporada == null) throw new BadRequestException("La temporada no existe");
+
+        tempNew.put("cantidadEquipos", temporada.getCantidadEquipos());
+        tempNew.put("cantidadPlayoffs", temporada.getCantidadPlayoffs());
+        tempNew.put("cantidadEnfrentamientosRegular", temporada.getCantidadEnfrentamientosRegular());
+        return ResponseEntity.ok(tempNew);
+    }
 }

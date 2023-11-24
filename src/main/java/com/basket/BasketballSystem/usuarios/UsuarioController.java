@@ -46,16 +46,19 @@ public class UsuarioController {
 
     @GetMapping("/obtenerJugador")
     public List<UsuarioResponse> obtenerJugador(
-            @RequestParam(name = "usuario", required = false) String usuario,
-            @RequestParam(name = "rol", required = false) Rol rol
+            @RequestParam(name = "usuario", required = false) String usuario
     ) {
-
-        return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario, rol);
+        return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
     }
 
     @GetMapping("/obtenerTipoUser")
     public ResponseEntity<String> obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
         return usuarioService.obtenerTipoUser(usuario);
+    }
+
+    @GetMapping("/obtenerUsuarioPorUser")
+    public Usuario obtenerUsuarioPorUser(@RequestParam(name = "usuario", required = false) String usuario) {
+        return usuarioService.obtenerUsuarioPorUser(usuario);
     }
 
 

@@ -2,9 +2,11 @@ package com.basket.BasketballSystem.temporadas;
 
 import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.ligas.LigaService;
+import com.basket.BasketballSystem.temporadas.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.temporadas.DTO.obtenerTemporadasDeLigaResponse;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -92,6 +94,19 @@ public class TemporadaController {
     public ResponseEntity<Map<String, Object>> obtenerEstadoTemporada(@RequestParam(name = "idTemporada", required = false) Long idTemporada){
         return TemporadaService.obtenerEstadoTemporada(idTemporada);
     }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
+    @PutMapping("/modificarCaracteristicasTemporada")
+    public ResponseEntity<Map<String, Object>> modificarCaracteristicasTemporada(@RequestBody TemporadaRequest request) {
+        return TemporadaService.modificarCaracteristicasTemporada(request);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
+    @GetMapping("/obtenerCaracteristicasTemporada")
+    public ResponseEntity<Map<String, Object>> obtenerCaracteristicasTemporada(@RequestParam(name = "idTemporada", required = false) Long idTemporada){
+        return TemporadaService.obtenerCaracteristicasTemporada(idTemporada);
+    }
+
 
 
 

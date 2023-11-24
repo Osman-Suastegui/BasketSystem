@@ -39,21 +39,12 @@ public class UsuarioService {
     }
 
 
-    public List<UsuarioResponse> buscarUsuariosPorLetrasEnNombre(String usuario, Rol rol) {
-            if (rol == null ){
-                rol = Rol.JUGADOR;
-            }
-        List<Usuario> usuariosBD = usuarioRepository.findByUsuarioContainingAndRol(usuario, rol);
+    public List<UsuarioResponse> buscarUsuariosPorLetrasEnNombre(String usuario) {
+        List<Usuario> usuariosBD = usuarioRepository.findByUsuarioContaining(usuario);
         List<UsuarioResponse> usuariosResponse = new ArrayList<>();
         for (Usuario usuarioBD : usuariosBD) {
             UsuarioResponse usuarioResponse = UsuarioResponse.builder()
                     .usuario(usuarioBD.getUsuario())
-                    .nombre(usuarioBD.getNombre())
-                    .apellido(usuarioBD.getApellido())
-                    .email(usuarioBD.getEmail())
-                    .fechaNacimiento(usuarioBD.getFechaNacimiento())
-                    .genero(usuarioBD.getGenero())
-                    .rol(usuarioBD.getRol())
                     .build();
             usuariosResponse.add(usuarioResponse);
         }
@@ -79,6 +70,13 @@ public class UsuarioService {
     }
 
 
+    public Usuario obtenerUsuarioPorUser(String usuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsuario(usuario);
+        if (usuarioOptional.isEmpty()) {
+            throw new BadRequestException("El usuario no existe.");
+        }
+        return usuarioOptional.get();
+    }
 
 }
 
