@@ -131,7 +131,7 @@ public class PartidoService {
         String nombreEquipo = equipo.getNombre();
 
         List<Partido> partidos = partidoRepository.findByEquipo1NombreOrEquipo2Nombre(nombreEquipo);
-        List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getGanador().isEmpty() && partido.getFechaInicio() != null ).
+        List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getFechaInicio() != null ).
                 collect(Collectors.toList());
 
         partidosFiltrados.sort((partido1, partido2) -> {
@@ -150,9 +150,10 @@ public class PartidoService {
             Instant fechaInicioPartido = partido.getFechaInicio();
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
 
-            p.put("temporadaId", partido.getTemporada().getClaveTemporada());
+            p.put("temporadaId", partido.getTemporada().getNombreTemporada());
             p.put("equipo1", partido.getEquipo1().getNombre());
             p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("ganador", partido.getGanador());
 
             if (fechaInicioPartido.isBefore(horaAcutal) && fechaEndPartido.isAfter(horaAcutal)){
                 p.put("estatus", "enCurso");

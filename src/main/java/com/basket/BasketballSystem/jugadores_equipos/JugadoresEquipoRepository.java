@@ -24,6 +24,9 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
 
     List<JugadoresEquipo> findAllByJugador(Usuario jugador);
 
+//que sea por el nombre del equipo
+    List<JugadoresEquipo> findAllByEquipo(Equipo equipo);
+
 
     JugadoresEquipo findByJugadorAndEquipo_Nombre(Usuario jugador, String nombreEquipo);
 

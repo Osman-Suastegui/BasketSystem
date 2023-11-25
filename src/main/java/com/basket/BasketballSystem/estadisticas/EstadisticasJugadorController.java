@@ -25,9 +25,12 @@ public class EstadisticasJugadorController {
     @RequestMapping("/jugador-general")
     public Map<String,Object> jugadorGeneralEstadisticas(@RequestParam(name="idJugador") String idJugador){
         return estadisticasJugadorService.jugadorGeneralEstadisticas(idJugador);
+    }
 
-
-
+    @RequestMapping("/equipo-temporada-estadisticas")
+    public Map<String, Map<String, Object>> equipoTemporadaEstadisticas(@RequestParam(name="nombreEquipo") String nombreEquipo,
+                                                          @RequestParam(name="temporadaId") Long temporadaId){
+        return estadisticasJugadorService.equipoTemporadaEstadisticas(nombreEquipo,temporadaId);
     }
 
 }

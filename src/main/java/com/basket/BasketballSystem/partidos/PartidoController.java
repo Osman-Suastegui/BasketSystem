@@ -21,7 +21,7 @@ public class PartidoController {
         return partidoService.obtenerPartidosArbitro(idArbitro,estatusPartido);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+
     @RequestMapping ("/obtenerPartidosEquipo")
     public List<Map<String,Object>>  obtenerPartidosEquipo(@RequestParam("idEquipo") String idEquipo, @RequestParam(value = "estatusPartido",required = false) String estatusPartido ){
         return partidoService.obtenerPartidosEquipo(idEquipo,estatusPartido);

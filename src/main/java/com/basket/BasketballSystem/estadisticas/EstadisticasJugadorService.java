@@ -1,6 +1,11 @@
 package com.basket.BasketballSystem.estadisticas;
 
+import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.equipos.EquipoRepository;
+import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.Partido;
@@ -25,6 +30,11 @@ public class EstadisticasJugadorService {
     PartidoRepository partidoRepository;
     @Autowired
     TemporadaRepository temporadaRepository;
+
+    @Autowired
+    EquipoRepository equipoRepository;
+    @Autowired
+    JugadoresEquipoRepository jugadoresEquipoRepository;
   
     public Map<String, Object> jugadorTemporadaEstadisticas(Long idTemporada, String idJugador) {
         Optional<Temporada> temporada = temporadaRepository.findById(idTemporada);
@@ -85,4 +95,23 @@ public class EstadisticasJugadorService {
         estadisticas.put("faltasGenerales",faltas);
         return estadisticas;
     }
-}
+
+    public Map<String, Map<String, Object>> equipoTemporadaEstadisticas(String nombreEquipo, Long temporadaId) {
+        Equipo equipo = equipoRepository.findByNombre(nombreEquipo);
+
+
+        List<JugadoresEquipo> jugadoresEquipo = jugadoresEquipoRepository.findAllByEquipo(equipo);
+
+        Map<String, Map<String, Object>> estadisticasEquipo = new HashMap<>();
+
+        for (JugadoresEquipo jugadorEquipo : jugadoresEquipo) {
+
+            String idJugador = jugadorEquipo.getJugador().getUsuario();
+            Map<String, Object> estadisticasJugador = jugadorTemporadaEstadisticas(temporadaId, idJugador);
+
+            estadisticasEquipo.put(idJugador, estadisticasJugador);
+        }
+
+        return estadisticasEquipo;
+    }
+    }
