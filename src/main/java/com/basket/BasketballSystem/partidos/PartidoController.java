@@ -102,8 +102,8 @@ public class PartidoController {
     }
 
     @PostMapping("/crearPartidosEliminatorias")
-    public ResponseEntity<Map<String, Object>>  verificarSiSeJugaronTodosLosPartidosRegular(@RequestBody Map<String, Object> idTemporadaBody){
-        Long idTemporada = (Long) idTemporadaBody.get("idTemporada");
+    public ResponseEntity<Map<String, Object>>  crearPartidosEliminatorias(@RequestBody Map<String, Object> idTemporadaBody){
+        Long idTemporada = Long.parseLong(idTemporadaBody.get("idTemporada").toString());
         partidoService.crearPartidosEliminatorias(idTemporada);
         return ResponseEntity.ok(Map.of("mensaje", "Partidos creados"));
     }
