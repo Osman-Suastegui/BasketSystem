@@ -98,20 +98,12 @@ public class Temporada {
         return cantidadEquipos;
     }
 
-    public Integer getCantidadEliminados() {
-        return cantidadPlayoffs;
-    }
-
     public List<Usuario> getArbitros() {
         return arbitros;
     }
 
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }
-
-    public void setCantidadEliminados(Integer cantidadEliminados) {
-        this.cantidadPlayoffs = cantidadEliminados;
     }
 
     public Categoria getCategoria() {

@@ -26,4 +26,8 @@ public interface PartidoRepository extends JpaRepository<Partido,Long> {
     List<Partido> findAllByTemporada(@Param("idTemporada") Long idTemporada);
 
 
+    @Query("SELECT p FROM Partido p WHERE p.temporada.claveTemporada = :idTemporada AND p.fase = :fase")
+    List<Partido> findAllByTemporadaAndFase(Long idTemporada, Fase fase);
+
+
 }

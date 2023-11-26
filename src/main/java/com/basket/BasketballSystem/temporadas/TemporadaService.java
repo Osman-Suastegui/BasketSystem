@@ -41,8 +41,8 @@ public class TemporadaService {
             throw new BadRequestException("La fecha de inicio no puede ser mayor a la fecha de termino");
 
 
-        if (temporada.getCantidadEliminados() == null) {
-            temporada.setCantidadEliminados(0);
+        if (temporada.getCantidadPlayoffs() == null) {
+            temporada.setCantidadPlayoffs(0);
         }
         if (temporada.getEstado() == null) {
             temporada.setEstado(Estado.INACTIVA);
