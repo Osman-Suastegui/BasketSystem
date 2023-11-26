@@ -51,13 +51,13 @@ public class UsuarioService {
         return usuariosResponse;
     }
 
-    public ResponseEntity<String> obtenerTipoUser(String usuario) {
+    public ResponseEntity<Map<String, Object>>  obtenerTipoUser(String usuario) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario);
-        if (usuarioOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("El usuario no existe.");
-        }
+        Map<String, Object> userAct = new HashMap<>();
+
         Rol userRol = usuarioOptional.get().getRol();
-        return ResponseEntity.ok(userRol.toString());
+        userAct.put("Rol", userRol.toString());
+        return ResponseEntity.ok(userAct);
     }
 
 

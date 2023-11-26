@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/obtenerTipoUser")
-    public ResponseEntity<String> obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
+    public ResponseEntity<Map<String, Object>>  obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
         return usuarioService.obtenerTipoUser(usuario);
     }
 

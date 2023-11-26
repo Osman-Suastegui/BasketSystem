@@ -192,6 +192,7 @@ public class PartidoService {
    }
 
     public List<Map<String, Object>> obtenerPartidosJugador(String idJugador) {
+
         Usuario jugador = usuarioRepository.findById(idJugador).orElse(null);
         if (jugador == null) {
             throw new BadRequestException("El jugador no existe");
@@ -228,6 +229,7 @@ public class PartidoService {
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
             p.put("equipo1", partido.getEquipo1().getNombre());
             p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("ganador", partido.getGanador());
             partidosMap.add(p);
         }
 
