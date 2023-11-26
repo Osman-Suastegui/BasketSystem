@@ -3,6 +3,7 @@ package com.basket.BasketballSystem.partidos;
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
 import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -88,7 +89,8 @@ public class PartidoController {
     }
     @GetMapping("/rankingTemporadaRegular")
     public ResponseEntity<Map<String, Integer>> rankingTemporadaRegular(@RequestParam("idTemporada") Long idTemporada){
-        return partidoService.rankingTemporadaRegular(idTemporada);
+        Map<String, Integer> ranking = partidoService.rankingTemporadaRegular(idTemporada);
+        return new ResponseEntity<>(ranking, HttpStatus.OK);
     }
 
 //    solo para tesst
@@ -99,6 +101,12 @@ public class PartidoController {
         return ResponseEntity.ok(Map.of("mensaje", "Ganador asignado"));
     }
 
+    @PostMapping("/crearPartidosEliminatorias")
+    public ResponseEntity<Map<String, Object>>  crearPartidosEliminatorias(@RequestBody Map<String, Object> idTemporadaBody){
+        Long idTemporada = Long.parseLong(idTemporadaBody.get("idTemporada").toString());
+        partidoService.crearPartidosEliminatorias(idTemporada);
+        return ResponseEntity.ok(Map.of("mensaje", "Partidos creados"));
+    }
 
 
 
