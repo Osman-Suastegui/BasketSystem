@@ -51,6 +51,13 @@ public class JugadorPartidoController {
         return jugadorPartidoService.posicionarJugadorEnPartido(clavePartido,usuario,enBanca);
     }
 
+    @GetMapping("/obtenerPuntosEquipo")
+    public ResponseEntity<Map<String, Object>> obtenerPuntosEquipo(@RequestParam (name="clavePartido",required = true) Long clavePartido,
+                                                                   @RequestParam (name="nombreEquipo",required = true) String nombreEquipo) {
+        int puntos = jugadorPartidoService.sumarPuntosPorEquipoYPartido(nombreEquipo,clavePartido);
+        Map<String, Object> puntosEquipo = Map.of("puntos", puntos);
+        return ResponseEntity.ok(puntosEquipo);
+    }
 
 
 

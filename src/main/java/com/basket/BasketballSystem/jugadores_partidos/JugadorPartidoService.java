@@ -175,4 +175,8 @@ public class JugadorPartidoService {
         meterJugadorResponse.setAsistencias(meterJugadorMessage.getAsistencias());
         return meterJugadorResponse;
     }
+
+    public int sumarPuntosPorEquipoYPartido(String nombreEquipo, Long clavePartido){
+        return jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(nombreEquipo,clavePartido);
+    }
 }

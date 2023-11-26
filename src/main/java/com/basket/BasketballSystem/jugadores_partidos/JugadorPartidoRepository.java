@@ -43,4 +43,6 @@ public interface JugadorPartidoRepository extends JpaRepository<JugadorPartido, 
     void setEnBanca(Boolean enBanca, Long clavePartido, String jugador, String equipo);
 
 
+    @Query("SELECT SUM(jp.tirosDe2Puntos * 2 + jp.tirosDe3Puntos * 3 + jp.tirosLibres) FROM JugadorPartido jp group by jp.equipo, jp.partido.clavePartido having jp.equipo = ?1 and jp.partido.clavePartido = ?2")
+    Integer sumarPuntosPorEquipoYPartido(String nombreEquipo, Long clavePartido);
 }
