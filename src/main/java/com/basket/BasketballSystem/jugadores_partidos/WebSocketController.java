@@ -13,10 +13,10 @@ public class WebSocketController {
 
     @Autowired
     JugadorPartidoService jugadorPartidoService;
-    @MessageMapping("/agregarPunto/{claveDelPartido}")
+    @MessageMapping("/actualizarPunto/{claveDelPartido}")
     @SendTo("/topic/ActualizacionesDePuntos/{claveDelPartido}")
-    public ActualizarJugadorPartidoResponse agregarPunto(actualizarJugadorPartidoRequest actualizarJugadorPartidoMensaje) {
-        return jugadorPartidoService.agregarPunto(actualizarJugadorPartidoMensaje);
+    public ActualizarJugadorPartidoResponse actualizarPunto(actualizarJugadorPartidoRequest actualizarJugadorPartidoMensaje) {
+        return jugadorPartidoService.actualizarPunto(actualizarJugadorPartidoMensaje);
     }
 
     @MessageMapping("/sacarJugador/{claveDelPartido}")

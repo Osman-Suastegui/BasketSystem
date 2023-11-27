@@ -11,6 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ActualizarJugadorPartidoResponse {
 
-    String jugador;
-    String descripcion;
+    private String jugador;
+    private String descripcion;
+    private boolean puntoPositivo;
+
 }

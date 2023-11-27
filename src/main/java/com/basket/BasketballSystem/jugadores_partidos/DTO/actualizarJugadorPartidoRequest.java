@@ -18,4 +18,6 @@ public class actualizarJugadorPartidoRequest {
 //   tipo de estadistica de juego que se le actualiza al jugador
     private String descripcion;
 
+    @NotBlank(message = "el campo puntoPositivo no puede estar en blanco")
+    private boolean puntoPositivo;
 }

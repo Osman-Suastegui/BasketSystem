@@ -56,7 +56,7 @@ public class JugadorPartidoService {
         return ResponseEntity.ok(jugadorpart);
     }
 
-    public ActualizarJugadorPartidoResponse agregarPunto(actualizarJugadorPartidoRequest jugadorPartidoDTO) {
+    public ActualizarJugadorPartidoResponse actualizarPunto(actualizarJugadorPartidoRequest jugadorPartidoDTO) {
 
         String jugadorUsuario = jugadorPartidoDTO.getJugador();
         Long jugadorPartidoId = jugadorPartidoDTO.getClavePartido();
@@ -64,36 +64,68 @@ public class JugadorPartidoService {
 
         JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndPartido(jugadorUsuario, jugadorPartidoId);
         ActualizarJugadorPartidoResponse actJugPartido = new ActualizarJugadorPartidoResponse();
+        actJugPartido.setJugador(jugadorPartido.getJugador().getUsuario());
+        actJugPartido.setPuntoPositivo(jugadorPartidoDTO.isPuntoPositivo());
+        int punto = 1;
+        if(!jugadorPartidoDTO.isPuntoPositivo()) punto = - 1;
 
         switch (descripcion) {
             case "tirosDe2Puntos" -> {
-                jugadorPartido.setTirosDe2Puntos(jugadorPartido.getTirosDe2Puntos() + 1);
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
                 actJugPartido.setDescripcion("tirosDe2Puntos");
+
+                if (jugadorPartido.getTirosDe2Puntos() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
+                    actJugPartido.setDescripcion("");
+                    return actJugPartido;
+                }
+                jugadorPartido.setTirosDe2Puntos(jugadorPartido.getTirosDe2Puntos() + punto );
+                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto );
             }
             case "tirosDe3Puntos" -> {
-                jugadorPartido.setTirosDe3Puntos(jugadorPartido.getTirosDe3Puntos() + 1);
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
                 actJugPartido.setDescripcion("tirosDe3Puntos");
+
+                if (jugadorPartido.getTirosDe3Puntos() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
+                    actJugPartido.setDescripcion("");
+
+                    return actJugPartido;
+                }
+                jugadorPartido.setTirosDe3Puntos(jugadorPartido.getTirosDe3Puntos() + punto );
+                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto );
             }
             case "tirosLibres" -> {
-                jugadorPartido.setTirosLibres(jugadorPartido.getTirosLibres() + 1);
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + 1);
                 actJugPartido.setDescripcion("tirosLibres");
+
+                if (jugadorPartido.getTirosLibres() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
+                    actJugPartido.setDescripcion("");
+
+                    return actJugPartido;
+                }
+                jugadorPartido.setTirosLibres(jugadorPartido.getTirosLibres() + punto);
+                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto);
             }
             case "faltas" -> {
-                jugadorPartido.setFaltas(jugadorPartido.getFaltas() + 1);
                 actJugPartido.setDescripcion("faltas");
+
+                if (jugadorPartido.getFaltas() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
+                    actJugPartido.setDescripcion("");
+
+                    return actJugPartido;
+                }
+                jugadorPartido.setFaltas(jugadorPartido.getFaltas() + punto);
             }
             case "asistencias" -> {
-                jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + 1);
                 actJugPartido.setDescripcion("asistencias");
+
+                if (jugadorPartido.getAsistencias() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
+                    actJugPartido.setDescripcion("");
+
+                    return actJugPartido;
+                }
+                jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + punto);
             }
         }
 
         jugadorPartidoRepository.save(jugadorPartido);
 
-        actJugPartido.setJugador(jugadorPartido.getJugador().getUsuario());
 
 
         return actJugPartido;
