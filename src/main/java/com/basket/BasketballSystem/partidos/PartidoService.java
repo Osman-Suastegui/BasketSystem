@@ -320,7 +320,7 @@ public class PartidoService {
     }
 
 
-    public ResponseEntity<Map<String,Object>> generarPartidosTemporadaRegular(Long idTemporada, int cantidadEnfrentamientosRegular){
+    public ResponseEntity<Map<String,Object>> crearPartidosTemporadaRegular(Long idTemporada, int cantidadEnfrentamientosRegular){
         Temporada t = temporadaRepository.findById(idTemporada).orElse(null);
         if(t == null) throw new BadRequestException("La temporada no existe");
         if(cantidadEnfrentamientosRegular != 1 && cantidadEnfrentamientosRegular != 2) throw new BadRequestException("La cantidad de enfrentamientos debe ser 1 o 2");

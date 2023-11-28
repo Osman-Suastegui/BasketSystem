@@ -1,7 +1,6 @@
 package com.basket.BasketballSystem.partidos;
 
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
-import jakarta.servlet.http.Part;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,13 +78,13 @@ public class PartidoController {
         return partidoService.obtenerEquipo1Equipo2(idPartido);
     }
 
-    @PostMapping("/generarPartidosTemporadaRegular")
+    @PostMapping("/crearPartidosTemporadaRegular")
 
     public ResponseEntity<Map<String, Object>> generarPartidosTemporadaRegular(@RequestBody Map<String, Object> temporada){
         Integer idTemporada = (Integer) temporada.get("idTemporada");
         int cantidadEnfrentamientosRegular = (Integer) temporada.get("cantidadEnfrentamientosRegular");
         Long idTemporadaLong = idTemporada.longValue();
-        return partidoService.generarPartidosTemporadaRegular(idTemporadaLong,cantidadEnfrentamientosRegular);
+        return partidoService.crearPartidosTemporadaRegular(idTemporadaLong,cantidadEnfrentamientosRegular);
     }
     @GetMapping("/rankingTemporadaRegular")
     public ResponseEntity<Map<String, Integer>> rankingTemporadaRegular(@RequestParam("idTemporada") Long idTemporada){
