@@ -86,6 +86,8 @@ public class PartidoController {
         Long idTemporadaLong = idTemporada.longValue();
         return partidoService.crearPartidosTemporadaRegular(idTemporadaLong,cantidadEnfrentamientosRegular);
     }
+
+
     @GetMapping("/rankingTemporadaRegular")
     public ResponseEntity<Map<String, Integer>> rankingTemporadaRegular(@RequestParam("idTemporada") Long idTemporada){
         Map<String, Integer> ranking = partidoService.rankingTemporadaRegular(idTemporada);
