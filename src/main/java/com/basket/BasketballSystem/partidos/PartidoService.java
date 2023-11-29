@@ -20,6 +20,8 @@ import java.time.Instant;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -258,6 +260,7 @@ public class PartidoService {
             p.put("equipo1", partido.getEquipo1().getNombre());
             p.put("equipo2", partido.getEquipo2().getNombre());
             p.put("ganador", partido.getGanador());
+            p.put("fase", partido.getFase());
             if (partido.getGanador().isEmpty()) {
                 p.put("ganador", "Sin concluir");
             } else {
@@ -277,12 +280,21 @@ public class PartidoService {
         }
 
         Partido partido = partidoOptional.get();
+        Temporada temp = partido.getTemporada();
+
+        LocalDate fechaInicioTemp = temp.getFechaInicio();
+        LocalDate fechaFinTemp = temp.getFechaTermino();
 
         try {
-            System.out.println(fechaInicio);
             // Formatear la fecha y hora en el formato correcto
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Date fechaHora = sdf.parse(fechaInicio);
+
+            // Verificar si la fecha está dentro del rango de la temporada
+            LocalDate fechaAgendada = fechaHora.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (fechaAgendada.isBefore(fechaInicioTemp) || fechaAgendada.isAfter(fechaFinTemp)) {
+                throw new BadRequestException("La fecha y hora del partido están fuera del rango de la temporada.");
+            }
 
             // Agregar una hora a la fecha
             Calendar calendar = Calendar.getInstance();
@@ -293,7 +305,6 @@ public class PartidoService {
             Instant fechaInicioInstant = fechaConUnaHoraMas.toInstant();
 
             partido.setFechaInicio(fechaInicioInstant);
-            System.out.println("fecha inicio instant: " + fechaInicioInstant);
             partidoRepository.save(partido);
 
             Map<String, Object> agendaPartido = new HashMap<>();
@@ -308,14 +319,40 @@ public class PartidoService {
     public ResponseEntity<Map<String, Object>> asignarArbitro(Long idPartido, String idArbitro) {
         Optional<Partido> p = partidoRepository.findById(idPartido);
         if (!p.isPresent()) throw new BadRequestException("El partido no existe");
+
+        if(idArbitro.equals("")){
+            p.get().setArbitro(null);
+            partidoRepository.save(p.get());
+
+            Map<String, Object> arbitroPartido = new HashMap<>();
+            arbitroPartido.put("message", "Árbitro asignado exitosamente.");
+            return ResponseEntity.ok(arbitroPartido);
+        }
+
         Optional<Usuario> arbitro = usuarioRepository.findById(idArbitro);
-        if (!arbitro.isPresent()) throw new BadRequestException("El arbitro no existe");
+
+        Instant fechaInicioNuevoPartido = p.get().getFechaInicio();
+        Instant fechaFinNuevoPartido = fechaInicioNuevoPartido.plus(Duration.ofHours(1));
+
+        // Obtener todos los partidos del árbitro
+        List<Map<String, Object>> partidosArbitro = obtenerPartidosArbitro(idArbitro, "todos");
+        for (Map<String, Object> partido : partidosArbitro) {
+            Instant fechaInicio = (Instant) partido.get("fechaInicio");
+            Instant fechaFin = fechaInicio.plus(Duration.ofHours(1));
+
+            // Verificar si el nuevo partido se superpone con algún partido ya asignado al árbitro
+            if ((fechaInicioNuevoPartido.isAfter(fechaInicio) && fechaInicioNuevoPartido.isBefore(fechaFin)) ||
+                    (fechaFinNuevoPartido.isAfter(fechaInicio) && fechaFinNuevoPartido.isBefore(fechaFin)) ||
+                    fechaInicioNuevoPartido.equals(fechaInicio) || fechaFinNuevoPartido.equals(fechaFin)) {
+                throw new BadRequestException("El árbitro ya tiene un partido asignado en ese horario");
+            }
+        }
 
         p.get().setArbitro(arbitro.get());
         partidoRepository.save(p.get());
 
         Map<String, Object> arbitroPartido = new HashMap<>();
-        arbitroPartido.put("message", "Arbitro asignado exitosamente.");
+        arbitroPartido.put("message", "Árbitro asignado exitosamente.");
 
         return ResponseEntity.ok(arbitroPartido);
     }
