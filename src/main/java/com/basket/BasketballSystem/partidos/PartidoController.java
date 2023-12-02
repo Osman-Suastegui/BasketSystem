@@ -109,6 +109,13 @@ public class PartidoController {
         return ResponseEntity.ok(Map.of("mensaje", "Partidos creados"));
     }
 
+//    fechaInicio
+    @GetMapping("/obtenerFechaInicio")
+    public ResponseEntity<Map<String, Object>> obtenerFechaInicio(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerFechaInicio(idPartido);
+    }
+
+
 
 
 

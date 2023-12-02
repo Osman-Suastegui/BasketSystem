@@ -671,4 +671,13 @@ public class PartidoService {
     }
 
 
+    public ResponseEntity<Map<String, Object>> obtenerFechaInicio(Long idPartido) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        Map<String, Object> fechaInicio = new HashMap<>();
+        fechaInicio.put("fechaInicio", partido.get().getFechaInicio());
+
+        return ResponseEntity.ok(fechaInicio);
+    }
 }
