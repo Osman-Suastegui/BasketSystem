@@ -6,6 +6,7 @@ import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
 import com.basket.BasketballSystem.temporadas.Estado;
 import com.basket.BasketballSystem.temporadas.Temporada;
@@ -41,7 +42,8 @@ public class PartidoService {
     TemporadaRepository temporadaRepository;
     @Autowired
     EquipoTemporadaRepository equipoTemporadaRepository;
-
+    @Autowired
+    JugadorPartidoRepository jugadorPartidoRepository;
 
     public List<Map<String, Object>> obtenerPartidosArbitro(String idArbitro, String estatusPartido) {
         final int duracionPartido = 40; // 40 minutos dura un partido ??
@@ -62,7 +64,7 @@ public class PartidoService {
         if (arbitro == null) throw new BadRequestException("El arbitro no existe");
 
         List<Partido> partidos = partidoRepository.findAllByArbitro(arbitro);
-        List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getGanador().isEmpty() && partido.getFechaInicio() != null ).
+        List<Partido> partidosFiltrados = partidos.stream().filter(partido ->  partido.getFechaInicio() != null ).
                 collect(Collectors.toList());
 
         partidosFiltrados.sort((partido1, partido2) -> {
@@ -80,7 +82,7 @@ public class PartidoService {
             p.put("fechaInicio", partido.getFechaInicio());
             Instant fechaInicioPartido = partido.getFechaInicio();
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
-
+            System.out.println("DURACION DEL PARTIDO INSTANT " + fechaInicioPartido);
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
             p.put("equipo1", partido.getEquipo1().getNombre());
             p.put("equipo2", partido.getEquipo2().getNombre());
@@ -679,5 +681,80 @@ public class PartidoService {
         fechaInicio.put("fechaInicio", partido.get().getFechaInicio());
 
         return ResponseEntity.ok(fechaInicio);
+    }
+
+    public ResponseEntity<Map<String, Object>> decidirGanadorPartido(Long idPartido) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        String equipo1 = partido.get().getEquipo1().getNombre();
+        String equipo2 = partido.get().getEquipo2().getNombre();
+        int anotacionesEquipo1 = jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(equipo1,idPartido);
+        int anotacionesEquipo2 = jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(equipo2,idPartido);
+
+        if(anotacionesEquipo1 > anotacionesEquipo2){
+            partido.get().setGanador(equipo1);
+        }
+        if(anotacionesEquipo2 > anotacionesEquipo1 ){
+            partido.get().setGanador(equipo2);
+        }
+        partidoRepository.save(partido.get());
+        return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity<Map<String, Object>> obtenerGanador(Long idPartido) {
+
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        Map<String, Object> ganador = new HashMap<>();
+        if(partido.get().getGanador().isEmpty() || partido.get() == null){
+            ganador.put("ganador","");
+        }else{
+            ganador.put("ganador", partido.get().getGanador());
+        }
+
+        return ResponseEntity.ok(ganador);
+    }
+
+    public ResponseEntity<Map<String, Object>> finalizarPartido(Long idPartido) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+        if(partido.get().getFechaInicio().isAfter(Instant.now())){
+            throw new BadRequestException("El partido aun no ha iniciado");
+        }
+        decidirGanadorPartido(idPartido);
+//        si es el ultimo partido de la temporada se debe cambiar el estado de la temporada a finalizada
+        Temporada temp = partido.get().getTemporada();
+        int cantidadPlayOffs = temp.getCantidadPlayoffs();
+        Long idTemporada = temp.getClaveTemporada();
+
+        int cantidadDeJuegosQueSeDebenJugar = 0;
+        while(cantidadPlayOffs > 1){
+            cantidadPlayOffs /= 2;
+            cantidadDeJuegosQueSeDebenJugar += cantidadPlayOffs;
+        }
+//        obtenemos la cantidad de juegos que tienen la fase eliminatorias y que ya tiene un ganador
+        int cantidadDeJuegosTerminados = 0;
+        List<Partido> partidosEliminatorias = partidoRepository.findAllByTemporadaAndFase(idTemporada, Fase.Eliminatorias);
+        for(Partido p : partidosEliminatorias){
+            if(!p.getGanador().isEmpty()){
+                cantidadDeJuegosTerminados++;
+            }
+        }
+        if(cantidadDeJuegosTerminados == cantidadDeJuegosQueSeDebenJugar){
+            temporadaRepository.updateTemporadaEstado(idTemporada,"FINALIZADA");
+        }
+        Map<String, Object> finalizarPartido = new HashMap<>();
+        finalizarPartido.put("message", "Partido finalizado exitosamente.");
+        return ResponseEntity.ok(finalizarPartido);
+    }
+
+    public ResponseEntity<Map<String, Object>> obtenerUsuarioArbitroAsignado(Long idPartido) {
+
+        String nombre = partidoRepository.findArbitroByClavePartido(idPartido);
+        Map<String, Object> nombreArbitro = new HashMap<>();
+        nombreArbitro.put("usuarioArbitro", nombre);
+        return ResponseEntity.ok(nombreArbitro);
     }
 }

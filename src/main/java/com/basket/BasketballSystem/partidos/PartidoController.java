@@ -40,7 +40,7 @@ public class PartidoController {
 
         return partidoService.obtenerPartidosTemporada(idTemporada);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PutMapping("/agendar")
     public ResponseEntity<Map<String, Object>> agendarPartido(@RequestBody Map<String, Object> partido){
         Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
@@ -115,6 +115,23 @@ public class PartidoController {
         return partidoService.obtenerFechaInicio(idPartido);
     }
 
+    @GetMapping("/obtenerGanador")
+    public ResponseEntity<Map<String, Object>> obtenerGanador(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerGanador(idPartido);
+    }
+
+    @PutMapping("/finalizarPartido")
+    public ResponseEntity<Map<String, Object>> finalizarPartido(@RequestBody Map<String, Object> partido){
+        Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
+        return partidoService.finalizarPartido(idPartido);
+    }
+    /*
+        Este controlador nos dice el nombre del el arbitro que esta asignado a un partido
+    */
+    @GetMapping("/obtenerUsuarioArbitroAsignado")
+    public ResponseEntity<Map<String, Object>> obtenerNombreUsuarioAsignado(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerUsuarioArbitroAsignado(idPartido);
+    }
 
 
 
