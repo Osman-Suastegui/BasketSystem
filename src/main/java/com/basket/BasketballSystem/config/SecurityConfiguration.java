@@ -4,7 +4,6 @@ import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,17 +32,45 @@ public class SecurityConfiguration {
     private final  JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private final CorsFilter corsFilter;
-    private static final String[] WHITE_LIST_URL = {"/auth/**","/Partido/**","/usuarios/**","/JugadorPartido/**","/Temporadas/**",
-            "/Equipo/**","/estadisticas/**","/EquipoTemporada/**","/jugadores-equipo/**","/Ligas/**"
+    private static final String[] WHITE_LIST_URL = {"/auth/**","/Partido/**","/usuarios/**","/JugadorPartido/**","/ws-basket/**",
+            "/auth/register",
+            "/auth/authenticate",
+            "/Partido/obtenerPartidosArbitro",
+            "/Partido/obtenerPartidosEquipo",
+            "/Partido/obtenerPartido",
+            "/Partido/rankingTemporadaRegular",
+            "/Partido/obtenerFechaInicio",
+            "/Partido/obtenerGanador",
+            "/Partido/obtenerUsuarioArbitroAsignado",
+
+
+            "/usuarios/obtenerUsuario",
+            "/usuarios/obtenerJugador",
+            "/usuarios/obtenerTipoUser",
+            "/usuarios/obtenerUsuarioPorUser",
+
+            "/JugadorPartido/obtenerJugadoresDePartidoyEquipo",
+            "/JugadorPartido/obtenerPuntosEquipo",
+            "/Temporadas/buscarTemporadasPorNombre",
+
+            "/Ligas/obtenerTemporadas",
+            "/Ligas/obtenerAdministradores",
+            "/Ligas/buscarLigaPorNombre",
+
+            "/estadisticas/jugador-temporada",
+            "/estadisticas/jugador-general",
+            "/estadisticas/equipo-temporada-estadisticas",
+            "/Equipo/**",
+            "/ws-basket/**"
     };
     @Bean
     public SecurityFilterChain  securityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                req.requestMatchers(HttpMethod.GET,WHITE_LIST_URL).permitAll().requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
-                        .requestMatchers("/ws-basket/**").permitAll()
-                    .anyRequest()
-                    .authenticated()
+                        req.requestMatchers(WHITE_LIST_URL)
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
