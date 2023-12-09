@@ -94,6 +94,12 @@ public class PartidoController {
         return new ResponseEntity<>(ranking, HttpStatus.OK);
     }
 
+    @GetMapping("/obtenerPartidosTemporadaRegular")
+    public ResponseEntity<Map<String, Map<String, Integer>>> obtenerRankingTemporadaRegular(@RequestParam("idTemporada") Long idTemporada) {
+        Map<String, Map<String, Integer>> ranking = partidoService.obtenerRankingTemporadaRegular(idTemporada);
+        return new ResponseEntity<>(ranking, HttpStatus.OK);
+    }
+
 //    solo para tesst
     @PutMapping("/setGanadorAleatorio")
     public ResponseEntity<Map<String, Object>> setGanadorAleatorio(@RequestBody Map<String, Object> partido){

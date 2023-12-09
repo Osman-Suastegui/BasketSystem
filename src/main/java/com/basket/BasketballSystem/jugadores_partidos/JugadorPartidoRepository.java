@@ -45,4 +45,10 @@ public interface JugadorPartidoRepository extends JpaRepository<JugadorPartido, 
 
     @Query("SELECT SUM(jp.tirosDe2Puntos * 2 + jp.tirosDe3Puntos * 3 + jp.tirosLibres) FROM JugadorPartido jp group by jp.equipo, jp.partido.clavePartido having jp.equipo = ?1 and jp.partido.clavePartido = ?2")
     Integer sumarPuntosPorEquipoYPartido(String nombreEquipo, Long clavePartido);
+
+
+    List<JugadorPartido> findAllByPartidoIn(List<Partido> partidos);
+
+    @Query("SELECT jp FROM JugadorPartido jp WHERE jp.partido.clavePartido = ?1")
+    List<JugadorPartido> findAllByPartido(Long clavePartido);
 }

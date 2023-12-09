@@ -32,4 +32,6 @@ public interface PartidoRepository extends JpaRepository<Partido,Long> {
 
     @Query("SELECT p.arbitro.usuario FROM Partido p WHERE p.clavePartido = :idPartido")
     String findArbitroByClavePartido(Long idPartido);
+
+
 }

@@ -16,10 +16,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class EstadisticasJugadorService {
@@ -114,4 +112,130 @@ public class EstadisticasJugadorService {
 
         return estadisticasEquipo;
     }
+
+    public Map<String, Object> topJugadoresTirosLibres(Long temporadaId) {
+        Optional<Temporada> temp = temporadaRepository.findById(temporadaId);
+        List<Partido> partidos = partidoRepository.findAllByTemporada(temp.get());
+        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
+
+        // Ordena la lista de jugadores por la cantidad de tiros libres en orden descendente
+        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
+                .sorted(Comparator.comparingInt(JugadorPartido::getTirosLibres).reversed())
+                .collect(Collectors.toList());
+
+        Map<String, Object> topJugadores = new HashMap<>();
+
+        // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
+        int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
+        for (int i = 0; i < cantidadJugadores; i++) {
+            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+
+            String idJugador = jugadorPartido.getJugador().getUsuario();
+            Map<String, Object> jugador = new HashMap<>();
+
+            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("tirosLibres", jugadorPartido.getTirosLibres());
+            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("posicion", i + 1); // La posición es 1-indexed
+
+            topJugadores.put(idJugador, jugador);
+        }
+
+        return topJugadores;
     }
+
+    public Map<String, Object> topJugadoresTirosDe2Puntos(Long temporadaId) {
+        Optional<Temporada> temp = temporadaRepository.findById(temporadaId);
+        List<Partido> partidos = partidoRepository.findAllByTemporada(temp.get());
+        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
+
+        // Ordena la lista de jugadores por la cantidad de tiros de 2 puntos en orden descendente
+        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
+                .sorted(Comparator.comparingInt(JugadorPartido::getTirosDe2Puntos).reversed())
+                .collect(Collectors.toList());
+
+        Map<String, Object> topJugadores = new HashMap<>();
+
+        // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
+        int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
+        for (int i = 0; i < cantidadJugadores; i++) {
+            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+
+            String idJugador = jugadorPartido.getJugador().getUsuario();
+            Map<String, Object> jugador = new HashMap<>();
+
+            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("tirosDe2Puntos", jugadorPartido.getTirosDe2Puntos());
+            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("posicion", i + 1); // La posición es 1-indexed
+
+            topJugadores.put(idJugador, jugador);
+        }
+
+        return topJugadores;
+    }
+
+    public Map<String, Object> topJugadoresTirosDe3Puntos(Long temporadaId) {
+        Optional<Temporada> temp = temporadaRepository.findById(temporadaId);
+        List<Partido> partidos = partidoRepository.findAllByTemporada(temp.get());
+        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
+
+        // Ordena la lista de jugadores por la cantidad de tiros de 3 puntos en orden descendente
+        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
+                .sorted(Comparator.comparingInt(JugadorPartido::getTirosDe3Puntos).reversed())
+                .collect(Collectors.toList());
+
+        Map<String, Object> topJugadores = new HashMap<>();
+
+        // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
+        int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
+        for (int i = 0; i < cantidadJugadores; i++) {
+            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+
+            String idJugador = jugadorPartido.getJugador().getUsuario();
+            Map<String, Object> jugador = new HashMap<>();
+
+            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("tirosDe3Puntos", jugadorPartido.getTirosDe3Puntos());
+            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("posicion", i + 1); // La posición es 1-indexed
+
+            topJugadores.put(idJugador, jugador);
+        }
+
+        return topJugadores;
+    }
+
+    public Map<String, Object> topJugadoresAsistencias(Long temporadaId) {
+        Optional<Temporada> temp = temporadaRepository.findById(temporadaId);
+        List<Partido> partidos = partidoRepository.findAllByTemporada(temp.get());
+        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
+
+        // Ordena la lista de jugadores por la cantidad de asistencias en orden descendente
+        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
+                .sorted(Comparator.comparingInt(JugadorPartido::getAsistencias).reversed())
+                .collect(Collectors.toList());
+
+        Map<String, Object> topJugadores = new HashMap<>();
+
+        // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
+        int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
+        for (int i = 0; i < cantidadJugadores; i++) {
+            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+
+            String idJugador = jugadorPartido.getJugador().getUsuario();
+            Map<String, Object> jugador = new HashMap<>();
+
+            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("asistencias", jugadorPartido.getAsistencias());
+            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("posicion", i + 1); // La posición es 1-indexed
+
+            topJugadores.put(idJugador, jugador);
+        }
+
+        return topJugadores;
+    }
+
+
+}

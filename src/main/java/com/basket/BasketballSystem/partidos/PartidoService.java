@@ -6,6 +6,7 @@ import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
 import com.basket.BasketballSystem.temporadas.Estado;
@@ -498,6 +499,92 @@ public class PartidoService {
         return equiposPuntos;
 
     }
+
+
+
+    public Map<String, Map<String, Integer>> obtenerRankingTemporadaRegular(Long idTemporada) {
+        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+
+        Map<String, Map<String, Integer>> equiposInfo = new HashMap<>();
+
+        // Inicializar la información de cada equipo en el mapa
+        for (Equipo e : equipos) {
+            Map<String, Integer> equipoInfo = new HashMap<>();
+            equipoInfo.put("puntosTemporada", 0);
+            equipoInfo.put("jugados", 0);
+            equipoInfo.put("ganados", 0);
+            equipoInfo.put("perdidos", 0);
+            equipoInfo.put("puntosJugador", 0);
+            equiposInfo.put(e.getNombre(), equipoInfo);
+        }
+
+        for (Partido p : partidos) {
+            if (!p.getGanador().isEmpty()) {
+                // Actualizar partidos jugados para ambos equipos
+                actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "jugados");
+                actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "jugados");
+
+                if (p.getGanador().equals("EMPATE")) {
+                    // Actualizar partidos empatados para ambos equipos
+                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "puntosTemporada");
+                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "puntosTemporada");
+                } else if (p.getGanador().equals(p.getEquipo1().getNombre())) {
+                    // Actualizar partidos ganados para el equipo 1
+                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "puntosTemporada", 3);
+                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "ganados");
+
+                    // Actualizar partidos perdidos para el equipo 2
+                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "perdidos");
+                } else {
+                    // Actualizar partidos ganados para el equipo 2
+                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "puntosTemporada", 3);
+                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "ganados");
+
+                    // Actualizar partidos perdidos para el equipo 1
+                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "perdidos");
+                }
+            }
+        }
+
+        // Calcular puntos adicionales de los jugadores
+        calcularPuntosJugador(idTemporada, equiposInfo);
+
+        // Retornar información de equipos
+        return equiposInfo;
+    }
+
+    private void actualizarContadores(Map<String, Map<String, Integer>> equiposInfo, String nombreEquipo, String key) {
+        equiposInfo.computeIfPresent(nombreEquipo, (k, equipoInfo) -> {
+            equipoInfo.put(key, equipoInfo.get(key) + 1);
+            return equipoInfo;
+        });
+    }
+
+    private void actualizarContadores(Map<String, Map<String, Integer>> equiposInfo, String nombreEquipo, String key, int valor) {
+        equiposInfo.computeIfPresent(nombreEquipo, (k, equipoInfo) -> {
+            equipoInfo.put(key, equipoInfo.get(key) + valor);
+            return equipoInfo;
+        });
+    }
+
+    private void calcularPuntosJugador(Long idTemporada, Map<String, Map<String, Integer>> equiposInfo) {
+        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+
+        for (Partido p : partidos) {
+            List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartido(p.getClavePartido());
+
+            for (JugadorPartido jp : jugadoresPartido) {
+                // Actualizar puntos de cada jugador al equipo correspondiente
+             //   actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getAnotaciones());
+                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosDe2Puntos() * 2);
+                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosDe3Puntos() * 3);
+                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosLibres());
+            }
+        }
+    }
+
+
 
     public ResponseEntity<PartidoResponse> obtenerPartido(Long idPartido) {
          Optional<Partido> partido = partidoRepository.findById(idPartido);

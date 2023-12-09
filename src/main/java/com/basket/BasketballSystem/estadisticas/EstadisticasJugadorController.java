@@ -33,4 +33,26 @@ public class EstadisticasJugadorController {
         return estadisticasJugadorService.equipoTemporadaEstadisticas(nombreEquipo,temporadaId);
     }
 
+    @RequestMapping("/top-jugadores-tiros-libres")
+    public Map<String, Object> topJugadoresTirosLibres(@RequestParam(name="temporadaId") Long temporadaId){
+        return estadisticasJugadorService.topJugadoresTirosLibres(temporadaId);
+    }
+
+    @RequestMapping("/top-jugadores-tiros-de-2-puntos")
+    public Map<String, Object> topJugadoresTirosDe2Puntos(@RequestParam(name="temporadaId") Long temporadaId){
+        return estadisticasJugadorService.topJugadoresTirosDe2Puntos(temporadaId);
+    }
+
+    @RequestMapping("/top-jugadores-tiros-de-3-puntos")
+    public Map<String, Object> topJugadoresTirosDe3Puntos(@RequestParam(name="temporadaId") Long temporadaId){
+        return estadisticasJugadorService.topJugadoresTirosDe3Puntos(temporadaId);
+    }
+
+    @RequestMapping("/top-jugadores-asistencias")
+    public Map<String, Object> topJugadoresAsistencias(@RequestParam(name="temporadaId") Long temporadaId){
+        return estadisticasJugadorService.topJugadoresAsistencias(temporadaId);
+    }
+
+
+
 }
