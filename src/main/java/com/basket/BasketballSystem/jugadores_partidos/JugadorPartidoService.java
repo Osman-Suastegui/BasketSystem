@@ -158,9 +158,9 @@ public class JugadorPartidoService {
 
     }
 
-    public List<String> obtenerJugadoresNoEnPartido(String nombreEquipo, Long clavePartido) {
+    public List<String> obtenerJugadoresNoEnPartido(String nombreEquipo, Long clavePartido, String nombreEquipo2) {
         List<String> jugadoresNoEnPartido = new ArrayList<>();
-        jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido);
+        jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido, nombreEquipo2);
         return jugadoresNoEnPartido;
     }
 

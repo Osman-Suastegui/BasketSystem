@@ -165,6 +165,7 @@ public class EquipoService {
     public List<Usuario> obtenerJugadoresParaEquipo(String nombreEquipo) {
         Equipo equipo = equipoRepository.findByNombre(nombreEquipo);
 
+
          Rama rama = equipo.getRama();
          String ramaString = rama.toString();
         Genero genero = ramaString.equals("MASCULINO") ? Genero.MASCULINO : Genero.FEMENINO;

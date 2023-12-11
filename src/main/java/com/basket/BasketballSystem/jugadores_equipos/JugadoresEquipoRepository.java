@@ -56,8 +56,9 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
             "WHERE je.nombre_equipo = ?1 " +
             "AND je.jugador NOT IN " +
             "(SELECT jp.jugador FROM jugadores_partidos jp " +
-            "WHERE jp.clave_partido = ?2 AND jp.equipo = ?1)", nativeQuery = true)
-    List<String> findJugadoresNoEnPartidos(String nombreEquipo, Long clavePartido);
+            "WHERE jp.clave_partido = ?2 AND (jp.equipo = ?1 OR jp.equipo = ?3))", nativeQuery = true)
+    List<String> findJugadoresNoEnPartidos(String nombreEquipo, Long clavePartido, String otroEquipo);
+
 
 
 

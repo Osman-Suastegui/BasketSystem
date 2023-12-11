@@ -36,8 +36,9 @@ public class JugadorPartidoController {
     @GetMapping("/obtenerJugadoresNoEnPartido")
     public List<String> obtenerJugadoresNoEnPartido(
             @RequestParam (name="clavePartido",required = true) Long clavePartido,
-            @RequestParam (name="nombreEquipo",required = true) String nombreEquipo) {
-        return jugadorPartidoService.obtenerJugadoresNoEnPartido(nombreEquipo,clavePartido);
+            @RequestParam (name="nombreEquipo",required = true) String nombreEquipo,
+            @RequestParam (name="otroEquipo",required = true) String otroEquipo) {
+        return jugadorPartidoService.obtenerJugadoresNoEnPartido(nombreEquipo,clavePartido, otroEquipo);
 
     }
 
