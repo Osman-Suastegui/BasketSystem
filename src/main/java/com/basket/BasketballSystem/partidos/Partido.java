@@ -48,6 +48,9 @@ public class Partido {
     @Column(name = "ganador")
     private String ganador;
 
+    @Column(name ="arbitroIniciaPartido")
+    private Instant arbitroIniciaPartido;
+
 
 
     // Getters y setters
@@ -88,6 +91,10 @@ public class Partido {
         return ganador;
     }
 
+    public Instant getArbitroIniciaPartido() {
+        return arbitroIniciaPartido;
+    }
+
     public void setGanador(String ganador) {
         this.ganador = ganador;
     }
@@ -115,6 +122,11 @@ public class Partido {
     public void setFase(Fase fase) {
         this.fase = fase;
     }
+
+    public void setArbitroIniciaPartido(Instant arbitroIniciaPartido) {
+        this.arbitroIniciaPartido = arbitroIniciaPartido;
+    }
+
 
 
 }

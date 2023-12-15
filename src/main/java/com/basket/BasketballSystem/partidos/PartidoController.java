@@ -140,6 +140,18 @@ public class PartidoController {
     }
 
 
+    @PutMapping("/arbitroIniciaPartidoFecha")
+    public ResponseEntity<Map<String, Object>> arbitroIniciaPartidoFecha(@RequestBody Map<String, Object> partido){
+        System.out.println(partido);
+        Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
+        String fecha = partido.get("fechaInicio").toString();
+        return partidoService.arbitroIniciaPartidoFecha(idPartido,fecha);
+    }
+    @GetMapping("/obtenerArbitroIniciaPartidoFecha")
+    public ResponseEntity<Map<String, Object>> obtenerArbitroIniciaPartidoFecha(@RequestParam("clavePartido") Long idPartido){
+        return partidoService.obtenerArbitroIniciaPartidoFecha(idPartido);
+    }
+
 
 
 

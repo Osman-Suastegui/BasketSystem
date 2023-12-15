@@ -42,6 +42,7 @@ public class SecurityConfiguration {
             "/Partido/obtenerFechaInicio",
             "/Partido/obtenerGanador",
             "/Partido/obtenerUsuarioArbitroAsignado",
+            "/Partido/obtenerArbitroIniciaPartidoFecha",
 
 
             "/usuarios/obtenerUsuario",

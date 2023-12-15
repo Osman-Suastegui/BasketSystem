@@ -844,4 +844,45 @@ public class PartidoService {
         nombreArbitro.put("usuarioArbitro", nombre);
         return ResponseEntity.ok(nombreArbitro);
     }
+
+    public ResponseEntity<Map<String, Object>> arbitroIniciaPartidoFecha(Long idPartido, String fecha) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        try {
+            // Formatear la fecha y hora en el formato correcto
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date fechaHora = sdf.parse(fecha);
+
+            // Verificar si la fecha está dentro del rango de la temporada
+            LocalDate fechaAgendada = fechaHora.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            // Agregar una hora a la fecha
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(fechaHora);
+            calendar.add(Calendar.HOUR, 1);
+
+            Date fechaConUnaHoraMas = calendar.getTime();
+            Instant fechaInicioInstant = fechaConUnaHoraMas.toInstant();
+
+            partido.get().setArbitroIniciaPartido(fechaInicioInstant);
+            partidoRepository.save(partido.get());
+
+            Map<String, Object> arbitroPartido = new HashMap<>();
+            arbitroPartido.put("message", "Partido iniciado exitosamente.");
+
+            return ResponseEntity.ok(arbitroPartido);
+        } catch (ParseException e) {
+            throw new BadRequestException("Error al analizar la fecha y hora.");
+        }
+    }
+
+    public ResponseEntity<Map<String, Object>> obtenerArbitroIniciaPartidoFecha(Long idPartido) {
+        Optional<Partido> partido = partidoRepository.findById(idPartido);
+        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+
+        Map<String, Object> arbitroIniciaPartido = new HashMap<>();
+        arbitroIniciaPartido.put("fechaInicio", partido.get().getArbitroIniciaPartido());
+
+        return ResponseEntity.ok(arbitroIniciaPartido);
+    }
 }
