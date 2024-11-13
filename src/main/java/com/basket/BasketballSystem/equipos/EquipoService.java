@@ -201,7 +201,7 @@ public class EquipoService {
             edadFin = 200;
         }
 
-        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipoWithAgeAndGenderCondition(edadInicio, edadFin,genero, nombreEquipo);
+        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipoWithAgeAndGenderCondition(nombreEquipo);
             return jugadores;
     }
 

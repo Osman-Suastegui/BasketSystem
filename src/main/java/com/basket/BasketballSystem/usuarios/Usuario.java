@@ -40,7 +40,6 @@ public class Usuario implements UserDetails {
 
     private String nombre;
 
-    private LocalDate fechaNacimiento;
     @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @NotBlank(message = "el apellido no puedo estar en blanco")
     String apellido;
     @Enumerated(EnumType.STRING)
@@ -48,9 +47,6 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    public Integer getEdad() {
-        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

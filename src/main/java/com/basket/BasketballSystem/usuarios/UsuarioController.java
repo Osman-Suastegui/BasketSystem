@@ -39,6 +39,7 @@ public class UsuarioController {
 
     @GetMapping("obtenerUsuario")
     public Usuario obtenerUsuario(@RequestParam(name = "usuario", required = false) String usuario) {
+        System.out.println("usuario " + usuario );
         return usuarioService.obtenerUsuario(usuario);
     }
 

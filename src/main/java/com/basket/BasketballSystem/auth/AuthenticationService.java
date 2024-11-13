@@ -26,8 +26,7 @@ public class AuthenticationService {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new BadRequestException("El correo electrónico ya está registrado.");
         }
-        if (registerRequest.getFechaNacimiento() == null)
-            throw new BadRequestException("La fecha de nacimiento no puede ser nula.");
+
         userRepository.findById(registerRequest.getUsuario()).ifPresent(user -> {throw new BadRequestException("El usuario ya existe.");});
 
         Usuario user = Usuario.builder()
@@ -35,7 +34,6 @@ public class AuthenticationService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .rol(registerRequest.getRol())
-                .fechaNacimiento(registerRequest.getFechaNacimiento())
                 .genero(registerRequest.getGenero())
                 .nombre(registerRequest.getNombre())
                 .apellido(registerRequest.getApellido())

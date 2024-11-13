@@ -32,24 +32,15 @@ public interface JugadoresEquipoRepository extends JpaRepository<JugadoresEquipo
 
     @Query("SELECT u FROM Usuario u " +
             "WHERE u.rol = 'jugador' " +
-            "AND u.genero = :genero " +
-            "AND FUNCTION('YEAR', CURRENT_DATE) - FUNCTION('YEAR', u.fechaNacimiento) BETWEEN :edadMin AND :edadMax " +
             "AND u.usuario NOT IN (" +
             "    SELECT je.jugador.usuario FROM JugadoresEquipo je WHERE je.equipo.nombre = :equipoNombre" +
             ")")
-    List<Usuario> findJugadoresNotInEquipoWithAgeAndGenderCondition(
-            @Param("edadMin") int edadMin,
-            @Param("edadMax") int edadMax,
-            @Param("genero") Genero genero,  // Asegúrate de utilizar el tipo enumerado correcto
+    default List<Usuario> findJugadoresNotInEquipoWithAgeAndGenderCondition(
+            // Asegúrate de utilizar el tipo enumerado correcto
             @Param("equipoNombre") String equipoNombre
-    );
-
-
-
-
-
-
-
+    ) {
+        return null;
+    }
 
 
     @Query(value= "SELECT je.jugador FROM jugadores_equipos je " +

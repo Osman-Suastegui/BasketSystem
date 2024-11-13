@@ -40,7 +40,6 @@ public class RegisterRequest {
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
-    @NotNull(message = "El genero no puede ser nulo")
     @Enumerated(EnumType.STRING)
     private Genero genero;
 
