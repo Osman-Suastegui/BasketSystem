@@ -33,8 +33,6 @@ public class AuthenticationService {
                 .usuario(registerRequest.getUsuario())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .rol(registerRequest.getRol())
-                .genero(registerRequest.getGenero())
                 .nombre(registerRequest.getNombre())
                 .apellido(registerRequest.getApellido())
                 .build();

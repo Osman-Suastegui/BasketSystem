@@ -26,8 +26,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder
 
 public class Usuario implements UserDetails {
+
     @Id
-    @NotEmpty(message = "el usuario no puede estar vacio") @NotNull(message = "el usuario no puede ser nulo") @ NotBlank(message = "el usuario no puede estar en blanco")
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-generate numeric ID
+    private Long id;
+
+    @NotEmpty(message = "Username cannot be empty")
+    @NotNull(message = "Username cannot be null")
+    @NotBlank(message = "Username cannot be blank")
     private String usuario;
 
     @Column(unique = true)
@@ -42,17 +48,12 @@ public class Usuario implements UserDetails {
 
     @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @NotBlank(message = "el apellido no puedo estar en blanco")
     String apellido;
-    @Enumerated(EnumType.STRING)
-    private Genero genero;
-    @Enumerated(EnumType.STRING)
-    private Rol rol;
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
+        return List.of();
     }
-
 
     @JsonIgnore
     @Override

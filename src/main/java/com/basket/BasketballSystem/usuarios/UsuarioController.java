@@ -52,11 +52,6 @@ public class UsuarioController {
         return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
     }
 
-    @GetMapping("/obtenerTipoUser")
-    public ResponseEntity<Map<String, Object>>  obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
-        return usuarioService.obtenerTipoUser(usuario);
-    }
-
     @GetMapping("/obtenerUsuarioPorUser")
     public Usuario obtenerUsuarioPorUser(@RequestParam(name = "usuario", required = false) String usuario) {
         return usuarioService.obtenerUsuarioPorUser(usuario);
