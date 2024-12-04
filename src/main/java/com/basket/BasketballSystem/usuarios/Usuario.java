@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
+// CHANGE NAME TO USER
 public class Usuario implements UserDetails {
 
     @Id
