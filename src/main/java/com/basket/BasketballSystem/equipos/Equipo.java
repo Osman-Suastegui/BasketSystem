@@ -1,8 +1,8 @@
 package com.basket.BasketballSystem.equipos;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
-import com.basket.BasketballSystem.temporadas.Categoria;
-import com.basket.BasketballSystem.temporadas.Rama;
+import com.basket.BasketballSystem.tournaments.Categoria;
+import com.basket.BasketballSystem.tournaments.Rama;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

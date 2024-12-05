@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.ligas;
 
 
-import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
@@ -36,10 +36,10 @@ public class Liga {
     private List<Usuario> administradores; // Lista de administradores asociadas a la liga
 
     @OneToMany(mappedBy = "liga")
-    private List<Temporada> temporadas; // Lista de temporadas asociadas a la liga
+    private List<Tournament> tournaments; // Lista de temporadas asociadas a la liga
 
-    public List<Temporada> getTemporadas() {
-        return this.temporadas;
+    public List<Tournament> getTemporadas() {
+        return this.tournaments;
     }
 
     public List<Usuario> getAdministradores() {

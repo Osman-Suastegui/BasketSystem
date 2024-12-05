@@ -1,8 +1,7 @@
 package com.basket.BasketballSystem.ligas;
 
 import com.basket.BasketballSystem.ligas.DTO.obtenerLigasDeAdminResponse;
-import com.basket.BasketballSystem.temporadas.DTO.obtenerTemporadasDeLigaResponse;
-import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +18,7 @@ public class LigaController {
     @Autowired
     LigaService ligaService;
     @RequestMapping("/obtenerTemporadas")
-    public List<Temporada> obtenerTemporadas(@RequestParam(name = "idLiga",required = false) Long idLiga) {
+    public List<Tournament> obtenerTemporadas(@RequestParam(name = "idLiga",required = false) Long idLiga) {
 
         return ligaService.obtenerTemporadas(idLiga);
     }

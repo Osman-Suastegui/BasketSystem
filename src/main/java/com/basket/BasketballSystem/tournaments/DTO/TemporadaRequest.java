@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.temporadas.DTO;
+package com.basket.BasketballSystem.tournaments.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,12 +1,12 @@
 package com.basket.BasketballSystem.equipos_temporadas;
 
 import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.tournaments.Tournament;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "equipos_temporadas", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"clave_temporada", "equipo"})
+        @UniqueConstraint(columnNames = {"id", "equipo"})
 })
 public class EquipoTemporada {
     @Id
@@ -15,23 +15,23 @@ public class EquipoTemporada {
     private Long clave;
 
     @ManyToOne
-    @JoinColumn(name = "clave_temporada")
-    private Temporada temporada;
+    @JoinColumn(name = "id")
+    private Tournament tournament;
 
     @ManyToOne
     @JoinColumn(name = "equipo")
     private Equipo equipo;
 
-    public EquipoTemporada(Temporada temporada, Equipo equipo) {
-        this.temporada = temporada;
+    public EquipoTemporada(Tournament tournament, Equipo equipo) {
+        this.tournament = tournament;
         this.equipo = equipo;
     }
 
     public EquipoTemporada() {
     }
 
-    public Temporada getTemporada() {
-        return temporada;
+    public Tournament getTemporada() {
+        return tournament;
     }
 
     public Equipo getEquipo() {

@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.temporadas;
+package com.basket.BasketballSystem.tournaments;
 
 public enum Estado {
     ACTIVA,

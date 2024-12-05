@@ -1,8 +1,5 @@
-package com.basket.BasketballSystem.temporadas;
+package com.basket.BasketballSystem.tournaments;
 
-import com.basket.BasketballSystem.ligas.Liga;
-import com.basket.BasketballSystem.partidos.Partido;
-import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,17 +8,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
-public interface TemporadaRepository extends JpaRepository<Temporada, Long> {
+public interface TournamentRepository extends JpaRepository<Tournament, Long> {
 
-    @Query("SELECT t.claveTemporada, t.nombreTemporada " +
-            "FROM Temporada t " +
+    @Query("SELECT t.id, t.name " +
+            "FROM Tournament t " +
             "INNER JOIN t.liga l " +
             "WHERE l.id = :ligaId")
-    List<Object[]> findTemporadasForLiga(@Param("ligaId") Long ligaId);
-    List<Temporada> findByNombreTemporadaContaining(String nombre);
+    List<Object[]> findTournamentsForLiga(@Param("ligaId") Long ligaId);
+    List<Tournament> findByNameContaining(String name);
 
     @Query(value = "SELECT u.usuario FROM usuarios u WHERE u.rol = 'ARBITRO' AND u.usuario NOT IN (SELECT ta.arbitro FROM temporadas_arbitro ta WHERE ta.clave_temporada = :temporadaId)", nativeQuery = true)
     List<String> findArbitrosNotInTemporada(@Param("temporadaId") Long temporadaId);
@@ -35,9 +31,8 @@ public interface TemporadaRepository extends JpaRepository<Temporada, Long> {
     //recibe el id de la temporada y cambia su estado dependiendo de que mandaron
     @Modifying
     @Transactional
-    @Query(value = "UPDATE temporadas SET estado = :estado WHERE clave_temporada = :temporadaId", nativeQuery = true)
+    @Query(value = "UPDATE temporadas SET estado = :estado WHERE id = :temporadaId", nativeQuery = true)
     void updateTemporadaEstado(@Param("temporadaId") Long temporadaId, @Param("estado") String estado);
 
-    Temporada findByClaveTemporada(Long claveTemporada);
 
 }

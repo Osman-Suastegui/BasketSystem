@@ -9,9 +9,9 @@ import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
-import com.basket.BasketballSystem.temporadas.Estado;
-import com.basket.BasketballSystem.temporadas.Temporada;
-import com.basket.BasketballSystem.temporadas.TemporadaRepository;
+import com.basket.BasketballSystem.tournaments.Estado;
+import com.basket.BasketballSystem.tournaments.Tournament;
+import com.basket.BasketballSystem.tournaments.TournamentRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class PartidoService {
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
     @Autowired
-    TemporadaRepository temporadaRepository;
+    TournamentRepository temporadaRepository;
     @Autowired
     EquipoTemporadaRepository equipoTemporadaRepository;
     @Autowired
@@ -243,10 +243,10 @@ public class PartidoService {
     }
 
     public List<Map<String, Object>> obtenerPartidosTemporada(Long idTemporada) {
-        Optional<Temporada> temporada = temporadaRepository.findById(idTemporada);
+        Optional<Tournament> temporada = temporadaRepository.findById(idTemporada);
         if (!temporada.isPresent()) throw new BadRequestException("La temporada no existe");
 
-        List<Partido> partidos = partidoRepository.findAllByTemporada(temporada.get());
+        List<Partido> partidos = partidoRepository.findAllByTournament(temporada.get());
 
         List<Map<String, Object>> partidosMap = new ArrayList<>();
 
@@ -283,10 +283,10 @@ public class PartidoService {
         }
 
         Partido partido = partidoOptional.get();
-        Temporada temp = partido.getTemporada();
+        Tournament temp = partido.getTemporada();
 
-        LocalDate fechaInicioTemp = temp.getFechaInicio();
-        LocalDate fechaFinTemp = temp.getFechaTermino();
+        LocalDate fechaInicioTemp = temp.getStartDate();
+        LocalDate fechaFinTemp = temp.getEndDate();
 
         try {
             // Formatear la fecha y hora en el formato correcto
@@ -362,7 +362,7 @@ public class PartidoService {
 
 
     public ResponseEntity<Map<String,Object>> crearPartidosTemporadaRegular(Long idTemporada, int cantidadEnfrentamientosRegular){
-        Temporada t = temporadaRepository.findById(idTemporada).orElse(null);
+        Tournament t = temporadaRepository.findById(idTemporada).orElse(null);
         Estado estado = Estado.ACTIVA;
         t.setEstado(estado);
         if(t == null) throw new BadRequestException("La temporada no existe");
@@ -481,7 +481,7 @@ public class PartidoService {
         for(Equipo e : equipos){
             equiposPuntos.put(e.getNombre(),0);
         }
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
         for(Partido p : partidos){
             if(p.getGanador().length() != 0 ){
                 if(p.getGanador().equals("EMPATE")){
@@ -504,7 +504,7 @@ public class PartidoService {
 
     public Map<String, Map<String, Integer>> obtenerRankingTemporadaRegular(Long idTemporada) {
         List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
 
         Map<String, Map<String, Integer>> equiposInfo = new HashMap<>();
 
@@ -569,7 +569,7 @@ public class PartidoService {
     }
 
     private void calcularPuntosJugador(Long idTemporada, Map<String, Map<String, Integer>> equiposInfo) {
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
 
         for (Partido p : partidos) {
             List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartido(p.getClavePartido());
@@ -616,7 +616,7 @@ public class PartidoService {
 //    METODO PARA TEST NADA MAS
     public void setGanadorAleatorio(Long idTemporada){
 
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
         for(Partido p : partidos){
 
                 Random r = new Random();
@@ -635,7 +635,7 @@ public class PartidoService {
 
     // verificar si ya se jugaron todos los partidos de la temporada en la fase regular
     public boolean verificarSiSeJugaronTodosLosPartidosRegular(Long idTemporada){
-        List<Partido> partidos = partidoRepository.findAllByTemporada(idTemporada);
+        List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
         int cantidadPartidosTerminados = 0;
         for(Partido p :partidos){
             if(p.getGanador().length() != 0){
@@ -648,7 +648,7 @@ public class PartidoService {
         return false;
     }
     public List<String> SeleccionarEquiposQuePasanAPlayoffs(Long idTemporada){
-        Temporada t = temporadaRepository.findById(idTemporada).orElse(null);
+        Tournament t = temporadaRepository.findById(idTemporada).orElse(null);
         if(t == null) throw new BadRequestException("La temporada no existe");
 
 
@@ -673,11 +673,11 @@ public class PartidoService {
 
     }
     public void crearPartidosEliminatorias(Long idTemporada) {
-        Temporada tempo = temporadaRepository.findById(idTemporada).orElse(null);
+        Tournament tempo = temporadaRepository.findById(idTemporada).orElse(null);
         if (tempo == null) throw new BadRequestException("La temporada no existe");
         int cantidadEquiposQuePasanAPlayoffs = tempo.getCantidadPlayoffs();
 //        tengo que checar si existen partidos con la fase de eliminatorias si es asi creo los partidos de eliminatorias
-        List<Partido> partidosEliminatorias = partidoRepository.findAllByTemporadaAndFase(idTemporada, Fase.Eliminatorias);
+        List<Partido> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
         int cantidadJuegosTerminadodosEliminatorias = 0;
 
 
@@ -812,7 +812,7 @@ public class PartidoService {
         }
         decidirGanadorPartido(idPartido);
 //        si es el ultimo partido de la temporada se debe cambiar el estado de la temporada a finalizada
-        Temporada temp = partido.get().getTemporada();
+        Tournament temp = partido.get().getTemporada();
         int cantidadPlayOffs = temp.getCantidadPlayoffs();
         Long idTemporada = temp.getClaveTemporada();
 
@@ -823,7 +823,7 @@ public class PartidoService {
         }
 //        obtenemos la cantidad de juegos que tienen la fase eliminatorias y que ya tiene un ganador
         int cantidadDeJuegosTerminados = 0;
-        List<Partido> partidosEliminatorias = partidoRepository.findAllByTemporadaAndFase(idTemporada, Fase.Eliminatorias);
+        List<Partido> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
         for(Partido p : partidosEliminatorias){
             if(!p.getGanador().isEmpty()){
                 cantidadDeJuegosTerminados++;

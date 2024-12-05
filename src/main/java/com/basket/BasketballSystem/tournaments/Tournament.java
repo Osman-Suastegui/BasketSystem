@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.temporadas;
+package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.usuarios.Usuario;
@@ -8,27 +8,26 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "temporadas")
-public class Temporada {
+@Table(name = "tournaments")
+public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long claveTemporada;
+    private Long id;
 
     //añadele el valor unique
-    @Column(name = "nombre_temporada", unique = true)
-    private String nombreTemporada;
+    @Column(name = "name", unique = true)
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "id_liga")
     private Liga liga;
 
-    @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio;
+    private LocalDate startDate;
 
-    @Column(name = "fecha_termino")
-    private LocalDate fechaTermino;
+    private LocalDate endDate;
 
-
+    @Enumerated(EnumType.STRING)
+    private Sport sport;
 
     @Column(name = "cantidad_equipos")
     private Integer cantidadEquipos;
@@ -48,26 +47,18 @@ public class Temporada {
     @Enumerated(EnumType.STRING)
     private Estado estado; // en curso, terminada, cancelada
 
-    @Enumerated(EnumType.STRING)
-    private Categoria categoria;
-
-    @Enumerated(EnumType.STRING)
-    private Rama rama;
-    // Getters y setters
 
 
-    public Temporada(String nombreTemporada, Liga liga, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos, List<Usuario> arbitros, Categoria categoria, Rama rama) {
-        this.nombreTemporada = nombreTemporada;
+    public Tournament(String nombreTemporada, Liga liga, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos, List<Usuario> arbitros) {
+        this.name = nombreTemporada;
         this.liga = liga;
-        this.fechaInicio = fechaInicio;
-        this.fechaTermino = fechaTermino;
+        this.startDate = fechaInicio;
+        this.endDate = fechaTermino;
         this.cantidadEquipos = cantidadEquipos;
         this.arbitros = arbitros;
-        this.categoria = categoria;
-        this.rama = rama;
     }
 
-    public Temporada() {
+    public Tournament() {
     }
 
     public int getCantidadEnfrentamientosRegular() {
@@ -75,19 +66,19 @@ public class Temporada {
     }
 
     public Long getClaveTemporada() {
-        return claveTemporada;
+        return id;
     }
 
     public String getNombreTemporada() {
-        return nombreTemporada;
+        return name;
     }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public LocalDate getFechaTermino() {
-        return fechaTermino;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
     public Estado getEstado() {
@@ -105,15 +96,6 @@ public class Temporada {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public Rama getRama() {
-        return rama;
-    }
-
 
     public void setLiga(Liga ligaId) {
         this.liga = ligaId;

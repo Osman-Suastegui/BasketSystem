@@ -6,8 +6,8 @@ import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 
-import com.basket.BasketballSystem.temporadas.Categoria;
-import com.basket.BasketballSystem.temporadas.Rama;
+import com.basket.BasketballSystem.tournaments.Categoria;
+import com.basket.BasketballSystem.tournaments.Rama;
 import com.basket.BasketballSystem.usuarios.Genero;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;

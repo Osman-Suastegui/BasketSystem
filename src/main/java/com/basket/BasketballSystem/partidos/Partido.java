@@ -1,15 +1,13 @@
 package com.basket.BasketballSystem.partidos;
 
 import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Table(name = "partidos")
@@ -21,7 +19,7 @@ public class Partido {
 
     @ManyToOne
     @JoinColumn(name = "clave_temporada")
-    private Temporada temporada;
+    private Tournament tournament;
 
     @ManyToOne
     @JoinColumn(name = "equipo1")
@@ -59,8 +57,8 @@ public class Partido {
         return clavePartido;
     }
 
-    public Temporada getTemporada() {
-        return temporada;
+    public Tournament getTemporada() {
+        return tournament;
     }
 
     public Equipo getEquipo1() {
@@ -107,8 +105,8 @@ public class Partido {
         this.fechaInicio = fechaInicio;
     }
 
-    public void setTemporada(Temporada temporada) {
-        this.temporada = temporada;
+    public void setTemporada(Tournament tournament) {
+        this.tournament = tournament;
     }
 
     public void setEquipo1(Equipo equipo1) {

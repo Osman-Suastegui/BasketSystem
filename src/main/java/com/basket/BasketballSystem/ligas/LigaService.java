@@ -2,8 +2,7 @@ package com.basket.BasketballSystem.ligas;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.ligas.DTO.obtenerLigasDeAdminResponse;
-import com.basket.BasketballSystem.temporadas.DTO.obtenerTemporadasDeLigaResponse;
-import com.basket.BasketballSystem.temporadas.Temporada;
+import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class LigaService {
         this.ligaRepository = ligaRepository;
     }
 
-    public List<Temporada> obtenerTemporadas(Long idLiga) {
+    public List<Tournament> obtenerTemporadas(Long idLiga) {
         if (idLiga == null) throw new BadRequestException("El id de la liga no puede ser nulo");
         Optional<Liga> liga = ligaRepository.findById(idLiga);
         if (!liga.isPresent()) throw new BadRequestException("La liga " + idLiga + " no existe");

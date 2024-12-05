@@ -12,7 +12,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 
 ### Ligas
 
-- [Obtener Temporadas de una Liga](#obtener-temporadas-de-una-liga)
+- [Obtener Temporadas de una Liga](#obtener-tournaments-de-una-liga)
 - [Buscar Liga por Nombre](#buscar-liga-por-nombre)
 - [Modificar Datos de una Liga](#modificar-datos-de-una-liga)
 - [Asignarle Administradores a una Liga](#asignarle-administradores-a-una-liga)
@@ -22,7 +22,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Obtener Admins que estan en una liga](#Obtener-Admins-que-estan-en-una-liga)
 
 ### Jugadores
-- [Ver estadisticas de jugador por temporada](#ver-estadisticas-de-jugador-por-temporada)
+- [Ver estadisticas de jugador por tournament](#ver-estadisticas-de-jugador-por-tournament)
 - [Ver estadisticas de jugador general](#ver-estadisticas-de-jugador-general)
 ### Equipos
 
@@ -35,18 +35,18 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 
 ### Temporadas
 
-- [Crear una Temporada](#crear-una-temporada)
-- [Asignar Temporada a una Liga](#asignar-temporada-a-una-liga)
-- [Modificar Datos de una Temporada](#modificar-datos-de-una-temporada)
-- [Buscar una Temporada por nombre](#buscar-una-temporada-por-nombre)
-- [Asignar Equipo a una Temporada](#asignar-equipo-a-una-temporada)
-- [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-temporada)
-- [Generar partidos de una temporada](#generar-partidos-de-una-temporada)
-- [Obtener Todos los datos de las  Temporadas de una liga](#obtener-temporadas-de-una-liga)
-- [Obtener nombre de temporadas de una liga](#obtener-temporadas-de-una-liga-1)
-- [Obtener equipos de una temporada](#obtener-equipos-de-una-temporada)
-- [Obtener Equipos no en temporada](#obtener-equipos-no-en-temporada)
-- [Eliminar un arbitro de una temporada](#eliminar-un-arbitro-de-una-temporada)
+- [Crear una Temporada](#crear-una-tournament)
+- [Asignar Temporada a una Liga](#asignar-tournament-a-una-liga)
+- [Modificar Datos de una Temporada](#modificar-datos-de-una-tournament)
+- [Buscar una Temporada por nombre](#buscar-una-tournament-por-nombre)
+- [Asignar Equipo a una Temporada](#asignar-equipo-a-una-tournament)
+- [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-tournament)
+- [Generar partidos de una tournament](#generar-partidos-de-una-tournament)
+- [Obtener Todos los datos de las  Temporadas de una liga](#obtener-tournaments-de-una-liga)
+- [Obtener nombre de tournaments de una liga](#obtener-tournaments-de-una-liga-1)
+- [Obtener equipos de una tournament](#obtener-equipos-de-una-tournament)
+- [Obtener Equipos no en tournament](#obtener-equipos-no-en-tournament)
+- [Eliminar un arbitro de una tournament](#eliminar-un-arbitro-de-una-tournament)
 
 ### Usuarios
 - [Log in Usuario](#log-in-usuario)
@@ -57,12 +57,12 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 
 ### Arbitros
 
-- [Agregar arbitro a una temporada](#agregar-arbitro-a-una-temporada)
-- [Obtener arbitros de una temporada](#obtener-arbitros-de-una-temporada)
+- [Agregar arbitro a una tournament](#agregar-arbitro-a-una-tournament)
+- [Obtener arbitros de una tournament](#obtener-arbitros-de-una-tournament)
 - [Obtener partidos de un arbitro (calendario)](#obtener-partidos-de-un-arbitro-calendario)
 - [Arbitro registra datos de un partido](#arbitro-registra-datos-de-un-partido)
 - [Obtener partidos de un jugador (calendario)](#obtener-partidos-de-un-jugador-calendario)
-- [Obtener partidos de una temporada](#obtener-partidos-de-una-temporada)
+- [Obtener partidos de una tournament](#obtener-partidos-de-una-tournament)
 - [Agendar partido](#agendar-partido)
 - [Asignar arbitro a un partido](#asignar-arbitro-a-un-partido)
 - [Arbitro modifica datos de un partido](#arbitro-modifica-datos-de-un-partido)
@@ -81,7 +81,7 @@ GET /Ligas/obtenerTemporadas?idLiga=1
 
 **Parámetros:**
 
-- `idLiga` (**requerido**): El identificador de la liga de la que deseas obtener las temporadas.
+- `idLiga` (**requerido**): El identificador de la liga de la que deseas obtener las tournaments.
 
 
 ```bash
@@ -249,13 +249,13 @@ Resultado:
 
 
 ## Jugadores
-### Ver estadisticas de jugador por temporada
+### Ver estadisticas de jugador por tournament
 ```bash
-GET estadisticas/jugador-temporada?idJugador=usuario1&idTemporada=1
+GET estadisticas/jugador-tournament?idJugador=usuario1&idTemporada=1
 ```
 **Parámetros:**
 - `idJugador` (**requerido**): El identificador del jugador del que deseas obtener las estadisticas.
-- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener las estadisticas.
+- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener las estadisticas.
 
 **Resultado:**
 ```bash
@@ -448,12 +448,12 @@ POST /Temporadas/crearTemporada
 ```
 **Parámetros:**
 
-- `nombreTemporada` (**requerido**): El nombre de la temporada que deseas crear.
-- `fechaInicio` (**requerido**): La fecha de inicio de la temporada que deseas crear.
-- `fechaTermino` (**requerido**): La fecha de termino de la temporada que deseas crear.
-- `cantidadEquipos` (**requerido**): La cantidad de equipos de la temporada que deseas crear.
-- `categoria` (**requerido**): La categoria de la temporada que deseas crear.
-- `rama` (**requerido**): La rama de la temporada que deseas crear.
+- `nombreTemporada` (**requerido**): El nombre de la tournament que deseas crear.
+- `fechaInicio` (**requerido**): La fecha de inicio de la tournament que deseas crear.
+- `fechaTermino` (**requerido**): La fecha de termino de la tournament que deseas crear.
+- `cantidadEquipos` (**requerido**): La cantidad de equipos de la tournament que deseas crear.
+- `categoria` (**requerido**): La categoria de la tournament que deseas crear.
+- `rama` (**requerido**): La rama de la tournament que deseas crear.
 
 ```bash
 {
@@ -481,8 +481,8 @@ PUT /Temporadas/asignarLiga
 PUT /Temporadas/modificarDatosTemporada
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada que deseas modificar.
-- `estado` (**requerido**): El estado de la temporada que deseas modificar.
+- `temporadaId` (**requerido**): El identificador de la tournament que deseas modificar.
+- `estado` (**requerido**): El estado de la tournament que deseas modificar.
 
 ```bash
 {
@@ -496,7 +496,7 @@ PUT /Temporadas/modificarDatosTemporada
 GET /Temporadas/buscarTemporadasPorNombre?nombreTemporada=z
 ```
 **Parámetros:**
-- `nombreTemporada` (**requerido**): El nombre de la temporada que deseas buscar.
+- `nombreTemporada` (**requerido**): El nombre de la tournament que deseas buscar.
 
 ```bash
 Resultado:
@@ -524,12 +524,12 @@ Resultado:
 POST /EquipoTemporada/crearEquipoTemporada
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas asignarle un equipo.
-- `nombreEquipo` (**requerido**): El nombre del equipo que deseas asignarle a la temporada.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas asignarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas asignarle a la tournament.
 
 ```bash
 {
-  "temporada": {
+  "tournament": {
     "claveTemporada": 1
   },
   "equipo": {
@@ -544,12 +544,12 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
 ```
 
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas modificarle/eliminarle un equipo.
-- `nombreEquipo` (**requerido**): El nombre del equipo que deseas modificar/eliminar de la temporada.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas modificarle/eliminarle un equipo.
+- `nombreEquipo` (**requerido**): El nombre del equipo que deseas modificar/eliminar de la tournament.
 
 ```bash
 {
-  "temporada": {
+  "tournament": {
     "claveTemporada": 1
   },
   "equipo": {
@@ -557,12 +557,12 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
   }
 }
 ```
-### Generar partidos de una temporada
+### Generar partidos de una tournament
 ```bash
 POST Partido/generarPartidosTemporada
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas generarle los partidos.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas generarle los partidos.
 
 **Resultado:**
 ```bash
@@ -577,7 +577,7 @@ GET /Temporadas/obtenerTemporadasDeLiga?idLiga=1
 ```
 **Parámetros:**
 
-- `idLiga` (**requerido**): El id de la liga a ver temporadas.
+- `idLiga` (**requerido**): El id de la liga a ver tournaments.
 
 **Respuesta**
 ```bash
@@ -592,12 +592,12 @@ GET /Temporadas/obtenerTemporadasDeLiga?idLiga=1
     }
 ]
 ```
-### Obtener equipos de una temporada
+### Obtener equipos de una tournament
 ```bash
 GET EquipoTemporada/obtenerEquiposTemporada?temporadaId=1
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas obtener los equipos.
+- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los equipos.
 
 **Respuesta**
 ```bash
@@ -606,12 +606,12 @@ GET EquipoTemporada/obtenerEquiposTemporada?temporadaId=1
 }
 ```
 
-### Obtener Equipos no en temporada
+### Obtener Equipos no en tournament
 ```bash
 GET /EquipoTemporada/obtenerEquiposNoEnTemporada?temporadaId=1
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas obtener los equipos.
+- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los equipos.
 
 **Respuesta**
 ```bash
@@ -622,12 +622,12 @@ GET /EquipoTemporada/obtenerEquiposNoEnTemporada?temporadaId=1
 ]
 ```
 
-### Eliminar un arbitro de una temporada
+### Eliminar un arbitro de una tournament
 ```bash
 http://localhost:8080/Temporadas/eliminarArbitro?temporadaId=27&arbitroId=nombre_de_usuario101
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la temporada de la que deseas eliminar el arbitro.
+- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas eliminar el arbitro.
 
 **Respuesta**
 ```bash
@@ -642,12 +642,12 @@ http://localhost:8080/Temporadas/eliminarArbitro?temporadaId=27&arbitroId=nombre
 
 
 
-### Obtener Estado de una temporada
+### Obtener Estado de una tournament
 ```bash
 GET /Temporadas/obtenerEstadoTemporada?idTemporada=1
 ```
 **Parámetros:**
-- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener el estado.
+- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener el estado.
 
 **Respuesta**
 ```bash
@@ -790,14 +790,14 @@ PUT /usuarios/ActualizarUsuario
 ```
 
 ## Arbitros
-### Agregar arbitro a una temporada
+### Agregar arbitro a una tournament
 ```bash
 POST /Temporadas/agregarArbitro
 ```
 **Parámetros:**
 
-- `temporadaId` (**requerido**): El identificador de la temporada a la que deseas agregar un arbitro.
-- `arbitroId` (**requerido**): El identificador del arbitro que deseas agregar a la temporada.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas agregar un arbitro.
+- `arbitroId` (**requerido**): El identificador del arbitro que deseas agregar a la tournament.
 
 ```bash
 {
@@ -805,7 +805,7 @@ POST /Temporadas/agregarArbitro
     "arbitroId": "usuario1"
 }
 ```
-### Obtener arbitros de una temporada
+### Obtener arbitros de una tournament
 ```bash
 GET /Temporadas/obtenerArbitros?idTemporada=1
 ```
@@ -891,12 +891,12 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
     }
 ]
 ```
-### Obtener partidos de una temporada
+### Obtener partidos de una tournament
 ```bash
 GET Partido/obtenerPartidosTemporada?idTemporada=1
 ```
 **parámetros**
-- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener los partidos.
+- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener los partidos.
 ```bash
     [
         {
@@ -970,13 +970,13 @@ Para permitir al árbitro modificar datos de un partido en tiempo real a través
 
 
 
-### Obtener Arbitros que no estan en una temporada
+### Obtener Arbitros que no estan en una tournament
 ```bash
 GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 ```
 **Parámetros:**
 
-- `idTemporada` (**requerido**): El identificador de la temporada de la que deseas obtener los arbitros.
+- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener los arbitros.
 
 **Respuesta**
 ```bash
@@ -1078,15 +1078,15 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Modificar datos de un Jugador
 - [x] Registrar Árbitros
 - [x] Modificar datos de un Arbitro
-- [x] Asignar una temporada a una liga
+- [x] Asignar una tournament a una liga
 - [x] Iniciar Temporada
-- [x] Concluir una temporada
+- [x] Concluir una tournament
 - [x] Asignar jugadores a equipos
 - [x] Modificar jugadores de equipos
-- [x] Asignar Equipos a temporada
-- [x] Modificar Equipos de una temporada
-- [x] Agendar partidos dentro de una temporada
-- [x] Reagendar partido dentro de una temporada
+- [x] Asignar Equipos a tournament
+- [x] Modificar Equipos de una tournament
+- [x] Agendar partidos dentro de una tournament
+- [x] Reagendar partido dentro de una tournament
 - [x] Asignar arbitro a un partido
 - [ ] Arbitro da por iniciado un partido
 - [x] Arbitro registra datos de un partido
@@ -1094,18 +1094,18 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [ ] Arbitro da por terminado algunos de los tiempos del partido
 - [ ] Arbitro inicia algunos de los tiempos del partido
 - [ ] Arbitro finaliza un partido
-- [x] Obtener Arbitro de una temporada
-- [x] Asginar Arbitro a una temporada
+- [x] Obtener Arbitro de una tournament
+- [x] Asginar Arbitro a una tournament
 - [x] Ver calendario de partidos
 - [x] Ver jugadores
-- [x] Ver estadísticas de puntos de un jugador por temporada
-- [x] Ver estadísticas de asistencias de un jugador por temporada
-- [x] Ver estadísticas de tiros de 3 puntos de un jugador por temporada
-- [x] Ver estadísticas de tiros de 2 puntos de un jugador por temporada
-- [x] Ver estadísticas de tiros libres de un jugador por temporada
-- [x] Ver estadísticas de faltas de un jugador por temporada
-- [x] Ver estadísticas de asistencias de un jugador por temporada
-- [ ] Ver estadísticas de equipo por temporada
+- [x] Ver estadísticas de puntos de un jugador por tournament
+- [x] Ver estadísticas de asistencias de un jugador por tournament
+- [x] Ver estadísticas de tiros de 3 puntos de un jugador por tournament
+- [x] Ver estadísticas de tiros de 2 puntos de un jugador por tournament
+- [x] Ver estadísticas de tiros libres de un jugador por tournament
+- [x] Ver estadísticas de faltas de un jugador por tournament
+- [x] Ver estadísticas de asistencias de un jugador por tournament
+- [ ] Ver estadísticas de equipo por tournament
 - [x] Ver perfil de un jugador (cualquier usuario)
 - [x] Ver perfil de un equipo
 - [x] Ver perfil de un arbitro (cualquier usuario)
@@ -1114,8 +1114,8 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Buscar Jugador por nombre (cualquier usuario)
 - [x] Buscar liga por nombre
 - [x] Buscar Temporada por nombre
-- [x] obtener partidos de una temporada
-- [x] generar partidos de una temporada
+- [x] obtener partidos de una tournament
+- [x] generar partidos de una tournament
 
 
 

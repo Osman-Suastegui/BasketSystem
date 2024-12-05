@@ -1,27 +1,21 @@
 package com.basket.BasketballSystem.equipos_temporadas;
 
 import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.equipos.EquipoRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.temporadas.Categoria;
-import com.basket.BasketballSystem.temporadas.Rama;
-import com.basket.BasketballSystem.temporadas.Temporada;
-import com.basket.BasketballSystem.temporadas.TemporadaRepository;
-import com.basket.BasketballSystem.usuarios.UsuarioRepository;
+import com.basket.BasketballSystem.tournaments.Tournament;
+import com.basket.BasketballSystem.tournaments.TournamentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class EquipoTemporadaService {
 
     @Autowired
-    TemporadaRepository TemporadaRepository;
+    TournamentRepository TemporadaRepository;
 
 
     @Autowired
@@ -57,7 +51,7 @@ public class EquipoTemporadaService {
         String nombreEquipo = equipoTemporada.getEquipo().getNombre();
 
 
-        equipoTemporadaRepository.deleteByTemporadaClaveTemporadaAndEquipoNombre(claveTemporada, nombreEquipo);
+        equipoTemporadaRepository.deleteByTournamentIdAndEquipoNombre(claveTemporada, nombreEquipo);
 
             equipoTemporadaRepository.delete(equipoTemporada);
         Map<String, Object> EquipoMap = new HashMap<>();
@@ -88,12 +82,11 @@ public class EquipoTemporadaService {
 
 
     public List<String> obtenerEquiposNoEnTemporada(Long temporadaId) {
-        Temporada temp = TemporadaRepository.findByClaveTemporada(temporadaId);
+        Optional<Tournament> optionalTemporada = TemporadaRepository.findById(temporadaId);
+        if(optionalTemporada.isEmpty()) return new ArrayList<>();
+        Tournament temp = optionalTemporada.get();
 
-        Rama rama = temp.getRama();
-        Categoria categoria = temp.getCategoria();
-
-        List<String> equipos = equipoTemporadaRepository.findEquiposNotInTemporadaAndCategoryAndGender(temporadaId, categoria.toString(), rama.toString());
+        List<String> equipos = equipoTemporadaRepository.findEquiposNotInTemporadaAndCategoryAndGender(temporadaId);
 
 
         return equipos;
