@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.ligas.Liga;
+import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
@@ -47,7 +48,8 @@ public class Tournament {
     @Enumerated(EnumType.STRING)
     private Estado estado; // en curso, terminada, cancelada
 
-
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTournament> userTournaments;
 
     public Tournament(String nombreTemporada, Liga liga, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos, List<Usuario> arbitros) {
         this.name = nombreTemporada;

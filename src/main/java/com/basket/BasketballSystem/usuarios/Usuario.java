@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
+import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -49,6 +50,8 @@ public class Usuario implements UserDetails {
     @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @NotBlank(message = "el apellido no puedo estar en blanco")
     String apellido;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserTournament> userTournaments;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
