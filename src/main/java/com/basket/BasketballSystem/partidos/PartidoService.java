@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.partidos;
 
-import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.equipos.EquipoRepository;
+import com.basket.BasketballSystem.teams.Team;
+import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
@@ -35,7 +35,7 @@ public class PartidoService {
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    EquipoRepository equipoRepository;
+    TeamRepository teamRepository;
 
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
@@ -131,12 +131,12 @@ public class PartidoService {
 
         Duration durationPartido = Duration.ofMinutes(duracionPartido);
         System.out.println("nombre Partido " + idEquipo + " fin");
-        Equipo equipo = equipoRepository.findByNombre(idEquipo);
+        Team team = teamRepository.findByNombre(idEquipo);
 
 
-        String nombreEquipo = equipo.getNombre();
+        String nombreEquipo = team.getNombre();
 
-        List<Partido> partidos = partidoRepository.findByEquipo1NombreOrEquipo2Nombre(nombreEquipo);
+        List<Partido> partidos = partidoRepository.findByTeam1NombreOrTeam2Nombre(nombreEquipo);
         List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getFechaInicio() != null ).
                 collect(Collectors.toList());
 
@@ -205,12 +205,12 @@ public class PartidoService {
         }
 
         List<JugadoresEquipo> jugadoresEquipoTmp = jugadoresEquipoRepository.findAllByJugador(jugador);
-        List<Equipo> equipos = new ArrayList<>();
-        jugadoresEquipoTmp.forEach(je -> equipos.add(je.getEquipo()));
+        List<Team> teams = new ArrayList<>();
+        jugadoresEquipoTmp.forEach(je -> teams.add(je.getEquipo()));
 
 
         // Filtrar partidos relacionados con los equipos del jugador
-        List<Partido> partidos = partidoRepository.findAllByEquipo1InOrEquipo2In(equipos, equipos);
+        List<Partido> partidos = partidoRepository.findAllByTeam1InOrTeam2In(teams, teams);
 
         // Filtrar partidos que aún no tienen un ganador (futuros o en curso)
         List<Partido> partidosFiltrados = partidos.stream()
@@ -369,21 +369,21 @@ public class PartidoService {
         if(cantidadEnfrentamientosRegular != 1 && cantidadEnfrentamientosRegular != 2) throw new BadRequestException("La cantidad de enfrentamientos debe ser 1 o 2");
 
         // equipos que participan en la temporada
-        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
         List<Partido> partidos = new ArrayList<>();
-        for(int i = 0 ; i < equipos.size()-1;i++){
+        for(int i = 0; i < teams.size()-1; i++){
 
-            for(int j = i+1; j < equipos.size();j++){
+            for(int j = i+1; j < teams.size(); j++){
                 Partido partido = new Partido();
-                partido.setEquipo1(equipos.get(i));
-                partido.setEquipo2(equipos.get(j));
+                partido.setEquipo1(teams.get(i));
+                partido.setEquipo2(teams.get(j));
                 partido.setTemporada(t);
                 partido.setFase(Fase.REGULAR);
                 partidos.add(partido);
                 if(cantidadEnfrentamientosRegular == 2){
                     partido = new Partido();
-                    partido.setEquipo1(equipos.get(i));
-                    partido.setEquipo2(equipos.get(j));
+                    partido.setEquipo1(teams.get(i));
+                    partido.setEquipo2(teams.get(j));
                     partido.setTemporada(t);
                     partido.setFase(Fase.REGULAR);
                     partidos.add(partido);
@@ -476,9 +476,9 @@ public class PartidoService {
     }
 
     public Map<String,Integer> rankingTemporadaRegular(Long idTemporada){
-        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
         Map<String,Integer> equiposPuntos = new HashMap<>();
-        for(Equipo e : equipos){
+        for(Team e : teams){
             equiposPuntos.put(e.getNombre(),0);
         }
         List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
@@ -503,13 +503,13 @@ public class PartidoService {
 
 
     public Map<String, Map<String, Integer>> obtenerRankingTemporadaRegular(Long idTemporada) {
-        List<Equipo> equipos = equipoTemporadaRepository.findAllEquiposByTemporada(idTemporada);
+        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
         List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
 
         Map<String, Map<String, Integer>> equiposInfo = new HashMap<>();
 
         // Inicializar la información de cada equipo en el mapa
-        for (Equipo e : equipos) {
+        for (Team e : teams) {
             Map<String, Integer> equipoInfo = new HashMap<>();
             equipoInfo.put("puntosTemporada", 0);
             equipoInfo.put("jugados", 0);
@@ -688,8 +688,8 @@ public class PartidoService {
             for (int i = 0; i < equiposQuePasanPlayoff.size() / 2; i++) {
                 Partido partido = new Partido();
                 partido.setTemporada(tempo);
-                partido.setEquipo1(equipoRepository.findByNombre(equiposQuePasanPlayoff.get(i)));
-                partido.setEquipo2(equipoRepository.findByNombre(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
+                partido.setEquipo1(teamRepository.findByNombre(equiposQuePasanPlayoff.get(i)));
+                partido.setEquipo2(teamRepository.findByNombre(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
                 partido.setFase(Fase.Eliminatorias);
                 partidoRepository.save(partido);
             }
@@ -739,11 +739,11 @@ public class PartidoService {
                         Partido partido = new Partido();
                         partido.setTemporada(tempo);
                         String NombreequipoGanadorPartido = partidosEliminatorias.get(i).obtenerEquipoGanador();
-                        Equipo equipoGanadorPartido1 = equipoRepository.findByNombre(NombreequipoGanadorPartido);
-                        partido.setEquipo1(equipoGanadorPartido1);
+                        Team teamGanadorPartido1 = teamRepository.findByNombre(NombreequipoGanadorPartido);
+                        partido.setEquipo1(teamGanadorPartido1);
                         NombreequipoGanadorPartido = partidosEliminatorias.get(i + 1).obtenerEquipoGanador();
-                        Equipo equipoGanadorPartido2 = equipoRepository.findByNombre(NombreequipoGanadorPartido);
-                        partido.setEquipo2(equipoGanadorPartido2);
+                        Team teamGanadorPartido2 = teamRepository.findByNombre(NombreequipoGanadorPartido);
+                        partido.setEquipo2(teamGanadorPartido2);
                         partido.setFase(Fase.Eliminatorias);
                         partidoRepository.save(partido);
                     }

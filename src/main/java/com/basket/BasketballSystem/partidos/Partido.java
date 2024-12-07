@@ -1,6 +1,6 @@
 package com.basket.BasketballSystem.partidos;
 
-import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -23,11 +23,11 @@ public class Partido {
 
     @ManyToOne
     @JoinColumn(name = "equipo1")
-    private Equipo equipo1;
+    private Team team1;
 
     @ManyToOne
     @JoinColumn(name = "equipo2")
-    private Equipo equipo2;
+    private Team team2;
 
     @Column(name = "fase")
     @Enumerated(EnumType.STRING)
@@ -61,12 +61,12 @@ public class Partido {
         return tournament;
     }
 
-    public Equipo getEquipo1() {
-        return equipo1;
+    public Team getEquipo1() {
+        return team1;
     }
 
-    public Equipo getEquipo2() {
-        return equipo2;
+    public Team getEquipo2() {
+        return team2;
     }
 
     public Fase getFase() {
@@ -109,12 +109,12 @@ public class Partido {
         this.tournament = tournament;
     }
 
-    public void setEquipo1(Equipo equipo1) {
-        this.equipo1 = equipo1;
+    public void setEquipo1(Team team1) {
+        this.team1 = team1;
     }
 
-    public void setEquipo2(Equipo equipo2) {
-        this.equipo2 = equipo2;
+    public void setEquipo2(Team team2) {
+        this.team2 = team2;
     }
 
     public void setFase(Fase fase) {

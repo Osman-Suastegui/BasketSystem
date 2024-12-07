@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.equipos;
+package com.basket.BasketballSystem.teams;
 
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
@@ -6,9 +6,6 @@ import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
 
-import com.basket.BasketballSystem.tournaments.Categoria;
-import com.basket.BasketballSystem.tournaments.Rama;
-import com.basket.BasketballSystem.usuarios.Genero;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -19,29 +16,29 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class EquipoService {
+public class TeamService {
     @Autowired
-    EquipoRepository equipoRepository;
+    TeamRepository teamRepository;
 
 
     @Autowired
     UsuarioRepository usuarioRepository;
 
     @Autowired
-    public EquipoService(EquipoRepository equipoRepository) {
-        this.equipoRepository = equipoRepository;
+    public TeamService(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
     }
 
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
 
 
-    public Equipo obtenerEquipoAdminEquipo(String idAdminEquipo){
+    public Team obtenerEquipoAdminEquipo(String idAdminEquipo){
         //System.out.println("idAdminEquipo: " + idAdminEquipo);
-        if(equipoRepository.findByidAdminEquipo(idAdminEquipo).orElse(null) == null){
+        if(teamRepository.findByidAdminEquipo(idAdminEquipo).orElse(null) == null){
             throw new BadRequestException("No tiene un equipo asignado");
         }
-        return equipoRepository.findByidAdminEquipo(idAdminEquipo).orElse(null);
+        return teamRepository.findByidAdminEquipo(idAdminEquipo).orElse(null);
 
     }
 
@@ -49,7 +46,7 @@ public class EquipoService {
         if(nombreEquipo == null){
           throw new BadRequestException("El nombre del equipo no puede ser nulo");
         }
-        Optional<Equipo> equipo = equipoRepository.findById(nombreEquipo);
+        Optional<Team> equipo = teamRepository.findById(nombreEquipo);
         if(equipo.isPresent()){
             return equipo.get().getJugadores();
         }
@@ -58,7 +55,7 @@ public class EquipoService {
     }
 
 
-    public ResponseEntity<Map<String, Object>> crearEquipo(Equipo equipo) {
+    public ResponseEntity<Map<String, Object>> crearEquipo(Team equipo) {
 
         if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
             throw new BadRequestException("El nombre del equipo no puede ser nulo o vacío");
@@ -69,19 +66,12 @@ public class EquipoService {
             throw new BadRequestException("El usuario administrador del equipo no puede ser nulo");
         }
 
-        if (equipoRepository.findById(equipo.getNombre()).isPresent()) {
+        if (teamRepository.findById(equipo.getNombre()).isPresent()) {
             throw new BadRequestException("El equipo ya existe");
         }
 
-        if(equipo.getRama() == null){
-            throw new BadRequestException("La rama no puede ser nula");
-        }
 
-        if(equipo.getCategoria() == null){
-            throw new BadRequestException("La categoria no puede ser nula");
-        }
-
-        equipoRepository.save(equipo);
+        teamRepository.save(equipo);
         Map<String, Object> team = new HashMap<>();
 
         team.put("message", "Equipo Creado Exitosamente.");
@@ -101,9 +91,9 @@ public class EquipoService {
 
         // Buscar y configurar el equipo
         String equipoNombre = jugadoresEquipoDTO.getEquipoNombre();
-        Equipo equipo = equipoRepository.findByNombre(equipoNombre);
+        Team team = teamRepository.findByNombre(equipoNombre);
 
-        if (equipo == null) {
+        if (team == null) {
             throw new BadRequestException("El equipo no existe");
         }
 
@@ -119,19 +109,19 @@ public class EquipoService {
             throw new BadRequestException("El usuario del jugador no existe");
         }
 
-        jugadoresEquipo.setEquipo(equipo);
+        jugadoresEquipo.setEquipo(team);
         jugadoresEquipo.setJugador(jugador);
 
         // Verificar si el jugador ya existe en el equipo
-        for (JugadoresEquipo jugadorEnEquipo : equipo.getJugadores()) {
+        for (JugadoresEquipo jugadorEnEquipo : team.getJugadores()) {
             if (jugadorEnEquipo.getJugador().getUsuario().equals(jugadorUsuario)) {
                 throw new BadRequestException("El jugador ya existe en el equipo");
             }
         }
 
         // Guardar la instancia de JugadoresEquipo en el repositorio
-        equipo.addJugador(jugadoresEquipo);
-        equipoRepository.save(equipo);
+        team.addJugador(jugadoresEquipo);
+        teamRepository.save(team);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Jugador asignado correctamente");
@@ -140,7 +130,7 @@ public class EquipoService {
     }
     @Transactional
     public ResponseEntity<Map<String, Object>> eliminarJugador(String nombreEquipo, String nombreJugador) {
-        jugadoresEquipoRepository.deleteByJugadorAndEquipo(nombreEquipo, nombreJugador);
+        jugadoresEquipoRepository.deleteByJugadorAndTeam(nombreEquipo, nombreJugador);
         Map<String, Object> team = new HashMap<>();
 
         team.put("message", "Jugador eliminado exitosamente.");
@@ -149,13 +139,13 @@ public class EquipoService {
 
     public List<Map<String,Object>> buscarEquipoPorNombre(String nombre) {
 
-        List<Equipo> equipos = equipoRepository.findByNombreContaining(nombre);
+        List<Team> teams = teamRepository.findByNombreContaining(nombre);
 
         List<Map<String,Object>> equiposMap = new ArrayList<>();
 
-        for(Equipo equipo: equipos){
+        for(Team team : teams){
             Map<String,Object> e = new HashMap<>();
-            e.put("nombre",equipo.getNombre());
+            e.put("nombre", team.getNombre());
             equiposMap.add(e);
         }
         return equiposMap;
@@ -163,45 +153,9 @@ public class EquipoService {
 
 
     public List<Usuario> obtenerJugadoresParaEquipo(String nombreEquipo) {
-        Equipo equipo = equipoRepository.findByNombre(nombreEquipo);
+        Team team = teamRepository.findByNombre(nombreEquipo);
 
-
-         Rama rama = equipo.getRama();
-         String ramaString = rama.toString();
-        Genero genero = ramaString.equals("MASCULINO") ? Genero.MASCULINO : Genero.FEMENINO;
-         Categoria categoria = equipo.getCategoria();
-        int edadInicio = 0;
-        int edadFin = 0;
-        if(categoria == Categoria.PREBENJAMIN) {
-            edadInicio = 6;
-            edadFin = 7;
-        }else if (categoria == Categoria.BENJAMIN) {
-            edadInicio = 8;
-            edadFin = 9;
-        }else if (categoria == Categoria.ALEVIN) {
-            edadInicio = 10;
-            edadFin = 11;
-        }else if (categoria == Categoria.INFANTIL) {
-            edadInicio = 12;
-            edadFin = 13;
-        }else if (categoria == Categoria.CADETE) {
-            edadInicio = 14;
-            edadFin = 15;
-        }else if (categoria == Categoria.JUNIOR) {
-            edadInicio = 16;
-            edadFin = 17;
-        }else if (categoria == Categoria.SUB22) {
-            edadInicio = 18;
-            edadFin = 21;
-        }else if (categoria == Categoria.SENIOR) {
-            edadInicio = 22;
-            edadFin = 200;
-        }else{
-            edadInicio = 0;
-            edadFin = 200;
-        }
-
-        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInEquipoWithAgeAndGenderCondition(nombreEquipo);
+        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInTeamWithAgeAndGenderCondition(nombreEquipo);
             return jugadores;
     }
 

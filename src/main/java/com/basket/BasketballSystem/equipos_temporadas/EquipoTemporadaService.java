@@ -1,6 +1,6 @@
 package com.basket.BasketballSystem.equipos_temporadas;
 
-import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
@@ -51,7 +51,7 @@ public class EquipoTemporadaService {
         String nombreEquipo = equipoTemporada.getEquipo().getNombre();
 
 
-        equipoTemporadaRepository.deleteByTournamentIdAndEquipoNombre(claveTemporada, nombreEquipo);
+        equipoTemporadaRepository.deleteByTournamentIdAndTeamNombre(claveTemporada, nombreEquipo);
 
             equipoTemporadaRepository.delete(equipoTemporada);
         Map<String, Object> EquipoMap = new HashMap<>();
@@ -67,13 +67,13 @@ public class EquipoTemporadaService {
             throw new BadRequestException("La temporada no existe");
         }
 
-        List<Equipo> equipos = equipoTemporadaRepository.findEquiposByClaveTemporada(temporadaId);
+        List<Team> teams = equipoTemporadaRepository.findTeamsByClaveTemporada(temporadaId);
 
 
 
         Map<String, Object> nombreEquipoMap = new HashMap<>();
-        for (Equipo equipo : equipos) {
-            nombreEquipoMap.put(equipo.getNombre(), equipo.getNombre()); // Utiliza el nombre del equipo como clave
+        for (Team team : teams) {
+            nombreEquipoMap.put(team.getNombre(), team.getNombre()); // Utiliza el nombre del equipo como clave
         }
 
         return ResponseEntity.ok(nombreEquipoMap);
@@ -86,7 +86,7 @@ public class EquipoTemporadaService {
         if(optionalTemporada.isEmpty()) return new ArrayList<>();
         Tournament temp = optionalTemporada.get();
 
-        List<String> equipos = equipoTemporadaRepository.findEquiposNotInTemporadaAndCategoryAndGender(temporadaId);
+        List<String> equipos = equipoTemporadaRepository.findTeamsNotInTemporadaAndCategoryAndGender(temporadaId);
 
 
         return equipos;

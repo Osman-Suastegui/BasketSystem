@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -52,6 +53,10 @@ public class Usuario implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTournament> userTournaments;
+    // User entity
+    @OneToMany(mappedBy = "admin_equipo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Team> teams;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

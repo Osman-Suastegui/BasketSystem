@@ -1,6 +1,6 @@
 package com.basket.BasketballSystem.equipos_temporadas;
 
-import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import jakarta.persistence.*;
 
@@ -20,11 +20,11 @@ public class EquipoTemporada {
 
     @ManyToOne
     @JoinColumn(name = "equipo")
-    private Equipo equipo;
+    private Team team;
 
-    public EquipoTemporada(Tournament tournament, Equipo equipo) {
+    public EquipoTemporada(Tournament tournament, Team team) {
         this.tournament = tournament;
-        this.equipo = equipo;
+        this.team = team;
     }
 
     public EquipoTemporada() {
@@ -34,7 +34,7 @@ public class EquipoTemporada {
         return tournament;
     }
 
-    public Equipo getEquipo() {
-        return equipo;
+    public Team getEquipo() {
+        return team;
     }
 }

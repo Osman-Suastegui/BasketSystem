@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.estadisticas;
 
-import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.equipos.EquipoRepository;
+import com.basket.BasketballSystem.teams.Team;
+import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
@@ -25,15 +25,15 @@ public class EstadisticasJugadorService {
     @Autowired
     PartidoRepository partidoRepository;
     @Autowired
-    TournamentRepository temporadaRepository;
+    TournamentRepository tournamentRepository;
 
     @Autowired
-    EquipoRepository equipoRepository;
+    TeamRepository teamRepository;
     @Autowired
     JugadoresEquipoRepository jugadoresEquipoRepository;
   
     public Map<String, Object> jugadorTemporadaEstadisticas(Long idTemporada, String idJugador) {
-        Optional<Tournament> temporada = temporadaRepository.findById(idTemporada);
+        Optional<Tournament> temporada = tournamentRepository.findById(idTemporada);
         if(!temporada.isPresent()) new BadRequestException("La temporada no existe");
         List<Partido> partidos = partidoRepository.findAllByTournament(temporada.get());
 
@@ -93,10 +93,10 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Map<String, Object>> equipoTemporadaEstadisticas(String nombreEquipo, Long temporadaId) {
-        Equipo equipo = equipoRepository.findByNombre(nombreEquipo);
+        Team team = teamRepository.findByNombre(nombreEquipo);
 
 
-        List<JugadoresEquipo> jugadoresEquipo = jugadoresEquipoRepository.findAllByEquipo(equipo);
+        List<JugadoresEquipo> jugadoresEquipo = jugadoresEquipoRepository.findAllByTeam(team);
 
         Map<String, Map<String, Object>> estadisticasEquipo = new HashMap<>();
 
@@ -112,7 +112,7 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Object> topJugadoresTirosLibres(Long temporadaId) {
-        Optional<Tournament> temp = temporadaRepository.findById(temporadaId);
+        Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Partido> partidos = partidoRepository.findAllByTournament(temp.get());
         List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
 
@@ -143,7 +143,7 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Object> topJugadoresTirosDe2Puntos(Long temporadaId) {
-        Optional<Tournament> temp = temporadaRepository.findById(temporadaId);
+        Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Partido> partidos = partidoRepository.findAllByTournament(temp.get());
         List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
 
@@ -174,7 +174,7 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Object> topJugadoresTirosDe3Puntos(Long temporadaId) {
-        Optional<Tournament> temp = temporadaRepository.findById(temporadaId);
+        Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Partido> partidos = partidoRepository.findAllByTournament(temp.get());
         List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
 
@@ -205,7 +205,7 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Object> topJugadoresAsistencias(Long temporadaId) {
-        Optional<Tournament> temp = temporadaRepository.findById(temporadaId);
+        Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Partido> partidos = partidoRepository.findAllByTournament(temp.get());
         List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByPartidoIn(partidos);
 

@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.equipos;
+package com.basket.BasketballSystem.teams;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.tournaments.Categoria;
@@ -12,38 +12,31 @@ import jakarta.validation.constraints.Size;
 import java.util.List;
 
 @Entity
-@Table(name = "equipos")
-public class Equipo {
+@Table(name = "teams")
+public class Team {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotNull
-    @Size(min = 3, max = 30)
+    @Size(min = 2, max = 30)
     private String nombre;
+
     @ManyToOne
     @JoinColumn(name="admin_equipo")
     private Usuario admin_equipo;
-    @Column(name = "rama")
-    @Enumerated(EnumType.STRING)
-    private Rama rama;
 
-    @Column(name = "categoria")
-    @Enumerated(EnumType.STRING)
-    private Categoria categoria;
+    private String logo;
 
-    @OneToMany(mappedBy = "equipo", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<JugadoresEquipo> jugadores;
 
-    public Equipo(String nombre, Usuario admin_equipo, Rama rama, Categoria categoria) {
+    public Team(String nombre, Usuario admin_equipo) {
         this.nombre = nombre;
         this.admin_equipo = admin_equipo;
-        this.rama = rama;
-        this.categoria = categoria;
     }
 
-    public Equipo() {
+    public Team() {
     }
-
-
-
 
     public String getNombre() {
         return nombre;
@@ -68,25 +61,19 @@ public class Equipo {
         jugadores.add(jugador);
     }
 
-
-
-    public void setRama(Rama rama) {
-        this.rama = rama;
+    public Long getId() {
+        return id;
     }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Rama getRama() {
-        return rama;
+    public String getLogo() {
+        return logo;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
-
-
-
-
 }

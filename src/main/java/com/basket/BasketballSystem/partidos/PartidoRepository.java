@@ -1,6 +1,6 @@
 package com.basket.BasketballSystem.partidos;
 
-import com.basket.BasketballSystem.equipos.Equipo;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,10 +14,10 @@ import java.util.List;
 public interface PartidoRepository extends JpaRepository<Partido,Long> {
     List<Partido> findAllByArbitro(Usuario arbitro);
 
-    List<Partido> findAllByEquipo1InOrEquipo2In(List<Equipo> equipos1,List<Equipo> equipos2);
+    List<Partido> findAllByTeam1InOrTeam2In(List<Team> equipos1, List<Team> equipos2);
 
-    @Query("SELECT p FROM Partido p WHERE p.equipo1.nombre = :nombreEquipo OR p.equipo2.nombre = :nombreEquipo")
-    List<Partido> findByEquipo1NombreOrEquipo2Nombre(String nombreEquipo);
+    @Query("SELECT p FROM Partido p WHERE p.team1.nombre = :nombreEquipo OR p.team2.nombre = :nombreEquipo")
+    List<Partido> findByTeam1NombreOrTeam2Nombre(String nombreEquipo);
 
     List<Partido> findAllByTournament(Tournament tournament);
 //        contar los partidos de una temporada

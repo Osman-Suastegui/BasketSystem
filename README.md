@@ -26,12 +26,12 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Ver estadisticas de jugador general](#ver-estadisticas-de-jugador-general)
 ### Equipos
 
-- [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-equipo)
-- [Buscar Equipos por Nombre](#buscar-equipos-por-nombre)
-- [Crear un Equipo](#crear-un-equipo)
-- [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-equipo)
-- [Eliminar Jugadores de un Equipo](#eliminar-jugadores-de-un-equipo)
-- [Obtener jugadores que no estan en un determinado equipo]
+- [Obtener Jugadores por Nombre del Equipo](#obtener-jugadores-por-nombre-del-team)
+- [Buscar Equipos por Nombre](#buscar-teams-por-nombre)
+- [Crear un Equipo](#crear-un-team)
+- [Asignarle Jugadores a un Equipo](#asignarle-jugadores-a-un-team)
+- [Eliminar Jugadores de un Equipo](#eliminar-jugadores-de-un-team)
+- [Obtener jugadores que no estan en un determinado team]
 
 ### Temporadas
 
@@ -39,13 +39,13 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Asignar Temporada a una Liga](#asignar-tournament-a-una-liga)
 - [Modificar Datos de una Temporada](#modificar-datos-de-una-tournament)
 - [Buscar una Temporada por nombre](#buscar-una-tournament-por-nombre)
-- [Asignar Equipo a una Temporada](#asignar-equipo-a-una-tournament)
-- [Eliminar Equipos de una Temporada](#eliminar-equipos-de-una-tournament)
+- [Asignar Equipo a una Temporada](#asignar-team-a-una-tournament)
+- [Eliminar Equipos de una Temporada](#eliminar-teams-de-una-tournament)
 - [Generar partidos de una tournament](#generar-partidos-de-una-tournament)
 - [Obtener Todos los datos de las  Temporadas de una liga](#obtener-tournaments-de-una-liga)
 - [Obtener nombre de tournaments de una liga](#obtener-tournaments-de-una-liga-1)
-- [Obtener equipos de una tournament](#obtener-equipos-de-una-tournament)
-- [Obtener Equipos no en tournament](#obtener-equipos-no-en-tournament)
+- [Obtener teams de una tournament](#obtener-teams-de-una-tournament)
+- [Obtener Equipos no en tournament](#obtener-teams-no-en-tournament)
 - [Eliminar un arbitro de una tournament](#eliminar-un-arbitro-de-una-tournament)
 
 ### Usuarios
@@ -68,9 +68,9 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Arbitro modifica datos de un partido](#arbitro-modifica-datos-de-un-partido)
 
 ### Partidos
-- [Obtener todos los jugadores de un partido y equipo](#obtener-todos-los-jugadores-de-un-partido-y-un-equipo)
+- [Obtener todos los jugadores de un partido y team](#obtener-todos-los-jugadores-de-un-partido-y-un-team)
 - [Obtener partido por id](#obtener-partido-por-id)
-- [Obtener los partidos de un equipo](#obtener-los-partidos-de-un-equipo)
+- [Obtener los partidos de un team](#obtener-los-partidos-de-un-team)
 ## Ligas
 ### Obtener Temporadas de una Liga
 
@@ -298,7 +298,7 @@ GET /Equipo/{nombreEquipo}/jugadores
 
 #### Parámetros de Ruta
 
-- `{nombreEquipo}` (**cadena,requerido**): El nombre del equipo del cual deseas obtener los jugadores.
+- `{nombreEquipo}` (**cadena,requerido**): El nombre del team del cual deseas obtener los jugadores.
 
 #### Ejemplo
 
@@ -327,7 +327,7 @@ GET /Equipo/{nombreEquipo}/jugadores
 GET /Equipo/buscarEquipoPorNombre?nombre=e
 ```
 **Parámetros:**
-- `nombre` (**requerido**): El nombre del equipo que deseas buscar.
+- `nombre` (**requerido**): El nombre del team que deseas buscar.
 
 ```bash
 Resultado:
@@ -351,8 +351,8 @@ POST /Equipo/crearEquipo
 ```
 **Parámetros:**
 
-- `nombre` (**requerido**): El nombre del equipo que deseas crear.
-- `admin_equipo` (**requerido**): El identificador del usuario que deseas asignarle como administrador del equipo.
+- `nombre` (**requerido**): El nombre del team que deseas crear.
+- `admin_equipo` (**requerido**): El identificador del usuario que deseas asignarle como administrador del team.
 
 ```bash
 {
@@ -367,16 +367,16 @@ POST /Equipo/crearEquipo
 
 ### Asignarle Jugadores a un Equipo
 ```bash
-POST /jugadores-equipo/crearJugadoresEquipo
+POST /jugadores-team/crearJugadoresEquipo
 ```
 **Parámetros:**
-- `nombreEquipo` (**requerido**): El nombre del equipo al que deseas asignarle un jugador.
-- `idUsuario` (**requerido**): El identificador del usuario que deseas asignarle como jugador del equipo.
-- `posicion` (**requerido**): La posicion del jugador que deseas asignarle al equipo.
+- `nombreEquipo` (**requerido**): El nombre del team al que deseas asignarle un jugador.
+- `idUsuario` (**requerido**): El identificador del usuario que deseas asignarle como jugador del team.
+- `posicion` (**requerido**): La posicion del jugador que deseas asignarle al team.
 
 ```bash
 {
-    "equipo": {
+    "team": {
         "nombre": "equipes"
     },
     "jugador": {
@@ -391,8 +391,8 @@ POST /jugadores-equipo/crearJugadoresEquipo
 DELETE /Equipo/eliminarJugador
 ```
 **Parámetros:**
-- `nombreEquipo` (**requerido**): El nombre del equipo al que deseas eliminarle un jugador.
-- `nombreJugador` (**requerido**): El identificador del usuario que deseas eliminarle como jugador del equipo.
+- `nombreEquipo` (**requerido**): El nombre del team al que deseas eliminarle un jugador.
+- `nombreJugador` (**requerido**): El identificador del usuario que deseas eliminarle como jugador del team.
 
 ```bash
 {
@@ -401,12 +401,12 @@ DELETE /Equipo/eliminarJugador
 }
 ```
 
-### Obtener jugadores que no estan en un determinado equipo
+### Obtener jugadores que no estan en un determinado team
 ```bash
 GET /Equipo/obtenerJugadoresParaEquipo?nombreEquipo=equipe
 ```
 **Parámetros:**
-- `nombreEquipo` (**requerido**): El nombre del equipo del que deseas obtener los jugadores.
+- `nombreEquipo` (**requerido**): El nombre del team del que deseas obtener los jugadores.
 
 **Respuesta**
 ```bash
@@ -451,7 +451,7 @@ POST /Temporadas/crearTemporada
 - `nombreTemporada` (**requerido**): El nombre de la tournament que deseas crear.
 - `fechaInicio` (**requerido**): La fecha de inicio de la tournament que deseas crear.
 - `fechaTermino` (**requerido**): La fecha de termino de la tournament que deseas crear.
-- `cantidadEquipos` (**requerido**): La cantidad de equipos de la tournament que deseas crear.
+- `cantidadEquipos` (**requerido**): La cantidad de teams de la tournament que deseas crear.
 - `categoria` (**requerido**): La categoria de la tournament que deseas crear.
 - `rama` (**requerido**): La rama de la tournament que deseas crear.
 
@@ -524,15 +524,15 @@ Resultado:
 POST /EquipoTemporada/crearEquipoTemporada
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas asignarle un equipo.
-- `nombreEquipo` (**requerido**): El nombre del equipo que deseas asignarle a la tournament.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas asignarle un team.
+- `nombreEquipo` (**requerido**): El nombre del team que deseas asignarle a la tournament.
 
 ```bash
 {
   "tournament": {
     "claveTemporada": 1
   },
-  "equipo": {
+  "team": {
     "nombre": "equipes"
   }
 }
@@ -544,15 +544,15 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
 ```
 
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas modificarle/eliminarle un equipo.
-- `nombreEquipo` (**requerido**): El nombre del equipo que deseas modificar/eliminar de la tournament.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas modificarle/eliminarle un team.
+- `nombreEquipo` (**requerido**): El nombre del team que deseas modificar/eliminar de la tournament.
 
 ```bash
 {
   "tournament": {
     "claveTemporada": 1
   },
-  "equipo": {
+  "team": {
     "nombre": "equipes"
   }
 }
@@ -592,12 +592,12 @@ GET /Temporadas/obtenerTemporadasDeLiga?idLiga=1
     }
 ]
 ```
-### Obtener equipos de una tournament
+### Obtener teams de una tournament
 ```bash
 GET EquipoTemporada/obtenerEquiposTemporada?temporadaId=1
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los equipos.
+- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los teams.
 
 **Respuesta**
 ```bash
@@ -611,7 +611,7 @@ GET EquipoTemporada/obtenerEquiposTemporada?temporadaId=1
 GET /EquipoTemporada/obtenerEquiposNoEnTemporada?temporadaId=1
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los equipos.
+- `temporadaId` (**requerido**): El identificador de la tournament de la que deseas obtener los teams.
 
 **Respuesta**
 ```bash
@@ -841,8 +841,8 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
         "temporadaId": 1,
         "arbitro": "Manuel321",
         "fechaInicio": "2023-09-22T02:17:07.000+00:00",
-        "equipo2": "el real madrid",
-        "equipo1": "Chivas",
+        "team2": "el real madrid",
+        "team1": "Chivas",
         "idPartido": 1
     }
 ]
@@ -855,11 +855,11 @@ PUT /JugadorPartido/agregarJugadorPartido
 **Parámetros:**
 - `idPartido` (**requerido**): El identificador del partido al que deseas agregarle un jugador.
 - `idJugador` (**requerido**): El identificador del jugador que deseas agregar al partido.
-- `equipo` (**requerido**): El nombre del equipo al que pertenece el jugador.
+- `team` (**requerido**): El nombre del team al que pertenece el jugador.
 
 ```bash
 {
-  "equipo": "equipe",
+  "team": "equipe",
   "jugador": {
     "usuario": "nombre_de_usuario"
   },
@@ -885,8 +885,8 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
         "temporadaId": 1,
         "arbitro": "Manuel321",
         "fechaInicio": "2023-09-22T02:17:07.000+00:00",
-        "equipo2": "el real madrid",
-        "equipo1": "Chivas",
+        "team2": "el real madrid",
+        "team1": "Chivas",
         "idPartido": 1
     }
 ]
@@ -903,8 +903,8 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
         "temporadaId": 1,
         "arbitro": "Manuel321",
         "fechaInicio": "2023-09-22T02:17:07.000+00:00",
-        "equipo2": "el real madrid",
-        "equipo1": "Chivas",
+        "team2": "el real madrid",
+        "team1": "Chivas",
         "idPartido": 1
         }
   ]
@@ -989,13 +989,13 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 
 ## Partidos
 
-### Obtener todos los jugadores de un partido y un equipo
+### Obtener todos los jugadores de un partido y un team
 ```bash
   GET /JugadorPartido/obtenerJugadoresDePartidoyEquipo?clavePartido=9&nombreEquipo=chivas&enBanca=0
 ```
 **Parámetros:**
 - `clavePartido` (**requerido**): El identificador del partido
-- `nombreEquipo` (**requerido**): El nombre del equipo
+- `nombreEquipo` (**requerido**): El nombre del team
 - `enBanca` (**opcional**): este parametro toma 2 valores 1 o 0  si es 1 retorna todos los jugadores que estan en banca si es 0 retorna los que no estan en banca si no se especifica el campo retorna ambos
 
 ```bash
@@ -1032,8 +1032,8 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 {
     "clavePartido": 9,
     "fechaInicio": "2023-10-26T03:43:08Z",
-    "equipo1": "Miami Heat",
-    "equipo2": "Denver Nuggets",
+    "team1": "Miami Heat",
+    "team2": "Denver Nuggets",
     "arbitro": "prueba",
     "resultado": "",
     "claveTemporada": 1,
@@ -1041,13 +1041,13 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 }
 ```
 
-### Obtener los partidos de un equipo
+### Obtener los partidos de un team
 ```bash
   GET Partido/obtenerPartidosEquipo?idEquipo=equipo12&estatusPartido=proximos
 ```
 
 **Parámetros:**
-- `idEquipo` (**requerido**): El identificador del equipo
+- `idEquipo` (**requerido**): El identificador del team
 - `estatusPartido` (**requerido**): El estatus del partido puede ser proximo, en curso o finalizado
 
 ```bash
@@ -1055,8 +1055,8 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
     {
         "temporadaId": 27,
         "fechaInicio": "2023-11-24T15:30:45Z",
-        "equipo2": "equipo13",
-        "equipo1": "equipo12",
+        "team2": "equipo13",
+        "team1": "equipo12",
         "idPartido": 9
     }
 ]
@@ -1070,10 +1070,10 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Modificar datos de una liga
 - [x] Registrar Temporada
 - [x] Modificar datos de una Temporada
-- [x] Registrar Administrador de equipo
+- [x] Registrar Administrador de team
 - [x] Modificar datos de Administrador de Equipo
 - [x] Crear Equipo
-- [x] Modificar datos de un equipo
+- [x] Modificar datos de un team
 - [x] Registrar Jugadores
 - [x] Modificar datos de un Jugador
 - [x] Registrar Árbitros
@@ -1081,8 +1081,8 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Asignar una tournament a una liga
 - [x] Iniciar Temporada
 - [x] Concluir una tournament
-- [x] Asignar jugadores a equipos
-- [x] Modificar jugadores de equipos
+- [x] Asignar jugadores a teams
+- [x] Modificar jugadores de teams
 - [x] Asignar Equipos a tournament
 - [x] Modificar Equipos de una tournament
 - [x] Agendar partidos dentro de una tournament
@@ -1105,11 +1105,11 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Ver estadísticas de tiros libres de un jugador por tournament
 - [x] Ver estadísticas de faltas de un jugador por tournament
 - [x] Ver estadísticas de asistencias de un jugador por tournament
-- [ ] Ver estadísticas de equipo por tournament
+- [ ] Ver estadísticas de team por tournament
 - [x] Ver perfil de un jugador (cualquier usuario)
-- [x] Ver perfil de un equipo
+- [x] Ver perfil de un team
 - [x] Ver perfil de un arbitro (cualquier usuario)
-- [ ] Ver ranking de los equipos
+- [ ] Ver ranking de los teams
 - [x] Buscar Equipo por nombre
 - [x] Buscar Jugador por nombre (cualquier usuario)
 - [x] Buscar liga por nombre

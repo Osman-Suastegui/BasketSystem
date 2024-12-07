@@ -37,7 +37,7 @@ public class JugadorPartidoService {
             throw new BadRequestException("El partido no puede ser nulo");
         }
 
-        JugadoresEquipo jugadoresEquipo = jugadoresEquipoRepository.findByJugadorAndEquipo_Nombre(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
+        JugadoresEquipo jugadoresEquipo = jugadoresEquipoRepository.findByJugadorAndTeam_Nombre(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
         jugadorPartido.setPosicion(jugadoresEquipo.getPosicion());
         jugadorPartido.setAsistencias(0);
         jugadorPartido.setAnotaciones(0);
