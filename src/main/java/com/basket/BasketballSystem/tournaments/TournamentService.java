@@ -1,8 +1,6 @@
 package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.ligas.Liga;
-import com.basket.BasketballSystem.ligas.LigaRepository;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.tournaments.DTO.obtenerTemporadasDeLigaResponse;
 import com.basket.BasketballSystem.usuarios.Usuario;
@@ -23,8 +21,6 @@ public class TournamentService {
     TournamentRepository tournamentRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
-    @Autowired
-    LigaRepository ligaRepository;
 
     public ResponseEntity<Map<String, Object>> crearTemporada(Tournament tournament) {
         Map<String, Object> tempNew = new HashMap<>();
@@ -37,7 +33,6 @@ public class TournamentService {
             throw new BadRequestException("La fecha de termino de la temporada no puede ser nula");
         if (tournament.getStartDate().isAfter(tournament.getEndDate()))
             throw new BadRequestException("La fecha de inicio no puede ser mayor a la fecha de termino");
-
 
         if (tournament.getCantidadPlayoffs() == null) {
             tournament.setCantidadPlayoffs(0);
@@ -56,24 +51,6 @@ public class TournamentService {
 
     }
 
-
-    public ResponseEntity<Map<String, Object>> asignarLiga(Long temporadaId, Long ligaId) {
-        Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
-        Liga liga = ligaRepository.findById(ligaId).orElse(null);
-
-        if (liga == null) throw new BadRequestException("La liga no existe");
-        if (tournament == null) throw new BadRequestException("La temporada no existe");
-
-        tournament.setLiga(liga);
-        tournamentRepository.save(tournament);
-
-        Map<String, Object> tempNew = new HashMap<>();
-        tempNew.put("message", "Temporada asignada Exitosamente.");
-
-        return ResponseEntity.ok(tempNew);
-
-    }
-
     public ResponseEntity<String> modificarDatosTemporada(Long temporadaId, Estado estado) {
         Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
         if (tournament == null) return ResponseEntity.badRequest().body("La temporada no existe");
@@ -82,7 +59,6 @@ public class TournamentService {
         return ResponseEntity.ok("Temporada modificada exitosamente.");
     }
 
-
     public ResponseEntity<Map<String, Object>> agregarArbitro(Long temporadaId, String arbitroId) {
         Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
         Usuario arbitro = usuarioRepository.findById(arbitroId).orElse(null);
@@ -90,9 +66,7 @@ public class TournamentService {
         if (tournament == null) throw new BadRequestException("La temporada no existe");
         if (arbitro == null) throw new BadRequestException("El arbitro no existe");
 
-        tournament.getArbitros().add(arbitro);
         tournamentRepository.save(tournament);
-
 
         arbitroTemp.put("message", "Arbitro agregado exitosamente.");
 
@@ -104,8 +78,7 @@ public class TournamentService {
     public List<Usuario> obtenerArbitros(Long temporadaId) {
         Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
         if (tournament == null) throw new BadRequestException("La temporada no existe");
-        tournament.getArbitros().forEach(arbitro -> arbitro.setPassword(null));
-        return tournament.getArbitros();
+        return new ArrayList<>();
     }
 
     public List<Map<String, Object>> buscarTemporadasPorNombre(String nombreTemporada) {
@@ -123,41 +96,8 @@ public class TournamentService {
             temporadasMap.add(t);
         }
 
-
         return temporadasMap;
-
-
     }
-
-
-    public List<obtenerTemporadasDeLigaResponse> obtenerTemporadasDeLiga(Long idLiga) {
-        if (idLiga == null) {
-            throw new BadRequestException("La liga no puede ser nulo");
-        }
-
-        List<Object[]> TemporadasDeLiga = tournamentRepository.findTournamentsForLiga(idLiga);
-
-        List<obtenerTemporadasDeLigaResponse> TemporadasLigaRes = new ArrayList<>();
-
-        for (Object[] temp : TemporadasDeLiga) {
-            obtenerTemporadasDeLigaResponse temResponse = new obtenerTemporadasDeLigaResponse();
-
-            temResponse.setIdTemporada((Long) temp[0]);
-            temResponse.setNombreTemporada((String) temp[1]);
-            TemporadasLigaRes.add(temResponse);
-        }
-
-        // Llama a la consulta personalizada para obtener las ligas del administrador
-        return TemporadasLigaRes;
-
-    }
-
-
-    public List<String> obtenerArbitrosNoEnTemporada(Long temporadaId) {
-        List<String> arbitros = tournamentRepository.findArbitrosNotInTemporada(temporadaId);
-        return arbitros;
-    }
-
 
     public ResponseEntity<Map<String, Object>> obtenerEstadoTemporada(Long idTemporada) {
         Tournament tournament = tournamentRepository.findById(idTemporada).orElse(null);
@@ -170,7 +110,7 @@ public class TournamentService {
 
 
     public ResponseEntity<Map<String, Object>> eliminarArbitroDeTemporada(Long temporadaId, String nombreArbitro) {
-        tournamentRepository.deleteArbitroFromTemporada(temporadaId, nombreArbitro);
+//        tournamentRepository.deleteArbitroFromTemporada(temporadaId, nombreArbitro);
         Map<String, Object> arbitroTemp = new HashMap<>();
         arbitroTemp.put("message", "Arbitro eliminado exitosamente.");
         return ResponseEntity.ok(arbitroTemp);

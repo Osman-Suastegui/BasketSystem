@@ -1,6 +1,5 @@
 package com.basket.BasketballSystem.equipos;
 
-import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +17,5 @@ public interface EquipoRepository extends JpaRepository<Equipo, String> {
     List<Equipo> findByNombreContaining(String nombre);
 
     Equipo findByNombre(String nombre);
-
-
-
 
 }

@@ -1,6 +1,5 @@
 package com.basket.BasketballSystem.tournaments;
 
-import com.basket.BasketballSystem.ligas.Liga;
 import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
@@ -19,10 +18,6 @@ public class Tournament {
     @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "id_liga")
-    private Liga liga;
-
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -38,26 +33,17 @@ public class Tournament {
 
     @Column(name = "cantidad_enfrentamientos_regular")
     private Integer cantidadEnfrentamientosRegular;
-    @ManyToMany
-    @JoinTable(
-            name = "temporadas_arbitro",
-            joinColumns = @JoinColumn(name = "clave_temporada"),
-            inverseJoinColumns = @JoinColumn(name = "arbitro")
-    )
-    private List<Usuario> arbitros;
     @Enumerated(EnumType.STRING)
     private Estado estado; // en curso, terminada, cancelada
 
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTournament> userTournaments;
 
-    public Tournament(String nombreTemporada, Liga liga, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos, List<Usuario> arbitros) {
+    public Tournament(String nombreTemporada, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos) {
         this.name = nombreTemporada;
-        this.liga = liga;
         this.startDate = fechaInicio;
         this.endDate = fechaTermino;
         this.cantidadEquipos = cantidadEquipos;
-        this.arbitros = arbitros;
     }
 
     public Tournament() {
@@ -91,17 +77,11 @@ public class Tournament {
         return cantidadEquipos;
     }
 
-    public List<Usuario> getArbitros() {
-        return arbitros;
-    }
 
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
 
-    public void setLiga(Liga ligaId) {
-        this.liga = ligaId;
-    }
 
     public void setCantidadEnfrentamientosRegular(Integer cantidadEnfrentamientosRegular) {
         this.cantidadEnfrentamientosRegular = cantidadEnfrentamientosRegular;
@@ -117,6 +97,10 @@ public class Tournament {
 
     public Integer getCantidadPlayoffs() {
         return cantidadPlayoffs;
+    }
+
+    public List<UserTournament> getUserTournaments() {
+        return userTournaments;
     }
 }
 

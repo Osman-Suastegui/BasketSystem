@@ -24,15 +24,6 @@ public class TournamentController {
         return TournamentService.crearTemporada(tournament);
     }
 
-    @PutMapping("/asignarLiga")
-    public ResponseEntity<Map<String, Object>> asignarLiga(@RequestBody Map<String, Object> requestMap) {
-        Long ligaId = Long.parseLong(requestMap.get("ligaId").toString());
-        Long temporadaId = Long.parseLong(requestMap.get("temporadaId").toString());
-
-        return TournamentService.asignarLiga(temporadaId, ligaId);
-
-    }
-
     @PutMapping("/modificarDatosTemporada")
     public ResponseEntity<String> modificarDatosTemporada(@RequestBody Map<String, Object> requestMap) {
         Long temporadaId = Long.parseLong(requestMap.get("temporadaId").toString());
@@ -41,20 +32,12 @@ public class TournamentController {
         return TournamentService.modificarDatosTemporada(temporadaId, estado);
     }
 
-
     @DeleteMapping("/eliminarArbitro")
     public ResponseEntity<Map<String, Object>> eliminarArbitro(
             @RequestParam("temporadaId") Long temporadaId,
             @RequestParam("arbitroId") String arbitroId) {
         return TournamentService.eliminarArbitroDeTemporada(temporadaId, arbitroId);
     }
-
-
-    @GetMapping("/obtenerArbitrosNoEnTemporada")
-    public List<String> obtenerArbitrosNoEnTemporada(@RequestParam(name = "idTemporada",required = false) Long temporadaId) {
-        return TournamentService.obtenerArbitrosNoEnTemporada(temporadaId);
-    }
-
 
     @PostMapping("/agregarArbitro")
     public ResponseEntity<Map<String, Object>> agregarArbitro(@RequestBody Map<String, Object> requestMap) {
@@ -71,11 +54,6 @@ public class TournamentController {
     @GetMapping("/buscarTemporadasPorNombre")
         public List<Map<String,Object>> buscarTemporadasPorNombre(@RequestParam(name = "nombreTemporada",required = false) String nombreTemporada) {
         return TournamentService.buscarTemporadasPorNombre(nombreTemporada);
-    }
-
-    @GetMapping("/obtenerTemporadasDeLiga")
-    public List<obtenerTemporadasDeLigaResponse> obtenerTemporadasDeLiga(@RequestParam(name = "idLiga", required = false) Long idLiga){
-        return TournamentService.obtenerTemporadasDeLiga(idLiga);
     }
 
     @GetMapping("/obtenerEstadoTemporada")
