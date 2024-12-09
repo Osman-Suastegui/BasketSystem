@@ -2,7 +2,7 @@ package com.basket.BasketballSystem.partidos;
 
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
-import com.basket.BasketballSystem.equipos_temporadas.EquipoTemporadaRepository;
+import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
@@ -42,7 +42,7 @@ public class PartidoService {
     @Autowired
     TournamentRepository temporadaRepository;
     @Autowired
-    EquipoTemporadaRepository equipoTemporadaRepository;
+    TeamTournamentRepository teamTournamentRepository;
     @Autowired
     JugadorPartidoRepository jugadorPartidoRepository;
 
@@ -369,7 +369,7 @@ public class PartidoService {
         if(cantidadEnfrentamientosRegular != 1 && cantidadEnfrentamientosRegular != 2) throw new BadRequestException("La cantidad de enfrentamientos debe ser 1 o 2");
 
         // equipos que participan en la temporada
-        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
+        List<Team> teams = teamTournamentRepository.findAllTeamsByTournament(idTemporada);
         List<Partido> partidos = new ArrayList<>();
         for(int i = 0; i < teams.size()-1; i++){
 
@@ -476,7 +476,7 @@ public class PartidoService {
     }
 
     public Map<String,Integer> rankingTemporadaRegular(Long idTemporada){
-        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
+        List<Team> teams = teamTournamentRepository.findAllTeamsByTournament(idTemporada);
         Map<String,Integer> equiposPuntos = new HashMap<>();
         for(Team e : teams){
             equiposPuntos.put(e.getNombre(),0);
@@ -503,7 +503,7 @@ public class PartidoService {
 
 
     public Map<String, Map<String, Integer>> obtenerRankingTemporadaRegular(Long idTemporada) {
-        List<Team> teams = equipoTemporadaRepository.findAllTeamsByTournament(idTemporada);
+        List<Team> teams = teamTournamentRepository.findAllTeamsByTournament(idTemporada);
         List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
 
         Map<String, Map<String, Integer>> equiposInfo = new HashMap<>();

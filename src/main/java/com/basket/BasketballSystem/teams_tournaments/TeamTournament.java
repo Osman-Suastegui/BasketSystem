@@ -1,33 +1,30 @@
-package com.basket.BasketballSystem.equipos_temporadas;
+package com.basket.BasketballSystem.teams_tournaments;
 
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "equipos_temporadas", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"id", "equipo"})
-})
-public class EquipoTemporada {
+@Table(name = "teams_tournaments")
+public class TeamTournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "clave_equiposTemporada")
-    private Long clave;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "equipo")
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    public EquipoTemporada(Tournament tournament, Team team) {
+    public TeamTournament(Tournament tournament, Team team) {
         this.tournament = tournament;
         this.team = team;
     }
 
-    public EquipoTemporada() {
+    public TeamTournament() {
     }
 
     public Tournament getTemporada() {

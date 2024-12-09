@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.equipos_temporadas;
+package com.basket.BasketballSystem.teams_tournaments;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,41 +11,41 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/EquipoTemporada")
-public class EquipoTemporadaController {
+public class TeamTournamentController {
 
 
 
-    EquipoTemporadaService equipoTemporadaService;
+    TeamTournamentService teamTournamentService;
 
     @Autowired
-    public EquipoTemporadaController(EquipoTemporadaService equipoTemporadaService) {
-        this.equipoTemporadaService = equipoTemporadaService;
+    public TeamTournamentController(TeamTournamentService teamTournamentService) {
+        this.teamTournamentService = teamTournamentService;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PostMapping("/crearEquipoTemporada")
-    public ResponseEntity<Map<String, Object>> crearEquipoTemporada(@RequestBody EquipoTemporada equipoTemporada) {
-       return equipoTemporadaService.crearEquipoTemporada(equipoTemporada);
+    public ResponseEntity<Map<String, Object>> crearEquipoTemporada(@RequestBody TeamTournament teamTournament) {
+       return teamTournamentService.crearEquipoTemporada(teamTournament);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @Transactional
     @DeleteMapping("/eliminarEquipoTemporada")
-    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(@RequestBody EquipoTemporada equipoTemporada) {
-       return equipoTemporadaService.eliminarEquipoTemporada(equipoTemporada);
+    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(@RequestBody TeamTournament teamTournament) {
+       return teamTournamentService.eliminarEquipoTemporada(teamTournament);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @GetMapping("/obtenerEquiposTemporada")
     public ResponseEntity<Map<String, Object>> obtenerEquiposTemporada(@RequestParam(name = "temporadaId",required = false) Long temporadaId) {
-        return equipoTemporadaService.obtenerEquiposTemporada(temporadaId);
+        return teamTournamentService.obtenerEquiposTemporada(temporadaId);
     }
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @GetMapping("/obtenerEquiposNoEnTemporada")
     public List<String> obtenerEquiposNoEnTemporada(@RequestParam(name = "temporadaId",required = false) Long temporadaId) {
-        return equipoTemporadaService.obtenerEquiposNoEnTemporada(temporadaId);
+        return teamTournamentService.obtenerEquiposNoEnTemporada(temporadaId);
     }
 
 

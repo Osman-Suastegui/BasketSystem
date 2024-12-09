@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.equipos_temporadas;
+package com.basket.BasketballSystem.teams_tournaments;
 
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
@@ -12,32 +12,32 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class EquipoTemporadaService {
+public class TeamTournamentService {
 
     @Autowired
     TournamentRepository TemporadaRepository;
 
 
     @Autowired
-    EquipoTemporadaRepository equipoTemporadaRepository;
+    TeamTournamentRepository teamTournamentRepository;
 
     @Autowired
-    public EquipoTemporadaService(EquipoTemporadaRepository equipoTemporadaRepository) {
-        this.equipoTemporadaRepository = equipoTemporadaRepository;
+    public TeamTournamentService(TeamTournamentRepository teamTournamentRepository) {
+        this.teamTournamentRepository = teamTournamentRepository;
     }
 
 
-    public ResponseEntity<Map<String, Object>> crearEquipoTemporada(EquipoTemporada equipoTemporada) {
+    public ResponseEntity<Map<String, Object>> crearEquipoTemporada(TeamTournament teamTournament) {
 
-        if(equipoTemporada.getTemporada() == null ){
+        if(teamTournament.getTemporada() == null ){
             throw new BadRequestException("La temporada no puede ser nula o vacia");
         }
-        if(equipoTemporada.getEquipo().getNombre() == null ){
+        if(teamTournament.getEquipo().getNombre() == null ){
             throw new BadRequestException("El equipo no puede ser nulo o vacio");
         }
 
         Map<String, Object> equipoTemp = new HashMap<>();
-        equipoTemporadaRepository.save(equipoTemporada);
+        teamTournamentRepository.save(teamTournament);
         equipoTemp.put("message", "Arbitro agregado exitosamente.");
 
 
@@ -45,15 +45,15 @@ public class EquipoTemporadaService {
     }
 
     @Transactional
-    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(EquipoTemporada equipoTemporada) {
+    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(TeamTournament teamTournament) {
 
-        Long claveTemporada = equipoTemporada.getTemporada().getClaveTemporada();
-        String nombreEquipo = equipoTemporada.getEquipo().getNombre();
+        Long claveTemporada = teamTournament.getTemporada().getClaveTemporada();
+        String nombreEquipo = teamTournament.getEquipo().getNombre();
 
 
-        equipoTemporadaRepository.deleteByTournamentIdAndTeamNombre(claveTemporada, nombreEquipo);
+        teamTournamentRepository.deleteByTournamentIdAndTeamNombre(claveTemporada, nombreEquipo);
 
-            equipoTemporadaRepository.delete(equipoTemporada);
+            teamTournamentRepository.delete(teamTournament);
         Map<String, Object> EquipoMap = new HashMap<>();
         EquipoMap.put("message", "Equipo eliminado exitosamente.");
             return ResponseEntity.ok(EquipoMap);
@@ -67,7 +67,7 @@ public class EquipoTemporadaService {
             throw new BadRequestException("La temporada no existe");
         }
 
-        List<Team> teams = equipoTemporadaRepository.findTeamsByClaveTemporada(temporadaId);
+        List<Team> teams = teamTournamentRepository.findTeamsByClaveTemporada(temporadaId);
 
 
 
@@ -86,7 +86,7 @@ public class EquipoTemporadaService {
         if(optionalTemporada.isEmpty()) return new ArrayList<>();
         Tournament temp = optionalTemporada.get();
 
-        List<String> equipos = equipoTemporadaRepository.findTeamsNotInTemporadaAndCategoryAndGender(temporadaId);
+        List<String> equipos = teamTournamentRepository.findTeamsNotInTemporadaAndCategoryAndGender(temporadaId);
 
 
         return equipos;
