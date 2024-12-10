@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
 import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.tournaments.Categoria;
 import com.basket.BasketballSystem.tournaments.Rama;
 import com.basket.BasketballSystem.usuarios.Usuario;
@@ -26,6 +27,9 @@ public class Team {
     private Usuario admin_equipo;
 
     private String logo;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<JugadorPartido> jugadoresPartidos;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<JugadoresEquipo> jugadores;

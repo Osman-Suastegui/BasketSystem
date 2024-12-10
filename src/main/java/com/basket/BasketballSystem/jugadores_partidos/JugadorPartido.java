@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
 import com.basket.BasketballSystem.partidos.Partido;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
@@ -15,6 +16,9 @@ public class JugadorPartido {
     @JoinColumn(name = "clave_partido")
     private Partido partido;
 
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
     @ManyToOne
     @JoinColumn(name = "jugador")
     private Usuario jugador;
