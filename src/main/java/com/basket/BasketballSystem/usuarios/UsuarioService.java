@@ -28,8 +28,8 @@ public class UsuarioService {
             throw new BadRequestException("El usuario no existe.");
         }
         Usuario usuario = usuarioOptional.get();
-        usuario.setNombre(req.getNombre());
-        usuario.setApellido(req.getApellido());
+        usuario.setName(req.getNombre());
+        usuario.setLastName(req.getApellido());
         usuarioRepository.save(usuario);
 
         Map<String, Object> userAct = new HashMap<>();

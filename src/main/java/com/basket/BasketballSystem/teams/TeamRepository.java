@@ -13,8 +13,8 @@ public interface TeamRepository extends JpaRepository<Team, String> {
     @Query("SELECT e FROM Team e WHERE e.admin_equipo.usuario = :idAdminEquipo")
     Optional<Team> findByidAdminEquipo(@Param("idAdminEquipo") String idAdminEquipo);
 
-    List<Team> findByNombreContaining(String nombre);
+    List<Team> findByNameContaining(String nombre);
 
-    Team findByNombre(String nombre);
+    Team findByName(String nombre);
 
 }

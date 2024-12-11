@@ -3,8 +3,8 @@ package com.basket.BasketballSystem.teams;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
 
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
@@ -30,7 +30,7 @@ public class TeamService {
     }
 
     @Autowired
-    JugadoresEquipoRepository jugadoresEquipoRepository;
+    TeamPlayerRepository teamPlayerRepository;
 
 
     public Team obtenerEquipoAdminEquipo(String idAdminEquipo){
@@ -42,7 +42,7 @@ public class TeamService {
 
     }
 
-    public List<JugadoresEquipo> obtenerJugadoresPorNombreDelEquipo(String nombreEquipo) {
+    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(String nombreEquipo) {
         if(nombreEquipo == null){
           throw new BadRequestException("El nombre del equipo no puede ser nulo");
         }
@@ -57,7 +57,7 @@ public class TeamService {
 
     public ResponseEntity<Map<String, Object>> crearEquipo(Team equipo) {
 
-        if (equipo.getNombre() == null || equipo.getNombre().isEmpty()) {
+        if (equipo.getName() == null || equipo.getName().isEmpty()) {
             throw new BadRequestException("El nombre del equipo no puede ser nulo o vacío");
         }
 
@@ -66,7 +66,7 @@ public class TeamService {
             throw new BadRequestException("El usuario administrador del equipo no puede ser nulo");
         }
 
-        if (teamRepository.findById(equipo.getNombre()).isPresent()) {
+        if (teamRepository.findById(equipo.getName()).isPresent()) {
             throw new BadRequestException("El equipo ya existe");
         }
 
@@ -82,16 +82,16 @@ public class TeamService {
 
     public ResponseEntity<Map<String, Object>> agregarJugador(JugadoresEquipoDTO jugadoresEquipoDTO) {
         // Crear una instancia de JugadoresEquipo
-        JugadoresEquipo jugadoresEquipo = new JugadoresEquipo();
+        TeamPlayer teamplayers = new TeamPlayer();
         //valida que la posicion no sea nula
         if(jugadoresEquipoDTO.getPosicion() == null){
             throw new BadRequestException("La posicion no puede ser nula");
         }
-        jugadoresEquipo.setPosicion(jugadoresEquipoDTO.getPosicion());
+        teamplayers.setPosition(jugadoresEquipoDTO.getPosicion());
 
         // Buscar y configurar el equipo
         String equipoNombre = jugadoresEquipoDTO.getEquipoNombre();
-        Team team = teamRepository.findByNombre(equipoNombre);
+        Team team = teamRepository.findByName(equipoNombre);
 
         if (team == null) {
             throw new BadRequestException("El equipo no existe");
@@ -109,18 +109,18 @@ public class TeamService {
             throw new BadRequestException("El usuario del jugador no existe");
         }
 
-        jugadoresEquipo.setEquipo(team);
-        jugadoresEquipo.setJugador(jugador);
+        teamplayers.setEquipo(team);
+        teamplayers.setPlayer(jugador);
 
         // Verificar si el jugador ya existe en el equipo
-        for (JugadoresEquipo jugadorEnEquipo : team.getJugadores()) {
-            if (jugadorEnEquipo.getJugador().getUsuario().equals(jugadorUsuario)) {
+        for (TeamPlayer jugadorEnEquipo : team.getJugadores()) {
+            if (jugadorEnEquipo.getPlayer().getUsuario().equals(jugadorUsuario)) {
                 throw new BadRequestException("El jugador ya existe en el equipo");
             }
         }
 
         // Guardar la instancia de JugadoresEquipo en el repositorio
-        team.addJugador(jugadoresEquipo);
+        team.addJugador(teamplayers);
         teamRepository.save(team);
 
         Map<String, Object> response = new HashMap<>();
@@ -130,7 +130,7 @@ public class TeamService {
     }
     @Transactional
     public ResponseEntity<Map<String, Object>> eliminarJugador(String nombreEquipo, String nombreJugador) {
-        jugadoresEquipoRepository.deleteByJugadorAndTeam(nombreEquipo, nombreJugador);
+        teamPlayerRepository.deleteByPlayerAndTeam(nombreEquipo, nombreJugador);
         Map<String, Object> team = new HashMap<>();
 
         team.put("message", "Jugador eliminado exitosamente.");
@@ -139,13 +139,13 @@ public class TeamService {
 
     public List<Map<String,Object>> buscarEquipoPorNombre(String nombre) {
 
-        List<Team> teams = teamRepository.findByNombreContaining(nombre);
+        List<Team> teams = teamRepository.findByNameContaining(nombre);
 
         List<Map<String,Object>> equiposMap = new ArrayList<>();
 
         for(Team team : teams){
             Map<String,Object> e = new HashMap<>();
-            e.put("nombre", team.getNombre());
+            e.put("nombre", team.getName());
             equiposMap.add(e);
         }
         return equiposMap;
@@ -153,9 +153,9 @@ public class TeamService {
 
 
     public List<Usuario> obtenerJugadoresParaEquipo(String nombreEquipo) {
-        Team team = teamRepository.findByNombre(nombreEquipo);
+        Team team = teamRepository.findByName(nombreEquipo);
 
-        List<Usuario> jugadores = jugadoresEquipoRepository.findJugadoresNotInTeamWithAgeAndGenderCondition(nombreEquipo);
+        List<Usuario> jugadores = teamPlayerRepository.findPlayersNotInTeamWithAgeAndGenderCondition(nombreEquipo);
             return jugadores;
     }
 

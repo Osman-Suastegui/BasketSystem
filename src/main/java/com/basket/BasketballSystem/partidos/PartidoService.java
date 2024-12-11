@@ -4,8 +4,8 @@ import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
@@ -38,7 +38,7 @@ public class PartidoService {
     TeamRepository teamRepository;
 
     @Autowired
-    JugadoresEquipoRepository jugadoresEquipoRepository;
+    TeamPlayerRepository teamPlayerRepository;
     @Autowired
     TournamentRepository temporadaRepository;
     @Autowired
@@ -85,8 +85,8 @@ public class PartidoService {
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
             System.out.println("DURACION DEL PARTIDO INSTANT " + fechaInicioPartido);
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
-            p.put("equipo1", partido.getEquipo1().getNombre());
-            p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("equipo1", partido.getEquipo1().getName());
+            p.put("equipo2", partido.getEquipo2().getName());
 
             if (fechaInicioPartido.isBefore(horaAcutal) && fechaEndPartido.isAfter(horaAcutal)){
                 partidosEnCursoMap.add(p);
@@ -131,10 +131,10 @@ public class PartidoService {
 
         Duration durationPartido = Duration.ofMinutes(duracionPartido);
         System.out.println("nombre Partido " + idEquipo + " fin");
-        Team team = teamRepository.findByNombre(idEquipo);
+        Team team = teamRepository.findByName(idEquipo);
 
 
-        String nombreEquipo = team.getNombre();
+        String nombreEquipo = team.getName();
 
         List<Partido> partidos = partidoRepository.findByTeam1NombreOrTeam2Nombre(nombreEquipo);
         List<Partido> partidosFiltrados = partidos.stream().filter(partido -> partido.getFechaInicio() != null ).
@@ -157,8 +157,8 @@ public class PartidoService {
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
 
             p.put("temporadaId", partido.getTemporada().getNombreTemporada());
-            p.put("equipo1", partido.getEquipo1().getNombre());
-            p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("equipo1", partido.getEquipo1().getName());
+            p.put("equipo2", partido.getEquipo2().getName());
             p.put("ganador", partido.getGanador());
 
             if (fechaInicioPartido.isBefore(horaAcutal) && fechaEndPartido.isAfter(horaAcutal)){
@@ -204,9 +204,9 @@ public class PartidoService {
             throw new BadRequestException("El jugador no existe");
         }
 
-        List<JugadoresEquipo> jugadoresEquipoTmp = jugadoresEquipoRepository.findAllByJugador(jugador);
+        List<TeamPlayer> teamplayersTmp = teamPlayerRepository.findAllByPlayer(jugador);
         List<Team> teams = new ArrayList<>();
-        jugadoresEquipoTmp.forEach(je -> teams.add(je.getEquipo()));
+        teamplayersTmp.forEach(je -> teams.add(je.getEquipo()));
 
 
         // Filtrar partidos relacionados con los equipos del jugador
@@ -233,8 +233,8 @@ public class PartidoService {
             p.put("arbitro", partido.getArbitro().getUsuario());
             p.put("fechaInicio", partido.getFechaInicio());
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
-            p.put("equipo1", partido.getEquipo1().getNombre());
-            p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("equipo1", partido.getEquipo1().getName());
+            p.put("equipo2", partido.getEquipo2().getName());
             p.put("ganador", partido.getGanador());
             partidosMap.add(p);
         }
@@ -260,8 +260,8 @@ public class PartidoService {
             }
             p.put("fechaInicio", partido.getFechaInicio());
             p.put("temporadaId", partido.getTemporada().getClaveTemporada());
-            p.put("equipo1", partido.getEquipo1().getNombre());
-            p.put("equipo2", partido.getEquipo2().getNombre());
+            p.put("equipo1", partido.getEquipo1().getName());
+            p.put("equipo2", partido.getEquipo2().getName());
             p.put("ganador", partido.getGanador());
             p.put("fase", partido.getFase());
             if (partido.getGanador().isEmpty()) {
@@ -479,19 +479,19 @@ public class PartidoService {
         List<Team> teams = teamTournamentRepository.findAllTeamsByTournament(idTemporada);
         Map<String,Integer> equiposPuntos = new HashMap<>();
         for(Team e : teams){
-            equiposPuntos.put(e.getNombre(),0);
+            equiposPuntos.put(e.getName(),0);
         }
         List<Partido> partidos = partidoRepository.findAllByTournament(idTemporada);
         for(Partido p : partidos){
             if(p.getGanador().length() != 0 ){
                 if(p.getGanador().equals("EMPATE")){
-                    equiposPuntos.put(p.getEquipo1().getNombre(),equiposPuntos.get(p.getEquipo1().getNombre())+1);
-                    equiposPuntos.put(p.getEquipo2().getNombre(),equiposPuntos.get(p.getEquipo2().getNombre())+1);
+                    equiposPuntos.put(p.getEquipo1().getName(),equiposPuntos.get(p.getEquipo1().getName())+1);
+                    equiposPuntos.put(p.getEquipo2().getName(),equiposPuntos.get(p.getEquipo2().getName())+1);
                 }
-                else if(p.getGanador().equals(p.getEquipo1().getNombre())){
-                    equiposPuntos.put(p.getEquipo1().getNombre(),equiposPuntos.get(p.getEquipo1().getNombre())+3);
+                else if(p.getGanador().equals(p.getEquipo1().getName())){
+                    equiposPuntos.put(p.getEquipo1().getName(),equiposPuntos.get(p.getEquipo1().getName())+3);
                 }else{
-                    equiposPuntos.put(p.getEquipo2().getNombre(),equiposPuntos.get(p.getEquipo2().getNombre())+3);
+                    equiposPuntos.put(p.getEquipo2().getName(),equiposPuntos.get(p.getEquipo2().getName())+3);
                 }
             }
         }
@@ -516,33 +516,33 @@ public class PartidoService {
             equipoInfo.put("ganados", 0);
             equipoInfo.put("perdidos", 0);
             equipoInfo.put("puntosJugador", 0);
-            equiposInfo.put(e.getNombre(), equipoInfo);
+            equiposInfo.put(e.getName(), equipoInfo);
         }
 
         for (Partido p : partidos) {
             if (!p.getGanador().isEmpty()) {
                 // Actualizar partidos jugados para ambos equipos
-                actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "jugados");
-                actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "jugados");
+                actualizarContadores(equiposInfo, p.getEquipo1().getName(), "jugados");
+                actualizarContadores(equiposInfo, p.getEquipo2().getName(), "jugados");
 
                 if (p.getGanador().equals("EMPATE")) {
                     // Actualizar partidos empatados para ambos equipos
-                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "puntosTemporada");
-                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "puntosTemporada");
-                } else if (p.getGanador().equals(p.getEquipo1().getNombre())) {
+                    actualizarContadores(equiposInfo, p.getEquipo1().getName(), "puntosTemporada");
+                    actualizarContadores(equiposInfo, p.getEquipo2().getName(), "puntosTemporada");
+                } else if (p.getGanador().equals(p.getEquipo1().getName())) {
                     // Actualizar partidos ganados para el equipo 1
-                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "puntosTemporada", 3);
-                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "ganados");
+                    actualizarContadores(equiposInfo, p.getEquipo1().getName(), "puntosTemporada", 3);
+                    actualizarContadores(equiposInfo, p.getEquipo1().getName(), "ganados");
 
                     // Actualizar partidos perdidos para el equipo 2
-                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "perdidos");
+                    actualizarContadores(equiposInfo, p.getEquipo2().getName(), "perdidos");
                 } else {
                     // Actualizar partidos ganados para el equipo 2
-                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "puntosTemporada", 3);
-                    actualizarContadores(equiposInfo, p.getEquipo2().getNombre(), "ganados");
+                    actualizarContadores(equiposInfo, p.getEquipo2().getName(), "puntosTemporada", 3);
+                    actualizarContadores(equiposInfo, p.getEquipo2().getName(), "ganados");
 
                     // Actualizar partidos perdidos para el equipo 1
-                    actualizarContadores(equiposInfo, p.getEquipo1().getNombre(), "perdidos");
+                    actualizarContadores(equiposInfo, p.getEquipo1().getName(), "perdidos");
                 }
             }
         }
@@ -594,8 +594,8 @@ public class PartidoService {
             partidoResponse.setClavePartido(partido.get().getClavePartido());
             partidoResponse.setFase(partido.get().getFase().toString());
             partidoResponse.setFechaInicio(partido.get().getFechaInicio().toString());
-            partidoResponse.setEquipo1(partido.get().getEquipo1().getNombre());
-            partidoResponse.setEquipo2(partido.get().getEquipo2().getNombre());
+            partidoResponse.setEquipo1(partido.get().getEquipo1().getName());
+            partidoResponse.setEquipo2(partido.get().getEquipo2().getName());
             partidoResponse.setArbitro(partido.get().getArbitro().getUsuario());
             partidoResponse.setResultado(partido.get().getGanador());
             partidoResponse.setClaveTemporada(partido.get().getTemporada().getClaveTemporada());
@@ -607,8 +607,8 @@ public class PartidoService {
         if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
 
         Map<String, Object> equipo1Equipo2 = new HashMap<>();
-        equipo1Equipo2.put("equipo1", partido.get().getEquipo1().getNombre());
-        equipo1Equipo2.put("equipo2", partido.get().getEquipo2().getNombre());
+        equipo1Equipo2.put("equipo1", partido.get().getEquipo1().getName());
+        equipo1Equipo2.put("equipo2", partido.get().getEquipo2().getName());
 
         return ResponseEntity.ok(equipo1Equipo2);
     }
@@ -622,9 +622,9 @@ public class PartidoService {
                 Random r = new Random();
                 int random = r.nextInt(3);
                 if(random == 0){
-                    p.setGanador(p.getEquipo1().getNombre());
+                    p.setGanador(p.getEquipo1().getName());
                 }else if(random == 1){
-                    p.setGanador(p.getEquipo2().getNombre());
+                    p.setGanador(p.getEquipo2().getName());
                 }else{
                     p.setGanador("EMPATE");
                 }
@@ -688,8 +688,8 @@ public class PartidoService {
             for (int i = 0; i < equiposQuePasanPlayoff.size() / 2; i++) {
                 Partido partido = new Partido();
                 partido.setTemporada(tempo);
-                partido.setEquipo1(teamRepository.findByNombre(equiposQuePasanPlayoff.get(i)));
-                partido.setEquipo2(teamRepository.findByNombre(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
+                partido.setEquipo1(teamRepository.findByName(equiposQuePasanPlayoff.get(i)));
+                partido.setEquipo2(teamRepository.findByName(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
                 partido.setFase(Fase.Eliminatorias);
                 partidoRepository.save(partido);
             }
@@ -739,10 +739,10 @@ public class PartidoService {
                         Partido partido = new Partido();
                         partido.setTemporada(tempo);
                         String NombreequipoGanadorPartido = partidosEliminatorias.get(i).obtenerEquipoGanador();
-                        Team teamGanadorPartido1 = teamRepository.findByNombre(NombreequipoGanadorPartido);
+                        Team teamGanadorPartido1 = teamRepository.findByName(NombreequipoGanadorPartido);
                         partido.setEquipo1(teamGanadorPartido1);
                         NombreequipoGanadorPartido = partidosEliminatorias.get(i + 1).obtenerEquipoGanador();
-                        Team teamGanadorPartido2 = teamRepository.findByNombre(NombreequipoGanadorPartido);
+                        Team teamGanadorPartido2 = teamRepository.findByName(NombreequipoGanadorPartido);
                         partido.setEquipo2(teamGanadorPartido2);
                         partido.setFase(Fase.Eliminatorias);
                         partidoRepository.save(partido);
@@ -774,8 +774,8 @@ public class PartidoService {
         Optional<Partido> partido = partidoRepository.findById(idPartido);
         if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
 
-        String equipo1 = partido.get().getEquipo1().getNombre();
-        String equipo2 = partido.get().getEquipo2().getNombre();
+        String equipo1 = partido.get().getEquipo1().getName();
+        String equipo2 = partido.get().getEquipo2().getName();
         int anotacionesEquipo1 = jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(equipo1,idPartido);
         int anotacionesEquipo2 = jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(equipo2,idPartido);
 

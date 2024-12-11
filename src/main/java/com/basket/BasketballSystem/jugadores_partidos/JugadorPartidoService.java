@@ -1,8 +1,8 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
 import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
 
 import jakarta.transaction.Transactional;
@@ -22,7 +22,7 @@ public class JugadorPartidoService {
     JugadorPartidoRepository jugadorPartidoRepository;
 
     @Autowired
-    JugadoresEquipoRepository jugadoresEquipoRepository;
+    TeamPlayerRepository teamPlayerRepository;
 
 
     public ResponseEntity<Map<String, Object>> agregarJugadorPartido(JugadorPartido jugadorPartido) {
@@ -37,8 +37,8 @@ public class JugadorPartidoService {
             throw new BadRequestException("El partido no puede ser nulo");
         }
 
-        JugadoresEquipo jugadoresEquipo = jugadoresEquipoRepository.findByJugadorAndTeam_Nombre(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
-        jugadorPartido.setPosicion(jugadoresEquipo.getPosicion());
+        TeamPlayer teamplayers = teamPlayerRepository.findByPlayerAndTeam_Name(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
+        jugadorPartido.setPosicion(teamplayers.getPosition());
         jugadorPartido.setAsistencias(0);
         jugadorPartido.setAnotaciones(0);
         jugadorPartido.setTirosDe2Puntos(0);
@@ -160,7 +160,7 @@ public class JugadorPartidoService {
 
     public List<String> obtenerJugadoresNoEnPartido(String nombreEquipo, Long clavePartido, String nombreEquipo2) {
         List<String> jugadoresNoEnPartido = new ArrayList<>();
-        jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido, nombreEquipo2);
+//        jugadoresNoEnPartido = jugadoresEquipoRepository.findJugadoresNoEnPartidos(nombreEquipo, clavePartido, nombreEquipo2);
         return jugadoresNoEnPartido;
     }
 

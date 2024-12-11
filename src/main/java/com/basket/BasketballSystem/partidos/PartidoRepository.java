@@ -16,7 +16,7 @@ public interface PartidoRepository extends JpaRepository<Partido,Long> {
 
     List<Partido> findAllByTeam1InOrTeam2In(List<Team> equipos1, List<Team> equipos2);
 
-    @Query("SELECT p FROM Partido p WHERE p.team1.nombre = :nombreEquipo OR p.team2.nombre = :nombreEquipo")
+    @Query("SELECT p FROM Partido p WHERE p.team1.name = :nombreEquipo OR p.team2.name = :nombreEquipo")
     List<Partido> findByTeam1NombreOrTeam2Nombre(String nombreEquipo);
 
     List<Partido> findAllByTournament(Tournament tournament);

@@ -7,43 +7,41 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity()
-@Table(name = "jugadores_equipos",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"nombre_equipo", "jugador"}))
-
-public class JugadoresEquipo {
+@Table(name = "team_players")
+public class TeamPlayer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "nombre_equipo")
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "jugador")
-    private Usuario jugador;
+    @JoinColumn(name = "player_id")
+    private Usuario player;
 
-    private String posicion;
+    private String position;
 
-    public JugadoresEquipo() {
+    public TeamPlayer() {
     }
 
-    public JugadoresEquipo(Long id, Team team, Usuario jugador, String posicion) {
+    public TeamPlayer(Long id, Team team, Usuario player, String position) {
         this.id = id;
         this.team = team;
-        this.jugador = jugador;
-        this.posicion = posicion;
+        this.player = player;
+        this.position = position;
     }
 
-    public Usuario getJugador() {
-        return jugador;
+    public Usuario getPlayer() {
+        return player;
     }
 
 
     //lo voy a descomentar dia 04/11/23
     @JsonIgnore
     public String getNombreEquipo() {
-        return team.getNombre();
+        return team.getName();
     }
 
 
@@ -51,8 +49,8 @@ public class JugadoresEquipo {
         return id;
     }
 
-    public String getPosicion() {
-        return posicion;
+    public String getPosition() {
+        return position;
     }
 
     //lo voy a descomentar dia 04/11/23
@@ -62,12 +60,12 @@ public class JugadoresEquipo {
     }
 
 
-    public void setJugador(Usuario jugador) {
-        this.jugador = jugador;
+    public void setPlayer(Usuario player) {
+        this.player = player;
     }
 
-    public void setPosicion(String posicion) {
-        this.posicion = posicion;
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public void setId(Long id) {
@@ -81,9 +79,9 @@ public class JugadoresEquipo {
     @Override
     public String toString() {
         return "JugadoresEquipo{" +
-                "equiponombre=" + team.getNombre() +
-                ", jugador=" + jugador.getUsuario() +
-                ", posicion='" + posicion + '\'' +
+                "equiponombre=" + team.getName() +
+                ", jugador=" + player.getUsuario() +
+                ", posicion='" + position + '\'' +
                 '}';
     }
 }

@@ -3,8 +3,8 @@ package com.basket.BasketballSystem.estadisticas;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipoRepository;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
 import com.basket.BasketballSystem.partidos.Partido;
@@ -30,7 +30,7 @@ public class EstadisticasJugadorService {
     @Autowired
     TeamRepository teamRepository;
     @Autowired
-    JugadoresEquipoRepository jugadoresEquipoRepository;
+    TeamPlayerRepository teamPlayerRepository;
   
     public Map<String, Object> jugadorTemporadaEstadisticas(Long idTemporada, String idJugador) {
         Optional<Tournament> temporada = tournamentRepository.findById(idTemporada);
@@ -93,16 +93,16 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Map<String, Object>> equipoTemporadaEstadisticas(String nombreEquipo, Long temporadaId) {
-        Team team = teamRepository.findByNombre(nombreEquipo);
+        Team team = teamRepository.findByName(nombreEquipo);
 
 
-        List<JugadoresEquipo> jugadoresEquipo = jugadoresEquipoRepository.findAllByTeam(team);
+        List<TeamPlayer> teamplayers = teamPlayerRepository.findAllByTeam(team);
 
         Map<String, Map<String, Object>> estadisticasEquipo = new HashMap<>();
 
-        for (JugadoresEquipo jugadorEquipo : jugadoresEquipo) {
+        for (TeamPlayer jugadorEquipo : teamplayers) {
 
-            String idJugador = jugadorEquipo.getJugador().getUsuario();
+            String idJugador = jugadorEquipo.getPlayer().getUsuario();
             Map<String, Object> estadisticasJugador = jugadorTemporadaEstadisticas(temporadaId, idJugador);
 
             estadisticasEquipo.put(idJugador, estadisticasJugador);
@@ -131,7 +131,7 @@ public class EstadisticasJugadorService {
             String idJugador = jugadorPartido.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("nombre", jugadorPartido.getJugador().getName());
             jugador.put("tirosLibres", jugadorPartido.getTirosLibres());
             jugador.put("equipo", jugadorPartido.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
@@ -162,7 +162,7 @@ public class EstadisticasJugadorService {
             String idJugador = jugadorPartido.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("nombre", jugadorPartido.getJugador().getName());
             jugador.put("tirosDe2Puntos", jugadorPartido.getTirosDe2Puntos());
             jugador.put("equipo", jugadorPartido.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
@@ -193,7 +193,7 @@ public class EstadisticasJugadorService {
             String idJugador = jugadorPartido.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("nombre", jugadorPartido.getJugador().getName());
             jugador.put("tirosDe3Puntos", jugadorPartido.getTirosDe3Puntos());
             jugador.put("equipo", jugadorPartido.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
@@ -224,7 +224,7 @@ public class EstadisticasJugadorService {
             String idJugador = jugadorPartido.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getNombre());
+            jugador.put("nombre", jugadorPartido.getJugador().getName());
             jugador.put("asistencias", jugadorPartido.getAsistencias());
             jugador.put("equipo", jugadorPartido.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed

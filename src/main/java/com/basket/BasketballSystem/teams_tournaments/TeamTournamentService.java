@@ -32,7 +32,7 @@ public class TeamTournamentService {
         if(teamTournament.getTemporada() == null ){
             throw new BadRequestException("La temporada no puede ser nula o vacia");
         }
-        if(teamTournament.getEquipo().getNombre() == null ){
+        if(teamTournament.getEquipo().getName() == null ){
             throw new BadRequestException("El equipo no puede ser nulo o vacio");
         }
 
@@ -48,10 +48,10 @@ public class TeamTournamentService {
     public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(TeamTournament teamTournament) {
 
         Long claveTemporada = teamTournament.getTemporada().getClaveTemporada();
-        String nombreEquipo = teamTournament.getEquipo().getNombre();
+        String nombreEquipo = teamTournament.getEquipo().getName();
 
 
-        teamTournamentRepository.deleteByTournamentIdAndTeamNombre(claveTemporada, nombreEquipo);
+        teamTournamentRepository.deleteByTournamentIdAndTeamName(claveTemporada, nombreEquipo);
 
             teamTournamentRepository.delete(teamTournament);
         Map<String, Object> EquipoMap = new HashMap<>();
@@ -73,7 +73,7 @@ public class TeamTournamentService {
 
         Map<String, Object> nombreEquipoMap = new HashMap<>();
         for (Team team : teams) {
-            nombreEquipoMap.put(team.getNombre(), team.getNombre()); // Utiliza el nombre del equipo como clave
+            nombreEquipoMap.put(team.getName(), team.getName()); // Utiliza el nombre del equipo como clave
         }
 
         return ResponseEntity.ok(nombreEquipoMap);

@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
 import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,7 @@ public class TeamController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @GetMapping("/{nombreEquipo}/jugadores")
-    public List<JugadoresEquipo> obtenerJugadoresPorNombreDelEquipo(@PathVariable String nombreEquipo) {
+    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(@PathVariable String nombreEquipo) {
         return teamService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
     }
 

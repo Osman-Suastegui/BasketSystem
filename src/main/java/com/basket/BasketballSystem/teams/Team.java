@@ -1,9 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
-import com.basket.BasketballSystem.jugadores_equipos.JugadoresEquipo;
+import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
 import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
-import com.basket.BasketballSystem.tournaments.Categoria;
-import com.basket.BasketballSystem.tournaments.Rama;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -20,7 +18,7 @@ public class Team {
     private Long id;
     @NotNull
     @Size(min = 2, max = 30)
-    private String nombre;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name="admin_equipo")
@@ -32,22 +30,22 @@ public class Team {
     private List<JugadorPartido> jugadoresPartidos;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<JugadoresEquipo> jugadores;
+    private List<TeamPlayer> jugadores;
 
-    public Team(String nombre, Usuario admin_equipo) {
-        this.nombre = nombre;
+    public Team(String name, Usuario admin_equipo) {
+        this.name = name;
         this.admin_equipo = admin_equipo;
     }
 
     public Team() {
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
     public String getNombre_Admin_equipo() {
-        return admin_equipo.getNombre();
+        return admin_equipo.getName();
     }
     public String getUsuario_Admin_equipo() {
         return admin_equipo.getUsuario();
@@ -57,11 +55,11 @@ public class Team {
         return admin_equipo;
     }
 
-    public List<JugadoresEquipo> getJugadores() {
+    public List<TeamPlayer> getJugadores() {
         return jugadores;
     }
     @JsonIgnore
-    public void addJugador(JugadoresEquipo jugador){
+    public void addJugador(TeamPlayer jugador){
         jugadores.add(jugador);
     }
 

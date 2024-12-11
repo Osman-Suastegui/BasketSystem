@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TeamTournamentRepository extends JpaRepository<TeamTournament, Long> {
 
-    void deleteByTournamentIdAndTeamNombre(Long claveTemporada, String nombreEquipo);
+    void deleteByTournamentIdAndTeamName(Long claveTemporada, String nombreEquipo);
 
 
     @Query("SELECT e.team FROM TeamTournament e WHERE e.tournament.id = ?1")
