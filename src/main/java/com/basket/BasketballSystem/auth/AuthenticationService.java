@@ -5,13 +5,10 @@ import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,19 +23,15 @@ public class AuthenticationService {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
             throw new BadRequestException("El correo electrónico ya está registrado.");
         }
-        if (registerRequest.getFechaNacimiento() == null)
-            throw new BadRequestException("La fecha de nacimiento no puede ser nula.");
+
         userRepository.findById(registerRequest.getUsuario()).ifPresent(user -> {throw new BadRequestException("El usuario ya existe.");});
 
         Usuario user = Usuario.builder()
                 .usuario(registerRequest.getUsuario())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .rol(registerRequest.getRol())
-                .fechaNacimiento(registerRequest.getFechaNacimiento())
-                .genero(registerRequest.getGenero())
-                .nombre(registerRequest.getNombre())
-                .apellido(registerRequest.getApellido())
+                .name(registerRequest.getNombre())
+                .lastName(registerRequest.getApellido())
                 .build();
 
         userRepository.save(user);

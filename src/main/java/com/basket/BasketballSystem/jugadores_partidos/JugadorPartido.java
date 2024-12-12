@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.jugadores_partidos;
 
-import com.basket.BasketballSystem.equipos.Equipo;
-import com.basket.BasketballSystem.partidos.Partido;
+import com.basket.BasketballSystem.matches.Match;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
@@ -14,8 +14,11 @@ public class JugadorPartido {
 
     @ManyToOne
     @JoinColumn(name = "clave_partido")
-    private Partido partido;
+    private Match match;
 
+    @ManyToOne
+    @JoinColumn(name = "team_id")
+    private Team team;
     @ManyToOne
     @JoinColumn(name = "jugador")
     private Usuario jugador;
@@ -61,8 +64,8 @@ public class JugadorPartido {
         this.descripcion = descripcion;
     }
 
-    public JugadorPartido(Partido partido, Usuario jugador, String equipo, String posicion) {
-        this.partido = partido;
+    public JugadorPartido(Match match, Usuario jugador, String equipo, String posicion) {
+        this.match = match;
         this.jugador = jugador;
         this.equipo = equipo;
         this.posicion = posicion;
@@ -79,12 +82,12 @@ public class JugadorPartido {
         this.clave = clave;
     }
 
-    public Partido getPartido() {
-        return partido;
+    public Match getPartido() {
+        return match;
     }
 
-    public void setPartido(Partido partido) {
-        this.partido = partido;
+    public void setPartido(Match match) {
+        this.match = match;
     }
 
     public Usuario getJugador() {
@@ -167,7 +170,7 @@ public class JugadorPartido {
     public String toString() {
         return "JugadorPartido{" +
                 "clave=" + clave +
-                ", partido=" + partido +
+                ", partido=" + match +
                 ", jugador=" + jugador +
                 ", equipo='" + equipo + '\'' +
                 ", anotaciones=" + anotaciones +

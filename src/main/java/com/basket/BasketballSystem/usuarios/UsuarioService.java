@@ -28,8 +28,8 @@ public class UsuarioService {
             throw new BadRequestException("El usuario no existe.");
         }
         Usuario usuario = usuarioOptional.get();
-        usuario.setNombre(req.getNombre());
-        usuario.setApellido(req.getApellido());
+        usuario.setName(req.getNombre());
+        usuario.setLastName(req.getApellido());
         usuarioRepository.save(usuario);
 
         Map<String, Object> userAct = new HashMap<>();
@@ -51,14 +51,7 @@ public class UsuarioService {
         return usuariosResponse;
     }
 
-    public ResponseEntity<Map<String, Object>>  obtenerTipoUser(String usuario) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario);
-        Map<String, Object> userAct = new HashMap<>();
 
-        Rol userRol = usuarioOptional.get().getRol();
-        userAct.put("Rol", userRol.toString());
-        return ResponseEntity.ok(userAct);
-    }
 
 
     public Usuario obtenerUsuario(String usuario) {

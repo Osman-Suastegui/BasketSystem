@@ -39,6 +39,7 @@ public class UsuarioController {
 
     @GetMapping("obtenerUsuario")
     public Usuario obtenerUsuario(@RequestParam(name = "usuario", required = false) String usuario) {
+        System.out.println("usuario " + usuario );
         return usuarioService.obtenerUsuario(usuario);
     }
 
@@ -49,11 +50,6 @@ public class UsuarioController {
             @RequestParam(name = "usuario", required = false) String usuario
     ) {
         return usuarioService.buscarUsuariosPorLetrasEnNombre(usuario);
-    }
-
-    @GetMapping("/obtenerTipoUser")
-    public ResponseEntity<Map<String, Object>>  obtenerTipoUser(@RequestParam(name = "usuario", required = false) String usuario) {
-        return usuarioService.obtenerTipoUser(usuario);
     }
 
     @GetMapping("/obtenerUsuarioPorUser")
