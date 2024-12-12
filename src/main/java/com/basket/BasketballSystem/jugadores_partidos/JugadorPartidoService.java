@@ -62,7 +62,7 @@ public class JugadorPartidoService {
         Long jugadorPartidoId = jugadorPartidoDTO.getClavePartido();
         String descripcion = jugadorPartidoDTO.getDescripcion();
 
-        JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndPartido(jugadorUsuario, jugadorPartidoId);
+        JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndMatch(jugadorUsuario, jugadorPartidoId);
         ActualizarJugadorPartidoResponse actJugPartido = new ActualizarJugadorPartidoResponse();
         actJugPartido.setJugador(jugadorPartido.getJugador().getUsuario());
         actJugPartido.setPuntoPositivo(jugadorPartidoDTO.isPuntoPositivo());
@@ -136,7 +136,7 @@ public class JugadorPartidoService {
     public List<ObtenerJugadoresDePartidoyEquipoResponse> obtenerJugadoresDePartidoyEquipo(String nombreEquipo,Long clavePartido,Boolean enBancaFiltro){
       List<JugadorPartido> jugadorPartido = new ArrayList<>();
         List<ObtenerJugadoresDePartidoyEquipoResponse> jugadoresPartidoResponse = new ArrayList<>();
-        jugadorPartido = jugadorPartidoRepository.findAllByEquipoAndPartidoAndNombre2(nombreEquipo,clavePartido,enBancaFiltro);
+        jugadorPartido = jugadorPartidoRepository.findAllByEquipoAndMatchAndNombre2(nombreEquipo,clavePartido,enBancaFiltro);
 
         for (JugadorPartido jp: jugadorPartido) {
             ObtenerJugadoresDePartidoyEquipoResponse jpResponse = new ObtenerJugadoresDePartidoyEquipoResponse();
@@ -166,7 +166,7 @@ public class JugadorPartidoService {
 
     @Transactional
     public ResponseEntity<Map<String, Object>> posicionarJugadorEnPartido(Long clavePartido, String usuario, Boolean enBanca) {
-        jugadorPartidoRepository.posicionarJugadorEnPartido(clavePartido,usuario,enBanca);
+        jugadorPartidoRepository.posicionarJugadorEnMatch(clavePartido,usuario,enBanca);
         Map<String, Object> jugadorpart = new HashMap<>();
         jugadorpart.put("message", "Jugador actualizado");
         return ResponseEntity.ok(jugadorpart);
@@ -209,6 +209,6 @@ public class JugadorPartidoService {
     }
 
     public int sumarPuntosPorEquipoYPartido(String nombreEquipo, Long clavePartido){
-        return jugadorPartidoRepository.sumarPuntosPorEquipoYPartido(nombreEquipo,clavePartido);
+        return jugadorPartidoRepository.sumarPuntosPorEquipoYMatch(nombreEquipo,clavePartido);
     }
 }

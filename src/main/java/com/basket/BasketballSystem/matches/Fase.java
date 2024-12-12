@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.partidos;
+package com.basket.BasketballSystem.matches;
 
 public enum Fase {
     Eliminatorias,

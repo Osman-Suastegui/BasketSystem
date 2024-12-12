@@ -41,7 +41,7 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 - [Buscar una Temporada por nombre](#buscar-una-tournament-por-nombre)
 - [Asignar Equipo a una Temporada](#asignar-team-a-una-tournament)
 - [Eliminar Equipos de una Temporada](#eliminar-teams-de-una-tournament)
-- [Generar partidos de una tournament](#generar-partidos-de-una-tournament)
+- [Generar matches de una tournament](#generar-matches-de-una-tournament)
 - [Obtener Todos los datos de las  Temporadas de una liga](#obtener-tournaments-de-una-liga)
 - [Obtener nombre de tournaments de una liga](#obtener-tournaments-de-una-liga-1)
 - [Obtener teams de una tournament](#obtener-teams-de-una-tournament)
@@ -59,18 +59,18 @@ Este proyecto es un servicio web desarrollado en Spring Boot para un sistema de 
 
 - [Agregar arbitro a una tournament](#agregar-arbitro-a-una-tournament)
 - [Obtener arbitros de una tournament](#obtener-arbitros-de-una-tournament)
-- [Obtener partidos de un arbitro (calendario)](#obtener-partidos-de-un-arbitro-calendario)
-- [Arbitro registra datos de un partido](#arbitro-registra-datos-de-un-partido)
-- [Obtener partidos de un jugador (calendario)](#obtener-partidos-de-un-jugador-calendario)
-- [Obtener partidos de una tournament](#obtener-partidos-de-una-tournament)
-- [Agendar partido](#agendar-partido)
-- [Asignar arbitro a un partido](#asignar-arbitro-a-un-partido)
-- [Arbitro modifica datos de un partido](#arbitro-modifica-datos-de-un-partido)
+- [Obtener matches de un arbitro (calendario)](#obtener-matches-de-un-arbitro-calendario)
+- [Arbitro registra datos de un match](#arbitro-registra-datos-de-un-match)
+- [Obtener matches de un jugador (calendario)](#obtener-matches-de-un-jugador-calendario)
+- [Obtener matches de una tournament](#obtener-matches-de-una-tournament)
+- [Agendar match](#agendar-match)
+- [Asignar arbitro a un match](#asignar-arbitro-a-un-match)
+- [Arbitro modifica datos de un match](#arbitro-modifica-datos-de-un-match)
 
 ### Partidos
-- [Obtener todos los jugadores de un partido y team](#obtener-todos-los-jugadores-de-un-partido-y-un-team)
-- [Obtener partido por id](#obtener-partido-por-id)
-- [Obtener los partidos de un team](#obtener-los-partidos-de-un-team)
+- [Obtener todos los jugadores de un match y team](#obtener-todos-los-jugadores-de-un-match-y-un-team)
+- [Obtener match por id](#obtener-match-por-id)
+- [Obtener los matches de un team](#obtener-los-matches-de-un-team)
 ## Ligas
 ### Obtener Temporadas de una Liga
 
@@ -557,12 +557,12 @@ DELETE /EquipoTemporada/eliminarEquipoTemporada
   }
 }
 ```
-### Generar partidos de una tournament
+### Generar matches de una tournament
 ```bash
 POST Partido/generarPartidosTemporada
 ```
 **Parámetros:**
-- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas generarle los partidos.
+- `temporadaId` (**requerido**): El identificador de la tournament a la que deseas generarle los matches.
 
 **Resultado:**
 ```bash
@@ -826,13 +826,13 @@ GET /Temporadas/obtenerArbitros?idTemporada=1
       }
   ]
 ```
-### obtener partidos de un arbitro (calendario)
+### obtener matches de un arbitro (calendario)
 ```bash
 Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
 ```
 
 **parámetros**
-- `idArbitro` (**requerido**): El identificador del arbitro del que deseas obtener los partidos.
+- `idArbitro` (**requerido**): El identificador del arbitro del que deseas obtener los matches.
 
 **resultado**
 ```bash
@@ -848,13 +848,13 @@ Get Partido/obtenerPartidosArbitro?idArbitro=Manuel321
 ]
 ```
 
-### Arbitro registra datos de un partido
+### Arbitro registra datos de un match
 ```bash
 PUT /JugadorPartido/agregarJugadorPartido
 ```
 **Parámetros:**
-- `idPartido` (**requerido**): El identificador del partido al que deseas agregarle un jugador.
-- `idJugador` (**requerido**): El identificador del jugador que deseas agregar al partido.
+- `idPartido` (**requerido**): El identificador del match al que deseas agregarle un jugador.
+- `idJugador` (**requerido**): El identificador del jugador que deseas agregar al match.
 - `team` (**requerido**): El nombre del team al que pertenece el jugador.
 
 ```bash
@@ -863,20 +863,20 @@ PUT /JugadorPartido/agregarJugadorPartido
   "jugador": {
     "usuario": "nombre_de_usuario"
   },
-  "partido": {
+  "match": {
     "clavePartido": 1
   }
 }
 ```
 
 
-### obtener partidos de un jugador (calendario)
+### obtener matches de un jugador (calendario)
 ```bash
 Get Partido/obtenerPartidosJugador?idJugador=usuario1
 ```
 
 **parámetros**
-- `idJugador` (**requerido**): El identificador del jugador del que deseas obtener los partidos.
+- `idJugador` (**requerido**): El identificador del jugador del que deseas obtener los matches.
 
 **resultado**
 ```bash
@@ -891,12 +891,12 @@ Get Partido/obtenerPartidosJugador?idJugador=usuario1
     }
 ]
 ```
-### Obtener partidos de una tournament
+### Obtener matches de una tournament
 ```bash
 GET Partido/obtenerPartidosTemporada?idTemporada=1
 ```
 **parámetros**
-- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener los partidos.
+- `idTemporada` (**requerido**): El identificador de la tournament de la que deseas obtener los matches.
 ```bash
     [
         {
@@ -909,14 +909,14 @@ GET Partido/obtenerPartidosTemporada?idTemporada=1
         }
   ]
 ```
-### Agendar partido
+### Agendar match
 ```bash
 PUT /Partido/agendar
 ```
 **Parámetros:**
 
-- `clavePartido` (**requerido**): El identificador del partido
-- `fechaInicio` (**requerido**): La fecha de inicio del partido
+- `clavePartido` (**requerido**): El identificador del match
+- `fechaInicio` (**requerido**): La fecha de inicio del match
 ```bash
 {
     "clavePartido":1,
@@ -924,27 +924,27 @@ PUT /Partido/agendar
 }
 ```
 
-### Asignar arbitro a un partido
+### Asignar arbitro a un match
 ```bash
 PUT /Partido/asignarArbitro
 ```
 **Parámetros:**
 
-- `clavePartido` (**requerido**): El identificador del partido
+- `clavePartido` (**requerido**): El identificador del match
 - `arbitro` (**requerido**): El identificador del arbitro
 ```bash
 {
-  "clavePartido": 1, // Reemplaza con el ID del partido que deseas asignar
+  "clavePartido": 1, // Reemplaza con el ID del match que deseas asignar
   "arbitro": {
     "usuario": "Jesus123" // Reemplaza con el nombre de usuario del árbitro que deseas asignar
   }
 }
 ```
 
-### Arbitro modifica datos de un partido
-**Arbitro modifica datos de un partido (WebSocket)
-Actualización en tiempo real de estadísticas de un partido
-Para permitir al árbitro modificar datos de un partido en tiempo real a través de WebSocket, se utiliza un mensaje con el siguiente formato:**
+### Arbitro modifica datos de un match
+**Arbitro modifica datos de un match (WebSocket)
+Actualización en tiempo real de estadísticas de un match
+Para permitir al árbitro modificar datos de un match en tiempo real a través de WebSocket, se utiliza un mensaje con el siguiente formato:**
 
 ```bash
 /app/agregarPunto
@@ -952,7 +952,7 @@ Para permitir al árbitro modificar datos de un partido en tiempo real a través
 **Parametros**
 
 
-- `clavePartido` (**requerido**): El identificador del partido.
+- `clavePartido` (**requerido**): El identificador del match.
 
 - `jugador` (**requerido**): El identificador del jugador.
 
@@ -989,12 +989,12 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 
 ## Partidos
 
-### Obtener todos los jugadores de un partido y un team
+### Obtener todos los jugadores de un match y un team
 ```bash
   GET /JugadorPartido/obtenerJugadoresDePartidoyEquipo?clavePartido=9&nombreEquipo=chivas&enBanca=0
 ```
 **Parámetros:**
-- `clavePartido` (**requerido**): El identificador del partido
+- `clavePartido` (**requerido**): El identificador del match
 - `nombreEquipo` (**requerido**): El nombre del team
 - `enBanca` (**opcional**): este parametro toma 2 valores 1 o 0  si es 1 retorna todos los jugadores que estan en banca si es 0 retorna los que no estan en banca si no se especifica el campo retorna ambos
 
@@ -1019,14 +1019,14 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 ]
 ```
 
-### Obtener partido por id
+### Obtener match por id
 ```bash
   GET /Partido/obtenerPartidoPorId?clavePartido=9
 ```
 
 **Parámetros:**
 
-- `idPartido` (**requerido**): El identificador del partido
+- `idPartido` (**requerido**): El identificador del match
 
 ```bash
 {
@@ -1041,14 +1041,14 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 }
 ```
 
-### Obtener los partidos de un team
+### Obtener los matches de un team
 ```bash
   GET Partido/obtenerPartidosEquipo?idEquipo=equipo12&estatusPartido=proximos
 ```
 
 **Parámetros:**
 - `idEquipo` (**requerido**): El identificador del team
-- `estatusPartido` (**requerido**): El estatus del partido puede ser proximo, en curso o finalizado
+- `estatusPartido` (**requerido**): El estatus del match puede ser proximo, en curso o finalizado
 
 ```bash
 [
@@ -1085,18 +1085,18 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Modificar jugadores de teams
 - [x] Asignar Equipos a tournament
 - [x] Modificar Equipos de una tournament
-- [x] Agendar partidos dentro de una tournament
-- [x] Reagendar partido dentro de una tournament
-- [x] Asignar arbitro a un partido
-- [ ] Arbitro da por iniciado un partido
-- [x] Arbitro registra datos de un partido
-- [x] Arbitro modifica datos de un partido
-- [ ] Arbitro da por terminado algunos de los tiempos del partido
-- [ ] Arbitro inicia algunos de los tiempos del partido
-- [ ] Arbitro finaliza un partido
+- [x] Agendar matches dentro de una tournament
+- [x] Reagendar match dentro de una tournament
+- [x] Asignar arbitro a un match
+- [ ] Arbitro da por iniciado un match
+- [x] Arbitro registra datos de un match
+- [x] Arbitro modifica datos de un match
+- [ ] Arbitro da por terminado algunos de los tiempos del match
+- [ ] Arbitro inicia algunos de los tiempos del match
+- [ ] Arbitro finaliza un match
 - [x] Obtener Arbitro de una tournament
 - [x] Asginar Arbitro a una tournament
-- [x] Ver calendario de partidos
+- [x] Ver calendario de matches
 - [x] Ver jugadores
 - [x] Ver estadísticas de puntos de un jugador por tournament
 - [x] Ver estadísticas de asistencias de un jugador por tournament
@@ -1114,8 +1114,8 @@ GET /Temporadas/obtenerArbitrosNoEnTemporada?idTemporada=1
 - [x] Buscar Jugador por nombre (cualquier usuario)
 - [x] Buscar liga por nombre
 - [x] Buscar Temporada por nombre
-- [x] obtener partidos de una tournament
-- [x] generar partidos de una tournament
+- [x] obtener matches de una tournament
+- [x] generar matches de una tournament
 
 
 

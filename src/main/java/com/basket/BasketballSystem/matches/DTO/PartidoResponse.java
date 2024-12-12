@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.partidos.DTO;
+package com.basket.BasketballSystem.matches.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.basket.BasketballSystem.partidos;
+package com.basket.BasketballSystem.matches;
 
-import com.basket.BasketballSystem.partidos.DTO.PartidoResponse;
+import com.basket.BasketballSystem.matches.DTO.PartidoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -60,9 +60,9 @@ public class PartidoController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN_LIGA')")
     @PutMapping("/asignarArbitro")
-        public ResponseEntity<Map<String, Object>> asignarArbitro(@RequestBody Partido partido){
-        Long idPartido = partido.getClavePartido();
-        String idArbitro = partido.getArbitro().getUsuario();
+        public ResponseEntity<Map<String, Object>> asignarArbitro(@RequestBody Match match){
+        Long idPartido = match.getClavePartido();
+        String idArbitro = match.getArbitro().getUsuario();
         return partidoService.asignarArbitro(idPartido,idArbitro);
 
     }
@@ -147,12 +147,5 @@ public class PartidoController {
         String fecha = partido.get("fechaInicio").toString();
         return partidoService.arbitroIniciaPartidoFecha(idPartido,fecha);
     }
-    @GetMapping("/obtenerArbitroIniciaPartidoFecha")
-    public ResponseEntity<Map<String, Object>> obtenerArbitroIniciaPartidoFecha(@RequestParam("clavePartido") Long idPartido){
-        return partidoService.obtenerArbitroIniciaPartidoFecha(idPartido);
-    }
-
-
-
 
 }

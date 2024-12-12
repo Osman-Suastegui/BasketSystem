@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.partidos;
+package com.basket.BasketballSystem.matches;
 
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
@@ -10,23 +10,22 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "partidos")
-public class Partido {
+@Table(name = "matches")
+public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "clave_partido")
-    private Long clavePartido;
+    private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "clave_temporada")
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
     @ManyToOne
-    @JoinColumn(name = "equipo1")
+    @JoinColumn(name = "team1_id")
     private Team team1;
 
     @ManyToOne
-    @JoinColumn(name = "equipo2")
+    @JoinColumn(name = "team2_id")
     private Team team2;
 
     @Column(name = "fase")
@@ -34,7 +33,7 @@ public class Partido {
     private Fase fase;
 
     @ManyToOne
-    @JoinColumn(name = "arbitro")
+    @JoinColumn(name = "referee_id")
     private Usuario arbitro;
 
     @Column(name = "fecha_inicio")
@@ -46,15 +45,10 @@ public class Partido {
     @Column(name = "ganador")
     private String ganador;
 
-    @Column(name ="arbitroIniciaPartido")
-    private Instant arbitroIniciaPartido;
-
-
-
     // Getters y setters
 
     public Long getClavePartido() {
-        return clavePartido;
+        return id;
     }
 
     public Tournament getTemporada() {
@@ -89,9 +83,6 @@ public class Partido {
         return ganador;
     }
 
-    public Instant getArbitroIniciaPartido() {
-        return arbitroIniciaPartido;
-    }
 
     public void setGanador(String ganador) {
         this.ganador = ganador;
@@ -120,11 +111,5 @@ public class Partido {
     public void setFase(Fase fase) {
         this.fase = fase;
     }
-
-    public void setArbitroIniciaPartido(Instant arbitroIniciaPartido) {
-        this.arbitroIniciaPartido = arbitroIniciaPartido;
-    }
-
-
 
 }
