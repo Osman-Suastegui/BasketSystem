@@ -6,8 +6,8 @@ import com.basket.BasketballSystem.usuarios.Usuario;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "jugadores_partidos")
-public class JugadorPartido {
+@Table(name = "matches_players")
+public class MatchPlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clave;
@@ -28,15 +28,6 @@ public class JugadorPartido {
 
     @Column(name = "anotaciones")
     private Integer anotaciones;
-
-    @Column(name = "tiros_de_3_puntos")
-    private Integer tirosDe3Puntos;
-
-    @Column(name = "tiros_de_2_puntos")
-    private Integer tirosDe2Puntos;
-
-    @Column(name = "tiros_libres")
-    private Integer tirosLibres;
 
     @Column(name = "faltas")
     private Integer faltas;
@@ -64,14 +55,14 @@ public class JugadorPartido {
         this.descripcion = descripcion;
     }
 
-    public JugadorPartido(Match match, Usuario jugador, String equipo, String posicion) {
+    public MatchPlayer(Match match, Usuario jugador, String equipo, String posicion) {
         this.match = match;
         this.jugador = jugador;
         this.equipo = equipo;
         this.posicion = posicion;
     }
 
-    public JugadorPartido() {
+    public MatchPlayer() {
     }
 
     public Long getClave() {
@@ -112,30 +103,6 @@ public class JugadorPartido {
         this.anotaciones = anotaciones;
     }
 
-    public Integer getTirosDe3Puntos() {
-        return tirosDe3Puntos;
-    }
-
-    public void setTirosDe3Puntos(Integer tirosDe3Puntos) {
-        this.tirosDe3Puntos = tirosDe3Puntos;
-    }
-
-    public Integer getTirosDe2Puntos() {
-        return tirosDe2Puntos;
-    }
-
-    public void setTirosDe2Puntos(Integer tirosDe2Puntos) {
-        this.tirosDe2Puntos = tirosDe2Puntos;
-    }
-
-    public Integer getTirosLibres() {
-        return tirosLibres;
-    }
-
-    public void setTirosLibres(Integer tirosLibres) {
-        this.tirosLibres = tirosLibres;
-    }
-
     public Integer getFaltas() {
         return faltas;
     }
@@ -174,9 +141,6 @@ public class JugadorPartido {
                 ", jugador=" + jugador +
                 ", equipo='" + equipo + '\'' +
                 ", anotaciones=" + anotaciones +
-                ", tirosDe3Puntos=" + tirosDe3Puntos +
-                ", tirosDe2Puntos=" + tirosDe2Puntos +
-                ", tirosLibres=" + tirosLibres +
                 ", faltas=" + faltas +
                 ", asistencias=" + asistencias +
                 ", posicion='" + posicion + '\'' +

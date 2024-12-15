@@ -6,8 +6,8 @@ import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
 import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
-import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
-import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
+import com.basket.BasketballSystem.jugadores_partidos.MatchPlayer;
+import com.basket.BasketballSystem.jugadores_partidos.MatchPlayerRepository;
 import com.basket.BasketballSystem.matches.PartidoRepository;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class EstadisticasJugadorService {
 
     @Autowired
-    JugadorPartidoRepository jugadorPartidoRepository;
+    MatchPlayerRepository matchPlayerRepository;
     @Autowired
     PartidoRepository partidoRepository;
     @Autowired
@@ -45,15 +45,12 @@ public class EstadisticasJugadorService {
         int faltas = 0;
 
         for (Match match : matches) {
-            JugadorPartido jugadorPartido = jugadorPartidoRepository.findByMatchAndJugador(match.getClavePartido(), idJugador);
-            if(jugadorPartido == null)continue;
-            tirosDe3puntos += jugadorPartido.getTirosDe3Puntos();
-            tirosDe2puntos += jugadorPartido.getTirosDe2Puntos();
-            tirosLibres += jugadorPartido.getTirosLibres();
-            asistencias += jugadorPartido.getAsistencias();
-            faltas += jugadorPartido.getFaltas();
+            MatchPlayer matchPlayer = matchPlayerRepository.findByMatchAndJugador(match.getClavePartido(), idJugador);
+            if(matchPlayer == null)continue;
+            asistencias += matchPlayer.getAsistencias();
+            faltas += matchPlayer.getFaltas();
         }
-        totalPuntosPorTemporada = tirosDe3puntos*3 + tirosDe2puntos*2 + tirosLibres;
+        totalPuntosPorTemporada = 0;
         Map<String,Object> estadisticas = new HashMap<>();
         estadisticas.put("totalPuntosPorTemporada",totalPuntosPorTemporada);
         estadisticas.put("tirosDe3puntosPorTemporada",tirosDe3puntos);
@@ -65,7 +62,7 @@ public class EstadisticasJugadorService {
     }
 
     public Map<String, Object> jugadorGeneralEstadisticas(String idJugador) {
-        List<JugadorPartido> juegosJugador = jugadorPartidoRepository.findByJugador(idJugador);
+        List<MatchPlayer> juegosJugador = matchPlayerRepository.findByJugador(idJugador);
         int totalPuntosPorTemporada = 0;
         int tirosDe3puntos = 0;
         int tirosDe2puntos = 0;
@@ -73,14 +70,11 @@ public class EstadisticasJugadorService {
         int asistencias = 0;
         int faltas = 0;
 
-        for(JugadorPartido j: juegosJugador){
-            tirosDe3puntos += j.getTirosDe3Puntos();
-            tirosDe2puntos += j.getTirosDe2Puntos();
-            tirosLibres += j.getTirosLibres();
+        for(MatchPlayer j: juegosJugador){
             asistencias += j.getAsistencias();
             faltas += j.getFaltas();
         }
-        totalPuntosPorTemporada = tirosDe3puntos * 3 + tirosDe2puntos * 2 + tirosLibres;
+        totalPuntosPorTemporada = 0;
 
         Map<String,Object> estadisticas = new HashMap<>();
         estadisticas.put("totalPuntosGenerales",totalPuntosPorTemporada);
@@ -114,11 +108,10 @@ public class EstadisticasJugadorService {
     public Map<String, Object> topJugadoresTirosLibres(Long temporadaId) {
         Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Match> matches = partidoRepository.findAllByTournament(temp.get());
-        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByMatchIn(matches);
+        List<MatchPlayer> jugadoresPartido = matchPlayerRepository.findAllByMatchIn(matches);
 
         // Ordena la lista de jugadores por la cantidad de tiros libres en orden descendente
-        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
-                .sorted(Comparator.comparingInt(JugadorPartido::getTirosLibres).reversed())
+        List<MatchPlayer> jugadoresOrdenados = jugadoresPartido.stream()
                 .collect(Collectors.toList());
 
         Map<String, Object> topJugadores = new HashMap<>();
@@ -126,14 +119,13 @@ public class EstadisticasJugadorService {
         // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
         int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
         for (int i = 0; i < cantidadJugadores; i++) {
-            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+            MatchPlayer matchPlayer = jugadoresOrdenados.get(i);
 
-            String idJugador = jugadorPartido.getJugador().getUsuario();
+            String idJugador = matchPlayer.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getName());
-            jugador.put("tirosLibres", jugadorPartido.getTirosLibres());
-            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("nombre", matchPlayer.getJugador().getName());
+            jugador.put("equipo", matchPlayer.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
 
             topJugadores.put(idJugador, jugador);
@@ -145,11 +137,10 @@ public class EstadisticasJugadorService {
     public Map<String, Object> topJugadoresTirosDe2Puntos(Long temporadaId) {
         Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Match> matches = partidoRepository.findAllByTournament(temp.get());
-        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByMatchIn(matches);
+        List<MatchPlayer> jugadoresPartido = matchPlayerRepository.findAllByMatchIn(matches);
 
         // Ordena la lista de jugadores por la cantidad de tiros de 2 puntos en orden descendente
-        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
-                .sorted(Comparator.comparingInt(JugadorPartido::getTirosDe2Puntos).reversed())
+        List<MatchPlayer> jugadoresOrdenados = jugadoresPartido.stream()
                 .collect(Collectors.toList());
 
         Map<String, Object> topJugadores = new HashMap<>();
@@ -157,14 +148,13 @@ public class EstadisticasJugadorService {
         // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
         int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
         for (int i = 0; i < cantidadJugadores; i++) {
-            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+            MatchPlayer matchPlayer = jugadoresOrdenados.get(i);
 
-            String idJugador = jugadorPartido.getJugador().getUsuario();
+            String idJugador = matchPlayer.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getName());
-            jugador.put("tirosDe2Puntos", jugadorPartido.getTirosDe2Puntos());
-            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("nombre", matchPlayer.getJugador().getName());
+            jugador.put("equipo", matchPlayer.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
 
             topJugadores.put(idJugador, jugador);
@@ -176,11 +166,10 @@ public class EstadisticasJugadorService {
     public Map<String, Object> topJugadoresTirosDe3Puntos(Long temporadaId) {
         Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Match> matches = partidoRepository.findAllByTournament(temp.get());
-        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByMatchIn(matches);
+        List<MatchPlayer> jugadoresPartido = matchPlayerRepository.findAllByMatchIn(matches);
 
         // Ordena la lista de jugadores por la cantidad de tiros de 3 puntos en orden descendente
-        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
-                .sorted(Comparator.comparingInt(JugadorPartido::getTirosDe3Puntos).reversed())
+        List<MatchPlayer> jugadoresOrdenados = jugadoresPartido.stream()
                 .collect(Collectors.toList());
 
         Map<String, Object> topJugadores = new HashMap<>();
@@ -188,14 +177,13 @@ public class EstadisticasJugadorService {
         // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
         int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
         for (int i = 0; i < cantidadJugadores; i++) {
-            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+            MatchPlayer matchPlayer = jugadoresOrdenados.get(i);
 
-            String idJugador = jugadorPartido.getJugador().getUsuario();
+            String idJugador = matchPlayer.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getName());
-            jugador.put("tirosDe3Puntos", jugadorPartido.getTirosDe3Puntos());
-            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("nombre", matchPlayer.getJugador().getName());
+            jugador.put("equipo", matchPlayer.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
 
             topJugadores.put(idJugador, jugador);
@@ -207,11 +195,11 @@ public class EstadisticasJugadorService {
     public Map<String, Object> topJugadoresAsistencias(Long temporadaId) {
         Optional<Tournament> temp = tournamentRepository.findById(temporadaId);
         List<Match> matches = partidoRepository.findAllByTournament(temp.get());
-        List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByMatchIn(matches);
+        List<MatchPlayer> jugadoresPartido = matchPlayerRepository.findAllByMatchIn(matches);
 
         // Ordena la lista de jugadores por la cantidad de asistencias en orden descendente
-        List<JugadorPartido> jugadoresOrdenados = jugadoresPartido.stream()
-                .sorted(Comparator.comparingInt(JugadorPartido::getAsistencias).reversed())
+        List<MatchPlayer> jugadoresOrdenados = jugadoresPartido.stream()
+                .sorted(Comparator.comparingInt(MatchPlayer::getAsistencias).reversed())
                 .collect(Collectors.toList());
 
         Map<String, Object> topJugadores = new HashMap<>();
@@ -219,14 +207,14 @@ public class EstadisticasJugadorService {
         // Selecciona los primeros 5 jugadores (o menos si hay menos de 5)
         int cantidadJugadores = Math.min(jugadoresOrdenados.size(), 5);
         for (int i = 0; i < cantidadJugadores; i++) {
-            JugadorPartido jugadorPartido = jugadoresOrdenados.get(i);
+            MatchPlayer matchPlayer = jugadoresOrdenados.get(i);
 
-            String idJugador = jugadorPartido.getJugador().getUsuario();
+            String idJugador = matchPlayer.getJugador().getUsuario();
             Map<String, Object> jugador = new HashMap<>();
 
-            jugador.put("nombre", jugadorPartido.getJugador().getName());
-            jugador.put("asistencias", jugadorPartido.getAsistencias());
-            jugador.put("equipo", jugadorPartido.getEquipo());
+            jugador.put("nombre", matchPlayer.getJugador().getName());
+            jugador.put("asistencias", matchPlayer.getAsistencias());
+            jugador.put("equipo", matchPlayer.getEquipo());
             jugador.put("posicion", i + 1); // La posición es 1-indexed
 
             topJugadores.put(idJugador, jugador);
