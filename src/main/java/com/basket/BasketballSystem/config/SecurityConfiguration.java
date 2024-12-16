@@ -43,8 +43,8 @@ public class SecurityConfiguration {
             "/Partido/obtenerGanador",
             "/Partido/obtenerUsuarioArbitroAsignado",
             "/Partido/obtenerArbitroIniciaPartidoFecha",
-
-
+            "swagger-ui/**",
+            "/v3/**",
             "/usuarios/obtenerUsuario",
             "/usuarios/obtenerJugador",
             "/usuarios/obtenerTipoUser",
