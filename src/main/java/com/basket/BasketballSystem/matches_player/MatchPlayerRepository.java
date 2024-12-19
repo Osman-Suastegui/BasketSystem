@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_partidos;
+package com.basket.BasketballSystem.matches_player;
 
 import com.basket.BasketballSystem.matches.Match;
 import org.springframework.data.jpa.repository.JpaRepository;

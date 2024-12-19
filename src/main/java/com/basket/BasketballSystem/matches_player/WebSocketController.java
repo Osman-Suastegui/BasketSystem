@@ -1,6 +1,6 @@
-package com.basket.BasketballSystem.jugadores_partidos;
+package com.basket.BasketballSystem.matches_player;
 
-import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
+import com.basket.BasketballSystem.matches_player.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

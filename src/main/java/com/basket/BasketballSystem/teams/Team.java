@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_partidos.MatchPlayer;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.matches_player.MatchPlayer;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_equipos;
+package com.basket.BasketballSystem.teams_players;
 
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.usuarios.Usuario;

@@ -1,9 +1,8 @@
-package com.basket.BasketballSystem.jugadores_partidos;
+package com.basket.BasketballSystem.matches_player;
 
-import com.basket.BasketballSystem.jugadores_partidos.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
+import com.basket.BasketballSystem.matches_player.DTO.ObtenerJugadoresDePartidoyEquipoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

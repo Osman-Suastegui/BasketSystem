@@ -2,9 +2,9 @@ package com.basket.BasketballSystem.teams;
 
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
+import com.basket.BasketballSystem.teams_players.DTO.JugadoresEquipoDTO;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
 
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;

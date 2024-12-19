@@ -1,9 +1,9 @@
-package com.basket.BasketballSystem.jugadores_partidos;
+package com.basket.BasketballSystem.matches_player;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
+import com.basket.BasketballSystem.matches_player.DTO.*;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
