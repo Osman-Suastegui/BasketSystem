@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.matches_player.MatchPlayer;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -27,7 +27,7 @@ public class Team {
     private String logo;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<JugadorPartido> jugadoresPartidos;
+    private List<MatchPlayer> jugadoresPartidos;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<TeamPlayer> jugadores;

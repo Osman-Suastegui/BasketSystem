@@ -1,9 +1,9 @@
-package com.basket.BasketballSystem.jugadores_partidos;
+package com.basket.BasketballSystem.matches_player;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
-import com.basket.BasketballSystem.jugadores_partidos.DTO.*;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
+import com.basket.BasketballSystem.matches_player.DTO.*;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,37 +17,34 @@ import java.util.Map;
 
 
 @Service
-public class JugadorPartidoService {
+public class MatchPlayerService {
     @Autowired
-    JugadorPartidoRepository jugadorPartidoRepository;
+    MatchPlayerRepository matchPlayerRepository;
 
     @Autowired
     TeamPlayerRepository teamPlayerRepository;
 
 
-    public ResponseEntity<Map<String, Object>> agregarJugadorPartido(JugadorPartido jugadorPartido) {
+    public ResponseEntity<Map<String, Object>> agregarJugadorPartido(MatchPlayer matchPlayer) {
 
-        if (jugadorPartido.getEquipo() == null) {
+        if (matchPlayer.getEquipo() == null) {
             throw new BadRequestException("El equipo no puede ser nulo");
         }
-        if (jugadorPartido.getJugador() == null) {
+        if (matchPlayer.getJugador() == null) {
             throw new BadRequestException("El jugador no puede ser nulo");
         }
-        if(jugadorPartido.getPartido() == null){
+        if(matchPlayer.getPartido() == null){
             throw new BadRequestException("El partido no puede ser nulo");
         }
 
-        TeamPlayer teamplayers = teamPlayerRepository.findByPlayerAndTeam_Name(jugadorPartido.getJugador(), jugadorPartido.getEquipo());
-        jugadorPartido.setPosicion(teamplayers.getPosition());
-        jugadorPartido.setAsistencias(0);
-        jugadorPartido.setAnotaciones(0);
-        jugadorPartido.setTirosDe2Puntos(0);
-        jugadorPartido.setTirosLibres(0);
-        jugadorPartido.setTirosDe3Puntos(0);
-        jugadorPartido.setFaltas(0);
-        jugadorPartido.setEnBanca(true);
+        TeamPlayer teamplayers = teamPlayerRepository.findByPlayerAndTeam_Name(matchPlayer.getJugador(), matchPlayer.getEquipo());
+        matchPlayer.setPosicion(teamplayers.getPosition());
+        matchPlayer.setAsistencias(0);
+        matchPlayer.setAnotaciones(0);
+        matchPlayer.setFaltas(0);
+        matchPlayer.setEnBanca(true);
 
-        jugadorPartidoRepository.save(jugadorPartido);
+        matchPlayerRepository.save(matchPlayer);
 
         Map<String, Object> jugadorpart = new HashMap<>();
         jugadorpart.put("message", "Jugador agregado al partido");
@@ -62,71 +59,14 @@ public class JugadorPartidoService {
         Long jugadorPartidoId = jugadorPartidoDTO.getClavePartido();
         String descripcion = jugadorPartidoDTO.getDescripcion();
 
-        JugadorPartido jugadorPartido = jugadorPartidoRepository.findByJugadorAndMatch(jugadorUsuario, jugadorPartidoId);
+        MatchPlayer matchPlayer = matchPlayerRepository.findByJugadorAndMatch(jugadorUsuario, jugadorPartidoId);
         ActualizarJugadorPartidoResponse actJugPartido = new ActualizarJugadorPartidoResponse();
-        actJugPartido.setJugador(jugadorPartido.getJugador().getUsuario());
+        actJugPartido.setJugador(matchPlayer.getJugador().getUsuario());
         actJugPartido.setPuntoPositivo(jugadorPartidoDTO.isPuntoPositivo());
         int punto = 1;
         if(!jugadorPartidoDTO.isPuntoPositivo()) punto = - 1;
 
-        switch (descripcion) {
-            case "tirosDe2Puntos" -> {
-                actJugPartido.setDescripcion("tirosDe2Puntos");
-
-                if (jugadorPartido.getTirosDe2Puntos() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
-                    actJugPartido.setDescripcion("");
-                    return actJugPartido;
-                }
-                jugadorPartido.setTirosDe2Puntos(jugadorPartido.getTirosDe2Puntos() + punto );
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto );
-            }
-            case "tirosDe3Puntos" -> {
-                actJugPartido.setDescripcion("tirosDe3Puntos");
-
-                if (jugadorPartido.getTirosDe3Puntos() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
-                    actJugPartido.setDescripcion("");
-
-                    return actJugPartido;
-                }
-                jugadorPartido.setTirosDe3Puntos(jugadorPartido.getTirosDe3Puntos() + punto );
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto );
-            }
-            case "tirosLibres" -> {
-                actJugPartido.setDescripcion("tirosLibres");
-
-                if (jugadorPartido.getTirosLibres() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
-                    actJugPartido.setDescripcion("");
-
-                    return actJugPartido;
-                }
-                jugadorPartido.setTirosLibres(jugadorPartido.getTirosLibres() + punto);
-                jugadorPartido.setAnotaciones(jugadorPartido.getAnotaciones() + punto);
-            }
-            case "faltas" -> {
-                actJugPartido.setDescripcion("faltas");
-
-                if (jugadorPartido.getFaltas() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
-                    actJugPartido.setDescripcion("");
-
-                    return actJugPartido;
-                }
-                jugadorPartido.setFaltas(jugadorPartido.getFaltas() + punto);
-            }
-            case "asistencias" -> {
-                actJugPartido.setDescripcion("asistencias");
-
-                if (jugadorPartido.getAsistencias() <= 0 && !jugadorPartidoDTO.isPuntoPositivo()) {
-                    actJugPartido.setDescripcion("");
-
-                    return actJugPartido;
-                }
-                jugadorPartido.setAsistencias(jugadorPartido.getAsistencias() + punto);
-            }
-        }
-
-        jugadorPartidoRepository.save(jugadorPartido);
-
-
+        matchPlayerRepository.save(matchPlayer);
 
         return actJugPartido;
 
@@ -134,17 +74,14 @@ public class JugadorPartidoService {
     }
 
     public List<ObtenerJugadoresDePartidoyEquipoResponse> obtenerJugadoresDePartidoyEquipo(String nombreEquipo,Long clavePartido,Boolean enBancaFiltro){
-      List<JugadorPartido> jugadorPartido = new ArrayList<>();
+      List<MatchPlayer> matchPlayer = new ArrayList<>();
         List<ObtenerJugadoresDePartidoyEquipoResponse> jugadoresPartidoResponse = new ArrayList<>();
-        jugadorPartido = jugadorPartidoRepository.findAllByEquipoAndMatchAndNombre2(nombreEquipo,clavePartido,enBancaFiltro);
+        matchPlayer = matchPlayerRepository.findAllByEquipoAndMatchAndNombre2(nombreEquipo,clavePartido,enBancaFiltro);
 
-        for (JugadorPartido jp: jugadorPartido) {
+        for (MatchPlayer jp: matchPlayer) {
             ObtenerJugadoresDePartidoyEquipoResponse jpResponse = new ObtenerJugadoresDePartidoyEquipoResponse();
 
             jpResponse.setJugador(jp.getJugador().getUsuario());
-            jpResponse.setTirosDe3Puntos(jp.getTirosDe3Puntos());
-            jpResponse.setTirosDe2Puntos(jp.getTirosDe2Puntos());
-            jpResponse.setTirosLibres(jp.getTirosLibres());
             jpResponse.setFaltas(jp.getFaltas());
             jpResponse.setAsistencias(jp.getAsistencias());
             jpResponse.setEnBanca(jp.getEnBanca());
@@ -166,7 +103,7 @@ public class JugadorPartidoService {
 
     @Transactional
     public ResponseEntity<Map<String, Object>> posicionarJugadorEnPartido(Long clavePartido, String usuario, Boolean enBanca) {
-        jugadorPartidoRepository.posicionarJugadorEnMatch(clavePartido,usuario,enBanca);
+        matchPlayerRepository.posicionarJugadorEnMatch(clavePartido,usuario,enBanca);
         Map<String, Object> jugadorpart = new HashMap<>();
         jugadorpart.put("message", "Jugador actualizado");
         return ResponseEntity.ok(jugadorpart);
@@ -177,7 +114,7 @@ public class JugadorPartidoService {
         Long clavePartido = sacarJugadorDePartidoMensaje.getClavePartido();
         String jugador = sacarJugadorDePartidoMensaje.getJugador();
         String nombreEquipo = sacarJugadorDePartidoMensaje.getNombreEquipo();
-        jugadorPartidoRepository.setEnBanca(true,clavePartido,jugador,nombreEquipo);
+        matchPlayerRepository.setEnBanca(true,clavePartido,jugador,nombreEquipo);
 
         SacarJugadorPartidoResponse sacarJugadorPartidoResponse = new SacarJugadorPartidoResponse();
         sacarJugadorPartidoResponse.setClavePartido(clavePartido);
@@ -194,7 +131,7 @@ public class JugadorPartidoService {
         String jugador = meterJugadorMessage.getJugador();
         String nombreEquipo = meterJugadorMessage.getNombreEquipo();
 
-        jugadorPartidoRepository.setEnBanca(false,clavePartido,jugador,nombreEquipo);
+        matchPlayerRepository.setEnBanca(false,clavePartido,jugador,nombreEquipo);
 
         MeterJugadorResponse meterJugadorResponse = new MeterJugadorResponse();
         meterJugadorResponse.setClavePartido(clavePartido);
@@ -209,6 +146,6 @@ public class JugadorPartidoService {
     }
 
     public int sumarPuntosPorEquipoYPartido(String nombreEquipo, Long clavePartido){
-        return jugadorPartidoRepository.sumarPuntosPorEquipoYMatch(nombreEquipo,clavePartido);
+        return 0;
     }
 }

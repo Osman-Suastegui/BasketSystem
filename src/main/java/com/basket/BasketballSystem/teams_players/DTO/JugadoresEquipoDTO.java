@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_equipos.DTO;
+package com.basket.BasketballSystem.teams_players.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

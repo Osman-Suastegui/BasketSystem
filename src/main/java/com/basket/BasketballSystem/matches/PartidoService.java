@@ -4,10 +4,9 @@ import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayerRepository;
-import com.basket.BasketballSystem.jugadores_partidos.JugadorPartido;
-import com.basket.BasketballSystem.jugadores_partidos.JugadorPartidoRepository;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
+import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
+import com.basket.BasketballSystem.matches_player.MatchPlayerRepository;
 import com.basket.BasketballSystem.matches.DTO.PartidoResponse;
 import com.basket.BasketballSystem.tournaments.Estado;
 import com.basket.BasketballSystem.tournaments.Tournament;
@@ -44,7 +43,7 @@ public class PartidoService {
     @Autowired
     TeamTournamentRepository teamTournamentRepository;
     @Autowired
-    JugadorPartidoRepository jugadorPartidoRepository;
+    MatchPlayerRepository matchPlayerRepository;
 
     public List<Map<String, Object>> obtenerPartidosArbitro(String idArbitro, String estatusPartido) {
         final int duracionPartido = 40; // 40 minutos dura un partido ??
@@ -570,18 +569,6 @@ public class PartidoService {
 
     private void calcularPuntosJugador(Long idTemporada, Map<String, Map<String, Integer>> equiposInfo) {
         List<Match> matches = partidoRepository.findAllByTournament(idTemporada);
-
-        for (Match p : matches) {
-            List<JugadorPartido> jugadoresPartido = jugadorPartidoRepository.findAllByMatch(p.getClavePartido());
-
-            for (JugadorPartido jp : jugadoresPartido) {
-                // Actualizar puntos de cada jugador al equipo correspondiente
-             //   actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getAnotaciones());
-                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosDe2Puntos() * 2);
-                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosDe3Puntos() * 3);
-                actualizarContadores(equiposInfo, jp.getEquipo(), "puntosJugador", jp.getTirosLibres());
-            }
-        }
     }
 
 
@@ -776,8 +763,8 @@ public class PartidoService {
 
         String equipo1 = partido.get().getEquipo1().getName();
         String equipo2 = partido.get().getEquipo2().getName();
-        int anotacionesEquipo1 = jugadorPartidoRepository.sumarPuntosPorEquipoYMatch(equipo1,idPartido);
-        int anotacionesEquipo2 = jugadorPartidoRepository.sumarPuntosPorEquipoYMatch(equipo2,idPartido);
+        int anotacionesEquipo1 = 0;
+        int anotacionesEquipo2 = 0;
 
         if(anotacionesEquipo1 > anotacionesEquipo2){
             partido.get().setGanador(equipo1);

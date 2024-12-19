@@ -25,6 +25,6 @@ public class UserTournament {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role; // Example: "PLAYER", "ADMIN"
+    private Role role; // Example: "ORGANIZER", "REFEREE"
 
 }

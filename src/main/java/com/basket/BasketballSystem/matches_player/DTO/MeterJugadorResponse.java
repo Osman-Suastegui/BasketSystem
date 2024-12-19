@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_partidos.DTO;
+package com.basket.BasketballSystem.matches_player.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeterJugadorRequest {
-
+public class MeterJugadorResponse {
     String jugador;
     String nombreEquipo;
     Long clavePartido;
@@ -17,5 +16,4 @@ public class MeterJugadorRequest {
     Integer tirosLibres;
     Integer faltas;
     Integer asistencias;
-
 }

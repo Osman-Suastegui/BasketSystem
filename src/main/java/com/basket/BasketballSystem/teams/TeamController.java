@@ -1,7 +1,7 @@
 package com.basket.BasketballSystem.teams;
 
-import com.basket.BasketballSystem.jugadores_equipos.DTO.JugadoresEquipoDTO;
-import com.basket.BasketballSystem.jugadores_equipos.TeamPlayer;
+import com.basket.BasketballSystem.teams_players.DTO.JugadoresEquipoDTO;
+import com.basket.BasketballSystem.teams_players.TeamPlayer;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_equipos;
+package com.basket.BasketballSystem.teams_players;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.jugadores_partidos.DTO;
+package com.basket.BasketballSystem.matches_player.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
