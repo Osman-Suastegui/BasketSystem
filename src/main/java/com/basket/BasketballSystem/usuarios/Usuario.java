@@ -49,7 +49,7 @@ public class Usuario implements UserDetails {
     @NotEmpty(message = "el apellido no puede estar vacio") @NotNull(message = "el apellido no puede ser nulo") @NotBlank(message = "el apellido no puedo estar en blanco")
     String lastName;
 
-    //THIS LIST 'userTournaments' REPRESENTS THE TOURNAMENTS WE ARE PART AS REFEREE OR ORGANIZER
+//    //THIS LIST 'userTournaments' REPRESENTS THE TOURNAMENTS WE ARE PART AS REFEREE OR ORGANIZER
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserTournament> userTournaments;
 

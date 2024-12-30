@@ -17,7 +17,7 @@ public class PartidoController {
     PartidoService partidoService;
 
     @RequestMapping ("/obtenerPartidosArbitro")
-    public List<Map<String,Object>>  obtenerPartidosArbitro(@RequestParam("idArbitro") String idArbitro, @RequestParam(value = "estatusPartido",required = false) String estatusPartido){
+    public List<Map<String,Object>>  obtenerPartidosArbitro(@RequestParam("idArbitro") Long idArbitro, @RequestParam(value = "estatusPartido",required = false) String estatusPartido){
         return partidoService.obtenerPartidosArbitro(idArbitro,estatusPartido);
     }
 
@@ -29,7 +29,7 @@ public class PartidoController {
 
 
     @RequestMapping ("/obtenerPartidosJugador")
-    public List<Map<String,Object>>  obtenerPartidosJugador(@RequestParam("idJugador") String idJugador){
+    public List<Map<String,Object>>  obtenerPartidosJugador(@RequestParam("idJugador") Long idJugador){
 
         return partidoService.obtenerPartidosJugador(idJugador);
     }
@@ -62,7 +62,7 @@ public class PartidoController {
     @PutMapping("/asignarArbitro")
         public ResponseEntity<Map<String, Object>> asignarArbitro(@RequestBody Match match){
         Long idPartido = match.getClavePartido();
-        String idArbitro = match.getArbitro().getUsuario();
+        Long idArbitro = match.getArbitro().getId();
         return partidoService.asignarArbitro(idPartido,idArbitro);
 
     }
@@ -107,13 +107,13 @@ public class PartidoController {
         partidoService.setGanadorAleatorio(idPartido);
         return ResponseEntity.ok(Map.of("mensaje", "Ganador asignado"));
     }
-
-    @PostMapping("/crearPartidosEliminatorias")
-    public ResponseEntity<Map<String, Object>>  crearPartidosEliminatorias(@RequestBody Map<String, Object> idTemporadaBody){
-        Long idTemporada = Long.parseLong(idTemporadaBody.get("idTemporada").toString());
-        partidoService.crearPartidosEliminatorias(idTemporada);
-        return ResponseEntity.ok(Map.of("mensaje", "Partidos creados"));
-    }
+//
+//    @PostMapping("/crearPartidosEliminatorias")
+//    public ResponseEntity<Map<String, Object>>  crearPartidosEliminatorias(@RequestBody Map<String, Object> idTemporadaBody){
+//        Long idTemporada = Long.parseLong(idTemporadaBody.get("idTemporada").toString());
+//        partidoService.crearPartidosEliminatorias(idTemporada);
+//        return ResponseEntity.ok(Map.of("mensaje", "Partidos creados"));
+//    }
 
 //    fechaInicio
     @GetMapping("/obtenerFechaInicio")
@@ -126,11 +126,11 @@ public class PartidoController {
         return partidoService.obtenerGanador(idPartido);
     }
 
-    @PutMapping("/finalizarPartido")
-    public ResponseEntity<Map<String, Object>> finalizarPartido(@RequestBody Map<String, Object> partido){
-        Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
-        return partidoService.finalizarPartido(idPartido);
-    }
+//    @PutMapping("/finalizarPartido")
+//    public ResponseEntity<Map<String, Object>> finalizarPartido(@RequestBody Map<String, Object> partido){
+//        Long idPartido = Long.parseLong(partido.get("clavePartido").toString());
+//        return partidoService.finalizarPartido(idPartido);
+//    }
     /*
         Este controlador nos dice el nombre del el arbitro que esta asignado a un partido
     */

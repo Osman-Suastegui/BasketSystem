@@ -63,7 +63,9 @@ public class SecurityConfiguration {
             "/estadisticas/equipo-temporada-estadisticas",
             "/Equipo/**",
             "/ws-basket/**",
-            "/api/test/**"
+            "/api/test/**",
+            "/tournaments/**",
+
     };
     @Bean
     public SecurityFilterChain  securityFilterChain(HttpSecurity http) throws Exception{

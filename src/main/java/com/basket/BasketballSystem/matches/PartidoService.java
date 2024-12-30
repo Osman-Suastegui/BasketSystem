@@ -45,7 +45,7 @@ public class PartidoService {
     @Autowired
     MatchPlayerRepository matchPlayerRepository;
 
-    public List<Map<String, Object>> obtenerPartidosArbitro(String idArbitro, String estatusPartido) {
+    public List<Map<String, Object>> obtenerPartidosArbitro(Long idArbitro, String estatusPartido) {
         final int duracionPartido = 40; // 40 minutos dura un partido ??
 //        ESTATUS PARTIDO enCurso, finalizado, proximo
         List<Map<String, Object>> partidosFinalizadosMap = new ArrayList<>();
@@ -83,7 +83,7 @@ public class PartidoService {
             Instant fechaInicioPartido = match.getFechaInicio();
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
             System.out.println("DURACION DEL PARTIDO INSTANT " + fechaInicioPartido);
-            p.put("temporadaId", match.getTemporada().getClaveTemporada());
+            p.put("temporadaId", match.getTemporada().getId());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
 
@@ -155,7 +155,7 @@ public class PartidoService {
             Instant fechaInicioPartido = match.getFechaInicio();
             Instant fechaEndPartido = fechaInicioPartido.plus(durationPartido);
 
-            p.put("temporadaId", match.getTemporada().getNombreTemporada());
+            p.put("temporadaId", match.getTemporada().getName());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
             p.put("ganador", match.getGanador());
@@ -196,7 +196,7 @@ public class PartidoService {
         return partidosMap;
    }
 
-    public List<Map<String, Object>> obtenerPartidosJugador(String idJugador) {
+    public List<Map<String, Object>> obtenerPartidosJugador(Long idJugador) {
 
         Usuario jugador = usuarioRepository.findById(idJugador).orElse(null);
         if (jugador == null) {
@@ -231,7 +231,7 @@ public class PartidoService {
             p.put("idPartido", match.getClavePartido());
             p.put("arbitro", match.getArbitro().getUsuario());
             p.put("fechaInicio", match.getFechaInicio());
-            p.put("temporadaId", match.getTemporada().getClaveTemporada());
+            p.put("temporadaId", match.getTemporada().getId());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
             p.put("ganador", match.getGanador());
@@ -258,7 +258,7 @@ public class PartidoService {
                 p.put("arbitro", "Sin asignar"); // Otra opción, puedes definir un valor por defecto
             }
             p.put("fechaInicio", match.getFechaInicio());
-            p.put("temporadaId", match.getTemporada().getClaveTemporada());
+            p.put("temporadaId", match.getTemporada().getId());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
             p.put("ganador", match.getGanador());
@@ -318,7 +318,7 @@ public class PartidoService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> asignarArbitro(Long idPartido, String idArbitro) {
+    public ResponseEntity<Map<String, Object>> asignarArbitro(Long idPartido, Long idArbitro) {
         Optional<Match> p = partidoRepository.findById(idPartido);
         if (!p.isPresent()) throw new BadRequestException("El partido no existe");
 
@@ -585,7 +585,7 @@ public class PartidoService {
             partidoResponse.setEquipo2(partido.get().getEquipo2().getName());
             partidoResponse.setArbitro(partido.get().getArbitro().getUsuario());
             partidoResponse.setResultado(partido.get().getGanador());
-            partidoResponse.setClaveTemporada(partido.get().getTemporada().getClaveTemporada());
+            partidoResponse.setClaveTemporada(partido.get().getTemporada().getId());
             return ResponseEntity.ok(partidoResponse);
     }
 
@@ -634,117 +634,118 @@ public class PartidoService {
         }
         return false;
     }
-    public List<String> SeleccionarEquiposQuePasanAPlayoffs(Long idTemporada){
-        Tournament t = temporadaRepository.findById(idTemporada).orElse(null);
-        if(t == null) throw new BadRequestException("La temporada no existe");
 
-
-        if(!verificarSiSeJugaronTodosLosPartidosRegular(idTemporada)){
-            throw new BadRequestException("No se han jugado todos los partidos de la temporada en la fase regular");
-        }
-        Map<String,Integer> rankingEquipos =  rankingTemporadaRegular(idTemporada);
-//        crea un arraylist de dos valores que tenga un string y integer y ordenalos por integer de mayor a menor
-
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(rankingEquipos.entrySet());
-        list.sort(Map.Entry.comparingByValue());
-        Collections.reverse(list);
-
-        List<String> equiposQuePasanAPlayoffs = new ArrayList<>();
-        int cantidadEquiposQuePasanAPlayoffs =  t.getCantidadPlayoffs();
-
-        for(int i =0 ; i < cantidadEquiposQuePasanAPlayoffs;i++){
-            equiposQuePasanAPlayoffs.add(list.get(i).getKey());
-        }
-
-        return equiposQuePasanAPlayoffs;
-
-    }
-    public void crearPartidosEliminatorias(Long idTemporada) {
-        Tournament tempo = temporadaRepository.findById(idTemporada).orElse(null);
-        if (tempo == null) throw new BadRequestException("La temporada no existe");
-        int cantidadEquiposQuePasanAPlayoffs = tempo.getCantidadPlayoffs();
-//        tengo que checar si existen partidos con la fase de eliminatorias si es asi creo los partidos de eliminatorias
-        List<Match> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
-        int cantidadJuegosTerminadodosEliminatorias = 0;
-
-
-//        Generamos partidos primera vez cuando los partidos de eliminatorias estan vacios y ya se jugaron todos los de la fase regular
-        if (partidosEliminatorias.size() == 0) {
-            List<String> equiposQuePasanPlayoff = SeleccionarEquiposQuePasanAPlayoffs(idTemporada);
-//            formamos los primeros partidos de eliminatorias
-            for (int i = 0; i < equiposQuePasanPlayoff.size() / 2; i++) {
-                Match match = new Match();
-                match.setTemporada(tempo);
-                match.setEquipo1(teamRepository.findByName(equiposQuePasanPlayoff.get(i)));
-                match.setEquipo2(teamRepository.findByName(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
-                match.setFase(Fase.Eliminatorias);
-                partidoRepository.save(match);
-            }
-        } else {
-//        Lo que se hace es que queremos saber la cantidad De partidos que se deben jugar en las eliminatorias en cierto momento
-//        dependiendo de ese momento decidimos si podemos generar nuevos partidos para la siguiente parte de las eliminatorias
-//        por ejemplo si cantidadEquiposQuePasanAPlayoffs = 8  En total se deben jugar 7 partidos en las eliminatorias
-//        si cantidadEquiposQuePasanAPlayoffs = 16 En total se deben jugar 15 partidos en las eliminatorias
-//        por lo debemos saber en que etapa estamos y cuando debemos generar partidos si cantidadEquiposQuePasanAPlayoffs = 8
-//        entonces primer etapa es 4 partidos y la siguiente etapa es 2 partidos y la ultima etapa es 1 partido
-//        Entonces ¿cuando generamos partidos? primero se genera cuando no hay equipos registrados en la fase de eliminatorias y
-//        ya se jugaron todos los de la fase regular
-//        despues se genera cuando ya se jugaron todos los partidos de la primera etapa y asi sucesivamente
-//        4 = 4 primera etapa
-//        4 + 2 = 6 segunda etapa
-//        4 + 2 + 1 = 7 tercera etapa
-//        por lo que tenmos que dividir entre 2 y acumular y verificar si la cantidad de partidos que se jugaron es igual a la cantidad de partidos que se deben jugar
-//        ¿como seleccionamos a los siguientes equipos que pasan a la siguiente etapa? for fecha ¿cuantos pasan? podemos ver en el ejemplo anterior
-//        ¿cuando debemos dejar de generar partidos? cantidadEquiposQuePasanAPlayoffs - 1 = cantidad de partidos finalizados en las Eliminatorias
-
-
-
-
-
-            for (Match p : partidosEliminatorias) {
-                if (!p.getGanador().isEmpty()) {
-                    cantidadJuegosTerminadodosEliminatorias++;
-                }
-            }
-            if (cantidadJuegosTerminadodosEliminatorias == cantidadEquiposQuePasanAPlayoffs - 1) {
-                throw new BadRequestException("Ya se han jugado todos los partidos de las eliminatorias");
-            }
-            boolean sePuedenGenerarPartidos = false;
-            int cantidadJuegosQueSeDebenJugarEliminatorias = 0;
-            while (cantidadEquiposQuePasanAPlayoffs > 1) {
-                cantidadEquiposQuePasanAPlayoffs /= 2;
-                cantidadJuegosQueSeDebenJugarEliminatorias += cantidadEquiposQuePasanAPlayoffs;
-                if (partidosEliminatorias.size() == cantidadJuegosTerminadodosEliminatorias && cantidadJuegosQueSeDebenJugarEliminatorias == partidosEliminatorias.size()) {
-                    partidosEliminatorias.sort((partido1, partido2) -> {
-                        Instant fechaInicio1 = partido1.getFechaInicio();
-                        Instant fechaInicio2 = partido2.getFechaInicio();
-                        return fechaInicio2.compareTo(fechaInicio1);
-                    });
-                    sePuedenGenerarPartidos = true;
-//                    generamos nuevos partidos para eliminatorias
-                    for (int i = 0; i < cantidadEquiposQuePasanAPlayoffs; i += 2) {
-                        Match match = new Match();
-                        match.setTemporada(tempo);
-                        String NombreequipoGanadorPartido = partidosEliminatorias.get(i).obtenerEquipoGanador();
-                        Team teamGanadorPartido1 = teamRepository.findByName(NombreequipoGanadorPartido);
-                        match.setEquipo1(teamGanadorPartido1);
-                        NombreequipoGanadorPartido = partidosEliminatorias.get(i + 1).obtenerEquipoGanador();
-                        Team teamGanadorPartido2 = teamRepository.findByName(NombreequipoGanadorPartido);
-                        match.setEquipo2(teamGanadorPartido2);
-                        match.setFase(Fase.Eliminatorias);
-                        partidoRepository.save(match);
-                    }
-                    break;
-
-                }
-            }
-            if (!sePuedenGenerarPartidos) {
-                throw new BadRequestException("Los partidos de eliminatorias aun no acaban");
-            }
-        }
-
-
-    }
+//    public List<String> SeleccionarEquiposQuePasanAPlayoffs(Long idTemporada){
+//        Tournament t = temporadaRepository.findById(idTemporada).orElse(null);
+//        if(t == null) throw new BadRequestException("La temporada no existe");
+//
+//
+//        if(!verificarSiSeJugaronTodosLosPartidosRegular(idTemporada)){
+//            throw new BadRequestException("No se han jugado todos los partidos de la temporada en la fase regular");
+//        }
+//        Map<String,Integer> rankingEquipos =  rankingTemporadaRegular(idTemporada);
+////        crea un arraylist de dos valores que tenga un string y integer y ordenalos por integer de mayor a menor
+//
+//        List<Map.Entry<String, Integer>> list = new ArrayList<>(rankingEquipos.entrySet());
+//        list.sort(Map.Entry.comparingByValue());
+//        Collections.reverse(list);
+//
+//        List<String> equiposQuePasanAPlayoffs = new ArrayList<>();
+//        int cantidadEquiposQuePasanAPlayoffs =  t.getCantidadPlayoffs();
+//
+//        for(int i =0 ; i < cantidadEquiposQuePasanAPlayoffs;i++){
+//            equiposQuePasanAPlayoffs.add(list.get(i).getKey());
+//        }
+//
+//        return equiposQuePasanAPlayoffs;
+//
+//    }
+//    public void crearPartidosEliminatorias(Long idTemporada) {
+//        Tournament tempo = temporadaRepository.findById(idTemporada).orElse(null);
+//        if (tempo == null) throw new BadRequestException("La temporada no existe");
+//        int cantidadEquiposQuePasanAPlayoffs = tempo.getCantidadPlayoffs();
+////        tengo que checar si existen partidos con la fase de eliminatorias si es asi creo los partidos de eliminatorias
+//        List<Match> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
+//        int cantidadJuegosTerminadodosEliminatorias = 0;
+//
+//
+////        Generamos partidos primera vez cuando los partidos de eliminatorias estan vacios y ya se jugaron todos los de la fase regular
+//        if (partidosEliminatorias.size() == 0) {
+//            List<String> equiposQuePasanPlayoff = SeleccionarEquiposQuePasanAPlayoffs(idTemporada);
+////            formamos los primeros partidos de eliminatorias
+//            for (int i = 0; i < equiposQuePasanPlayoff.size() / 2; i++) {
+//                Match match = new Match();
+//                match.setTemporada(tempo);
+//                match.setEquipo1(teamRepository.findByName(equiposQuePasanPlayoff.get(i)));
+//                match.setEquipo2(teamRepository.findByName(equiposQuePasanPlayoff.get(equiposQuePasanPlayoff.size() - 1 - i)));
+//                match.setFase(Fase.Eliminatorias);
+//                partidoRepository.save(match);
+//            }
+//        } else {
+////        Lo que se hace es que queremos saber la cantidad De partidos que se deben jugar en las eliminatorias en cierto momento
+////        dependiendo de ese momento decidimos si podemos generar nuevos partidos para la siguiente parte de las eliminatorias
+////        por ejemplo si cantidadEquiposQuePasanAPlayoffs = 8  En total se deben jugar 7 partidos en las eliminatorias
+////        si cantidadEquiposQuePasanAPlayoffs = 16 En total se deben jugar 15 partidos en las eliminatorias
+////        por lo debemos saber en que etapa estamos y cuando debemos generar partidos si cantidadEquiposQuePasanAPlayoffs = 8
+////        entonces primer etapa es 4 partidos y la siguiente etapa es 2 partidos y la ultima etapa es 1 partido
+////        Entonces ¿cuando generamos partidos? primero se genera cuando no hay equipos registrados en la fase de eliminatorias y
+////        ya se jugaron todos los de la fase regular
+////        despues se genera cuando ya se jugaron todos los partidos de la primera etapa y asi sucesivamente
+////        4 = 4 primera etapa
+////        4 + 2 = 6 segunda etapa
+////        4 + 2 + 1 = 7 tercera etapa
+////        por lo que tenmos que dividir entre 2 y acumular y verificar si la cantidad de partidos que se jugaron es igual a la cantidad de partidos que se deben jugar
+////        ¿como seleccionamos a los siguientes equipos que pasan a la siguiente etapa? for fecha ¿cuantos pasan? podemos ver en el ejemplo anterior
+////        ¿cuando debemos dejar de generar partidos? cantidadEquiposQuePasanAPlayoffs - 1 = cantidad de partidos finalizados en las Eliminatorias
+//
+//
+//
+//
+//
+//            for (Match p : partidosEliminatorias) {
+//                if (!p.getGanador().isEmpty()) {
+//                    cantidadJuegosTerminadodosEliminatorias++;
+//                }
+//            }
+//            if (cantidadJuegosTerminadodosEliminatorias == cantidadEquiposQuePasanAPlayoffs - 1) {
+//                throw new BadRequestException("Ya se han jugado todos los partidos de las eliminatorias");
+//            }
+//            boolean sePuedenGenerarPartidos = false;
+//            int cantidadJuegosQueSeDebenJugarEliminatorias = 0;
+//            while (cantidadEquiposQuePasanAPlayoffs > 1) {
+//                cantidadEquiposQuePasanAPlayoffs /= 2;
+//                cantidadJuegosQueSeDebenJugarEliminatorias += cantidadEquiposQuePasanAPlayoffs;
+//                if (partidosEliminatorias.size() == cantidadJuegosTerminadodosEliminatorias && cantidadJuegosQueSeDebenJugarEliminatorias == partidosEliminatorias.size()) {
+//                    partidosEliminatorias.sort((partido1, partido2) -> {
+//                        Instant fechaInicio1 = partido1.getFechaInicio();
+//                        Instant fechaInicio2 = partido2.getFechaInicio();
+//                        return fechaInicio2.compareTo(fechaInicio1);
+//                    });
+//                    sePuedenGenerarPartidos = true;
+////                    generamos nuevos partidos para eliminatorias
+//                    for (int i = 0; i < cantidadEquiposQuePasanAPlayoffs; i += 2) {
+//                        Match match = new Match();
+//                        match.setTemporada(tempo);
+//                        String NombreequipoGanadorPartido = partidosEliminatorias.get(i).obtenerEquipoGanador();
+//                        Team teamGanadorPartido1 = teamRepository.findByName(NombreequipoGanadorPartido);
+//                        match.setEquipo1(teamGanadorPartido1);
+//                        NombreequipoGanadorPartido = partidosEliminatorias.get(i + 1).obtenerEquipoGanador();
+//                        Team teamGanadorPartido2 = teamRepository.findByName(NombreequipoGanadorPartido);
+//                        match.setEquipo2(teamGanadorPartido2);
+//                        match.setFase(Fase.Eliminatorias);
+//                        partidoRepository.save(match);
+//                    }
+//                    break;
+//
+//                }
+//            }
+//            if (!sePuedenGenerarPartidos) {
+//                throw new BadRequestException("Los partidos de eliminatorias aun no acaban");
+//            }
+//        }
+//
+//
+//    }
 
 
     public ResponseEntity<Map<String, Object>> obtenerFechaInicio(Long idPartido) {
@@ -791,38 +792,38 @@ public class PartidoService {
         return ResponseEntity.ok(ganador);
     }
 
-    public ResponseEntity<Map<String, Object>> finalizarPartido(Long idPartido) {
-        Optional<Match> partido = partidoRepository.findById(idPartido);
-        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
-        if(partido.get().getFechaInicio().isAfter(Instant.now())){
-            throw new BadRequestException("El partido aun no ha iniciado");
-        }
-        decidirGanadorPartido(idPartido);
-//        si es el ultimo partido de la temporada se debe cambiar el estado de la temporada a finalizada
-        Tournament temp = partido.get().getTemporada();
-        int cantidadPlayOffs = temp.getCantidadPlayoffs();
-        Long idTemporada = temp.getClaveTemporada();
-
-        int cantidadDeJuegosQueSeDebenJugar = 0;
-        while(cantidadPlayOffs > 1){
-            cantidadPlayOffs /= 2;
-            cantidadDeJuegosQueSeDebenJugar += cantidadPlayOffs;
-        }
-//        obtenemos la cantidad de juegos que tienen la fase eliminatorias y que ya tiene un ganador
-        int cantidadDeJuegosTerminados = 0;
-        List<Match> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
-        for(Match p : partidosEliminatorias){
-            if(!p.getGanador().isEmpty()){
-                cantidadDeJuegosTerminados++;
-            }
-        }
-        if(cantidadDeJuegosTerminados == cantidadDeJuegosQueSeDebenJugar){
-            temporadaRepository.updateTemporadaEstado(idTemporada,"FINALIZADA");
-        }
-        Map<String, Object> finalizarPartido = new HashMap<>();
-        finalizarPartido.put("message", "Partido finalizado exitosamente.");
-        return ResponseEntity.ok(finalizarPartido);
-    }
+//    public ResponseEntity<Map<String, Object>> finalizarPartido(Long idPartido) {
+//        Optional<Match> partido = partidoRepository.findById(idPartido);
+//        if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
+//        if(partido.get().getFechaInicio().isAfter(Instant.now())){
+//            throw new BadRequestException("El partido aun no ha iniciado");
+//        }
+//        decidirGanadorPartido(idPartido);
+////        si es el ultimo partido de la temporada se debe cambiar el estado de la temporada a finalizada
+//        Tournament temp = partido.get().getTemporada();
+//        int cantidadPlayOffs = temp.getCantidadPlayoffs();
+//        Long idTemporada = temp.getClaveTemporada();
+//
+//        int cantidadDeJuegosQueSeDebenJugar = 0;
+//        while(cantidadPlayOffs > 1){
+//            cantidadPlayOffs /= 2;
+//            cantidadDeJuegosQueSeDebenJugar += cantidadPlayOffs;
+//        }
+////        obtenemos la cantidad de juegos que tienen la fase eliminatorias y que ya tiene un ganador
+//        int cantidadDeJuegosTerminados = 0;
+//        List<Match> partidosEliminatorias = partidoRepository.findAllByTournamentAndFase(idTemporada, Fase.Eliminatorias);
+//        for(Match p : partidosEliminatorias){
+//            if(!p.getGanador().isEmpty()){
+//                cantidadDeJuegosTerminados++;
+//            }
+//        }
+//        if(cantidadDeJuegosTerminados == cantidadDeJuegosQueSeDebenJugar){
+//            temporadaRepository.updateTemporadaEstado(idTemporada,"FINALIZADA");
+//        }
+//        Map<String, Object> finalizarPartido = new HashMap<>();
+//        finalizarPartido.put("message", "Partido finalizado exitosamente.");
+//        return ResponseEntity.ok(finalizarPartido);
+//    }
 
     public ResponseEntity<Map<String, Object>> obtenerUsuarioArbitroAsignado(Long idPartido) {
 
