@@ -2,6 +2,7 @@ package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.tournaments.DTO.CreateTournamentRequest;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
+import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,7 +83,7 @@ public class TournamentController {
     }
 
     @GetMapping("/getTournament")
-    public ResponseEntity<Map<String, Object>> getTournamentById(@RequestParam Long tournamentId){
+    public ResponseEntity<TournamentDTO> getTournamentById(@RequestParam Long tournamentId){
         return tournamentService.getTournamentById(tournamentId);
     }
 

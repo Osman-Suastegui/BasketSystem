@@ -2,6 +2,8 @@ package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
+import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
+import com.basket.BasketballSystem.tournaments.DTO.UserDTO;
 import com.basket.BasketballSystem.user_tournament.Role;
 import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.basket.BasketballSystem.user_tournament.UserTournamentRepository;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TournamentService {
@@ -152,14 +155,27 @@ public class TournamentService {
         return ResponseEntity.ok(tempNew);
     }
 
-    public ResponseEntity<Map<String, Object>> getTournamentById(Long tournamentId) {
+    public ResponseEntity<TournamentDTO> getTournamentById(Long tournamentId) {
 
-        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
-        if(tournament.isEmpty()){
-            throw new RuntimeException("Tournament not found");
-        }
-        Map<String, Object> tempNew = new HashMap<>();
-        tempNew.put("tournament",tournament.get());
-        return ResponseEntity.ok(tempNew);
+        Tournament tournament = tournamentRepository.findTournamentWithUsers(tournamentId);
+
+        TournamentDTO tournamentDTO = new TournamentDTO();
+        tournamentDTO.setId(tournament.getId());
+        tournamentDTO.setName(tournament.getName());
+        tournamentDTO.setSport(tournament.getSport());
+        List<UserDTO> users = tournament.getUserTournaments().stream()
+                .map(ut -> {
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setId(ut.getUser().getId());
+                    userDTO.setUsername(ut.getUser().getUsername());
+                    userDTO.setName(ut.getUser().getName());
+                    userDTO.setLastName(ut.getUser().getLastName());
+                    userDTO.setRole(ut.getRole().toString());
+                    return userDTO;
+                }).collect(Collectors.toList());
+
+        tournamentDTO.setUsers(users);
+
+        return ResponseEntity.ok(tournamentDTO);
     }
 }
