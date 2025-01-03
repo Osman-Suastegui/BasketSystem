@@ -2,17 +2,19 @@ package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
-import com.basket.BasketballSystem.tournaments.DTO.obtenerTemporadasDeLigaResponse;
+import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
+import com.basket.BasketballSystem.tournaments.DTO.UserDTO;
+import com.basket.BasketballSystem.user_tournament.Role;
+import com.basket.BasketballSystem.user_tournament.UserTournament;
+import com.basket.BasketballSystem.user_tournament.UserTournamentRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TournamentService {
@@ -21,35 +23,43 @@ public class TournamentService {
     TournamentRepository tournamentRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
+    @Autowired
+    UserTournamentRepository userTournamentRepository;
 
-    public ResponseEntity<Map<String, Object>> crearTemporada(Tournament tournament) {
-        Map<String, Object> tempNew = new HashMap<>();
-
-        if (tournament.getNombreTemporada() == null || tournament.getNombreTemporada().isEmpty())
-            throw new BadRequestException("El nombre de la temporada no puede ser nulo");
-        if (tournament.getStartDate() == null)
-            throw new BadRequestException("La fecha de inicio de la temporada no puede ser nula");
-        if (tournament.getEndDate() == null)
-            throw new BadRequestException("La fecha de termino de la temporada no puede ser nula");
-        if (tournament.getStartDate().isAfter(tournament.getEndDate()))
-            throw new BadRequestException("La fecha de inicio no puede ser mayor a la fecha de termino");
-
-        if (tournament.getCantidadPlayoffs() == null) {
-            tournament.setCantidadPlayoffs(0);
-        }
+    public ResponseEntity<Map<String, Object>> createTournament(Tournament tournament, Long userId) {
+        // Default the tournament state if not provided
         if (tournament.getEstado() == null) {
             tournament.setEstado(Estado.INACTIVA);
         }
 
-        tournamentRepository.save(tournament);
+        // Save the Tournament first
+        Tournament savedTournament = tournamentRepository.save(tournament);
 
+        // Get the user
+        Optional<Usuario> optionalUser = usuarioRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+        Usuario user = optionalUser.get();
 
-        tempNew.put("claveTemporada", tournament.getClaveTemporada().toString());
+        // Assign the organizer for the tournament
+        UserTournament organizerTournament = new UserTournament();
+        organizerTournament.setTournament(savedTournament); // Use the saved tournament
+        organizerTournament.setUser(user);
+        organizerTournament.setRole(Role.ORGANIZER);
 
-        tempNew.put("message", "Temporada creada Exitosamente.");
-        return ResponseEntity.ok(tempNew);
+        // Save the UserTournament
+        userTournamentRepository.save(organizerTournament);
 
+        // Add the UserTournament to the tournament's collection
+
+        // Return the response
+        return ResponseEntity.ok(Map.of(
+                "message", "Tournament created successfully",
+                "tournament", tournamentRepository.findById(savedTournament.getId())
+        ));
     }
+
 
     public ResponseEntity<String> modificarDatosTemporada(Long temporadaId, Estado estado) {
         Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
@@ -59,21 +69,21 @@ public class TournamentService {
         return ResponseEntity.ok("Temporada modificada exitosamente.");
     }
 
-    public ResponseEntity<Map<String, Object>> agregarArbitro(Long temporadaId, String arbitroId) {
-        Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
-        Usuario arbitro = usuarioRepository.findById(arbitroId).orElse(null);
-        Map<String, Object> arbitroTemp = new HashMap<>();
-        if (tournament == null) throw new BadRequestException("La temporada no existe");
-        if (arbitro == null) throw new BadRequestException("El arbitro no existe");
-
-        tournamentRepository.save(tournament);
-
-        arbitroTemp.put("message", "Arbitro agregado exitosamente.");
-
-
-        return ResponseEntity.ok(arbitroTemp);
-
-    }
+//    public ResponseEntity<Map<String, Object>> agregarArbitro(Long temporadaId, String arbitroId) {
+//        Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
+//        Usuario arbitro = usuarioRepository.findById(arbitroId).orElse(null);
+//        Map<String, Object> arbitroTemp = new HashMap<>();
+//        if (tournament == null) throw new BadRequestException("La temporada no existe");
+//        if (arbitro == null) throw new BadRequestException("El arbitro no existe");
+//
+//        tournamentRepository.save(tournament);
+//
+//        arbitroTemp.put("message", "Arbitro agregado exitosamente.");
+//
+//
+//        return ResponseEntity.ok(arbitroTemp);
+//
+//    }
 
     public List<Usuario> obtenerArbitros(Long temporadaId) {
         Tournament tournament = tournamentRepository.findById(temporadaId).orElse(null);
@@ -91,8 +101,8 @@ public class TournamentService {
         for (Tournament tournament : tournaments) {
             Map<String, Object> t = new HashMap<>();
 
-            t.put("claveTemporada", tournament.getClaveTemporada());
-            t.put("nombreTemporada", tournament.getNombreTemporada());
+            t.put("claveTemporada", tournament.getId());
+            t.put("nombreTemporada", tournament.getName());
             temporadasMap.add(t);
         }
 
@@ -129,8 +139,6 @@ public class TournamentService {
             throw new BadRequestException("La cantidad de enfrentamientos regulares no puede ser nula");
 
         tournament.setCantidadEquipos(request.getCantidadEquipos());
-        tournament.setCantidadPlayoffs(request.getCantidadPlayoffs());
-        tournament.setCantidadEnfrentamientosRegular(request.getCantidadEnfrentamientosRegular());
         tournamentRepository.save(tournament);
 
         tempNew.put("message", "Características de la temporada modificada exitosamente.");
@@ -144,8 +152,30 @@ public class TournamentService {
         if (tournament == null) throw new BadRequestException("La temporada no existe");
 
         tempNew.put("cantidadEquipos", tournament.getCantidadEquipos());
-        tempNew.put("cantidadPlayoffs", tournament.getCantidadPlayoffs());
-        tempNew.put("cantidadEnfrentamientosRegular", tournament.getCantidadEnfrentamientosRegular());
         return ResponseEntity.ok(tempNew);
+    }
+
+    public ResponseEntity<TournamentDTO> getTournamentById(Long tournamentId) {
+
+        Tournament tournament = tournamentRepository.findTournamentWithUsers(tournamentId);
+
+        TournamentDTO tournamentDTO = new TournamentDTO();
+        tournamentDTO.setId(tournament.getId());
+        tournamentDTO.setName(tournament.getName());
+        tournamentDTO.setSport(tournament.getSport());
+        List<UserDTO> users = tournament.getUserTournaments().stream()
+                .map(ut -> {
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setId(ut.getUser().getId());
+                    userDTO.setUsername(ut.getUser().getUsername());
+                    userDTO.setName(ut.getUser().getName());
+                    userDTO.setLastName(ut.getUser().getLastName());
+                    userDTO.setRole(ut.getRole().toString());
+                    return userDTO;
+                }).collect(Collectors.toList());
+
+        tournamentDTO.setUsers(users);
+
+        return ResponseEntity.ok(tournamentDTO);
     }
 }

@@ -47,7 +47,7 @@ public class TeamTournamentService {
     @Transactional
     public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(TeamTournament teamTournament) {
 
-        Long claveTemporada = teamTournament.getTemporada().getClaveTemporada();
+        Long claveTemporada = teamTournament.getTemporada().getId();
         String nombreEquipo = teamTournament.getEquipo().getName();
 
 

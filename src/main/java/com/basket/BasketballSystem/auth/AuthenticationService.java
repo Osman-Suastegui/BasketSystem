@@ -24,7 +24,7 @@ public class AuthenticationService {
             throw new BadRequestException("El correo electrónico ya está registrado.");
         }
 
-        userRepository.findById(registerRequest.getUsuario()).ifPresent(user -> {throw new BadRequestException("El usuario ya existe.");});
+        userRepository.findByUsuario(registerRequest.getUsuario()).ifPresent(user -> {throw new BadRequestException("El usuario ya existe.");});
 
         Usuario user = Usuario.builder()
                 .usuario(registerRequest.getUsuario())

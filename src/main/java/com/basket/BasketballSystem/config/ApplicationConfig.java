@@ -47,8 +47,7 @@ public class ApplicationConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost:4200"); // Reemplaza con la URL de tu cliente Angular
+        config.addAllowedOrigin("*"); // Reemplaza con la URL de tu cliente Angular
         config.addAllowedHeader("*");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");

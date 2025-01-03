@@ -23,7 +23,7 @@ public class UsuarioService {
 
     public ResponseEntity<Map<String, Object>> actualizarUsuario(ActualizarUsuarioRequest req  ) {
         // Verifica si el usuario existe por su ID
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(req.getUsuario());
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsuario(req.getUsuario());
         if (usuarioOptional.isEmpty()) {
             throw new BadRequestException("El usuario no existe.");
         }
@@ -55,7 +55,7 @@ public class UsuarioService {
 
 
     public Usuario obtenerUsuario(String usuario) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuario);
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUsuario(usuario);
         if (usuarioOptional.isEmpty()) {
             throw new BadRequestException("El usuario no existe.");
         }
