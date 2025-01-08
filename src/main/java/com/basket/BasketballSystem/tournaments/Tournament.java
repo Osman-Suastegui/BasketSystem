@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class Tournament {
     @Column(name = "name", unique = true)
     private String name;
 
+    private TournamentType tournamentType;
+
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -34,9 +37,18 @@ public class Tournament {
     @Enumerated(EnumType.STRING)
     private Estado estado; // en curso, terminada, cancelada
 
+    private String description;
+    private String rules;
+
+    private LocalDateTime createdAt;
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<UserTournament> userTournaments;
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now(); // Set the current date and time
+    }
 
     public Tournament(String name, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos) {
         this.name = name;
@@ -48,7 +60,6 @@ public class Tournament {
 
     public Tournament() {
         this.userTournaments = new ArrayList<>();
-
     }
 
 }

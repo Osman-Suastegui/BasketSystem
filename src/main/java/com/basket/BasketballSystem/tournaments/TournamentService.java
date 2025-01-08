@@ -10,6 +10,9 @@ import com.basket.BasketballSystem.user_tournament.UserTournamentRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -163,6 +166,10 @@ public class TournamentService {
         tournamentDTO.setId(tournament.getId());
         tournamentDTO.setName(tournament.getName());
         tournamentDTO.setSport(tournament.getSport());
+        tournamentDTO.setTournamentType(tournament.getTournamentType());
+        tournamentDTO.setRules(tournament.getRules());
+        tournamentDTO.setDescription(tournament.getDescription());
+
         List<UserDTO> users = tournament.getUserTournaments().stream()
                 .map(ut -> {
                     UserDTO userDTO = new UserDTO();
@@ -178,4 +185,23 @@ public class TournamentService {
 
         return ResponseEntity.ok(tournamentDTO);
     }
+
+    public ResponseEntity<List<TournamentDTO>> getTournaments(Long userId,int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Tournament> tournaments = userTournamentRepository.findDistinctTournamentsByUserId(userId,pageable );
+        List<TournamentDTO> tournamentDTOS = tournaments.stream().map(tournament -> {
+            TournamentDTO tournamentDTO = new TournamentDTO();
+            tournamentDTO.setId(tournament.getId());
+            tournamentDTO.setName(tournament.getName());
+            tournamentDTO.setSport(tournament.getSport());
+            tournamentDTO.setTournamentType(tournament.getTournamentType());
+            tournamentDTO.setRules(tournament.getRules());
+            tournamentDTO.setDescription(tournament.getDescription());
+            return tournamentDTO;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(tournamentDTOS);
+    }
+
+
 }

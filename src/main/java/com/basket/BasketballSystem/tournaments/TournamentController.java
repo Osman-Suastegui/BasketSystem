@@ -5,6 +5,7 @@ import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -85,6 +86,11 @@ public class TournamentController {
     @GetMapping("/getTournament")
     public ResponseEntity<TournamentDTO> getTournamentById(@RequestParam Long tournamentId){
         return tournamentService.getTournamentById(tournamentId);
+    }
+
+    @GetMapping("/getTournaments")
+    public ResponseEntity<List<TournamentDTO>> getTournaments(@RequestParam Long userId, @RequestParam int page, @RequestParam int size){
+        return tournamentService.getTournaments(userId,page,size);
     }
 
 }
