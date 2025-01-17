@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.teams.DTO.TeamDTO;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
 import com.basket.BasketballSystem.tournaments.DTO.UserDTO;
@@ -160,7 +161,7 @@ public class TournamentService {
 
     public ResponseEntity<TournamentDTO> getTournamentById(Long tournamentId) {
 
-        Tournament tournament = tournamentRepository.findTournamentWithUsers(tournamentId);
+        Tournament tournament = tournamentRepository.findTournamentWithUsersAndTeams(tournamentId);
 
         TournamentDTO tournamentDTO = new TournamentDTO();
         tournamentDTO.setId(tournament.getId());
@@ -169,6 +170,14 @@ public class TournamentService {
         tournamentDTO.setTournamentType(tournament.getTournamentType());
         tournamentDTO.setRules(tournament.getRules());
         tournamentDTO.setDescription(tournament.getDescription());
+
+        List<TeamDTO> teams = tournament.getTeamTournaments().stream().map(team -> {
+            TeamDTO teamDTO = new TeamDTO();
+            teamDTO.setId(team.getTeam().getId());
+            teamDTO.setName(team.getEquipo().getName());
+            return teamDTO;
+        }).toList();
+        tournamentDTO.setTeams(teams);
 
         List<UserDTO> users = tournament.getUserTournaments().stream()
                 .map(ut -> {

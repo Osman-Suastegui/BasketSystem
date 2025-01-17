@@ -65,6 +65,8 @@ public class SecurityConfiguration {
             "/ws-basket/**",
             "/api/test/**",
             "/tournaments/**",
+            "/teams/**",
+            "/team-tournament-links/**"
 
     };
     @Bean

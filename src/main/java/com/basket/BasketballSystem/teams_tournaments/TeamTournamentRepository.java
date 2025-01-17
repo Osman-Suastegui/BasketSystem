@@ -32,6 +32,15 @@ public interface TeamTournamentRepository extends JpaRepository<TeamTournament, 
             @Param("claveTemporada") Long claveTemporada
     );
 
+    @Query("""
+        SELECT tt
+        FROM TeamTournament tt
+        WHERE tt.tournament.id = :tournamentId
+          AND tt.team.id = :teamId
+    """)
+    TeamTournament findIdByTournamentIdAndTeamId(@Param("tournamentId") Long tournamentId,
+                                       @Param("teamId") Long teamId);
+
 
 
 

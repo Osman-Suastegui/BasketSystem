@@ -44,17 +44,20 @@ public class Team {
         return name;
     }
 
+    public void setName(@NotNull @Size(min = 2, max = 30) String name) {
+        this.name = name;
+    }
+
+    public void setAdmin_equipo(Usuario admin_equipo) {
+        this.admin_equipo = admin_equipo;
+    }
+
     public String getNombre_Admin_equipo() {
         return admin_equipo.getName();
     }
     public String getUsuario_Admin_equipo() {
         return admin_equipo.getUsuario();
     }
-
-    public Usuario getAdmin_equipo() {
-        return admin_equipo;
-    }
-
     public List<TeamPlayer> getJugadores() {
         return jugadores;
     }
@@ -78,4 +81,6 @@ public class Team {
     public void setLogo(String logo) {
         this.logo = logo;
     }
+
+
 }
