@@ -50,4 +50,19 @@ public class TeamTournamentLinkService {
     }
 
 
+    public boolean validateLink(Long teamId, Long tournamentId, String token) {
+        List<TeamTournamentLink> links =  linkRepository.findLinksByTeamAndTournament(teamId, tournamentId);
+
+        if (links == null || links.isEmpty()) {
+            return false;
+        }
+        // Loop through the links list and compare the token
+        for (TeamTournamentLink link : links) {
+            if (link.getToken().equals(token)) {
+                return true;  // Token matches, return true
+            }
+        }
+
+        return false;
+    }
 }

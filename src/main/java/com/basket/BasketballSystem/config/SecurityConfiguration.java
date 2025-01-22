@@ -66,7 +66,9 @@ public class SecurityConfiguration {
             "/api/test/**",
             "/tournaments/**",
             "/teams/**",
-            "/team-tournament-links/**"
+            "/team-tournament-links/**",
+            "/players/**"
+
 
     };
     @Bean

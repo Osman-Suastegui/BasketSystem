@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.usuarios;
 
+import com.basket.BasketballSystem.players.Player;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -58,6 +59,8 @@ public class Usuario implements UserDetails {
     @OneToMany(mappedBy = "admin_equipo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Team> teams;
 
+    @OneToOne(mappedBy = "user") // The inverse side of the relationship, specifying the owning side (`Player`)
+    private Player player;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
