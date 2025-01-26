@@ -27,3 +27,29 @@ jobs:
     
     - name: Push Docker image
       run: docker push ${{secrets.DOCKER_USERNAME}}/tournament-management-back
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Set up SSH to Connect to EC2
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+    # Step 2: Upload Docker Compose File to EC2
+    - name: Upload Docker Compose File
+      run: |
+        scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/path/to/docker-compose/directory/docker-compose.yml
+
+    # Step 3: Deploy Services on EC2
+    - name: Deploy Backend and Database
+      run: |
+        ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
+          cd /path/to/docker-compose/directory
+          docker-compose pull
+          docker-compose down
+          docker-compose up -d
+        EOF
