@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.teams;
 
+import com.basket.BasketballSystem.teams.DTO.TeamDTO;
 import com.basket.BasketballSystem.teams_players.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.teams_players.TeamPlayer;
 import com.basket.BasketballSystem.usuarios.Usuario;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/Equipo")
+@RequestMapping("/teams")
 
 public class TeamController {
     TeamService teamService;
@@ -39,6 +40,12 @@ public class TeamController {
     public ResponseEntity<Map<String, Object>> crearEquipo(@RequestBody Team team) {
 
         return teamService.crearEquipo(team);
+    }
+
+    @PostMapping("/createTeamInTournament")
+    public ResponseEntity<Team> createTeamInTournament(@RequestBody TeamDTO team) {
+        System.out.println(team.toString());
+        return teamService.createTeamInTournament(team);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")

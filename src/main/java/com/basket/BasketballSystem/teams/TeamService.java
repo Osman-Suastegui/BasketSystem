@@ -2,14 +2,20 @@ package com.basket.BasketballSystem.teams;
 
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.teams.DTO.TeamDTO;
 import com.basket.BasketballSystem.teams_players.DTO.JugadoresEquipoDTO;
 import com.basket.BasketballSystem.teams_players.TeamPlayer;
 import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
 
+import com.basket.BasketballSystem.teams_tournaments.TeamTournament;
+import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
+import com.basket.BasketballSystem.tournaments.Tournament;
+import com.basket.BasketballSystem.tournaments.TournamentRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +25,8 @@ import java.util.*;
 public class TeamService {
     @Autowired
     TeamRepository teamRepository;
-
-
+    @Autowired
+    TeamTournamentRepository teamTournamentRepository;
     @Autowired
     UsuarioRepository usuarioRepository;
 
@@ -31,6 +37,8 @@ public class TeamService {
 
     @Autowired
     TeamPlayerRepository teamPlayerRepository;
+    @Autowired
+    TournamentRepository tournamentRepository;
 
 
     public Team obtenerEquipoAdminEquipo(String idAdminEquipo){
@@ -159,10 +167,28 @@ public class TeamService {
             return jugadores;
     }
 
+    @Transactional
+    public ResponseEntity<Team> createTeamInTournament(TeamDTO team) {
+        Usuario createdBy = null;
+        if(team.getCreatedById() != null){
+             createdBy = usuarioRepository.findById(team.getCreatedById())
+                    .orElseThrow(()-> new RuntimeException("User not found"));
+        }
+        Tournament tournament = tournamentRepository.findById(team.getTournamentId())
+                .orElseThrow(()-> new RuntimeException("Tournament not found"));
 
+        Team newTeam = new Team();
+        newTeam.setName(team.getName());
+        if(createdBy != null){
+            newTeam.setAdmin_equipo(createdBy);
+        }
 
+        Team savedTeam = teamRepository.save(newTeam);
 
-
-
-
+        TeamTournament teamTournament = new TeamTournament();
+        teamTournament.setTeam(savedTeam);
+        teamTournament.setTournament(tournament);
+        teamTournamentRepository.save(teamTournament);
+        return ResponseEntity.ok(savedTeam);
+    }
 }

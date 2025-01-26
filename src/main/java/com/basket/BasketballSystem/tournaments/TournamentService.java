@@ -1,6 +1,7 @@
 package com.basket.BasketballSystem.tournaments;
 
 import com.basket.BasketballSystem.exceptions.BadRequestException;
+import com.basket.BasketballSystem.teams.DTO.TeamDTO;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
 import com.basket.BasketballSystem.tournaments.DTO.UserDTO;
@@ -10,6 +11,9 @@ import com.basket.BasketballSystem.user_tournament.UserTournamentRepository;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -157,12 +161,24 @@ public class TournamentService {
 
     public ResponseEntity<TournamentDTO> getTournamentById(Long tournamentId) {
 
-        Tournament tournament = tournamentRepository.findTournamentWithUsers(tournamentId);
+        Tournament tournament = tournamentRepository.findTournamentWithUsersAndTeams(tournamentId);
 
         TournamentDTO tournamentDTO = new TournamentDTO();
         tournamentDTO.setId(tournament.getId());
         tournamentDTO.setName(tournament.getName());
         tournamentDTO.setSport(tournament.getSport());
+        tournamentDTO.setTournamentType(tournament.getTournamentType());
+        tournamentDTO.setRules(tournament.getRules());
+        tournamentDTO.setDescription(tournament.getDescription());
+
+        List<TeamDTO> teams = tournament.getTeamTournaments().stream().map(team -> {
+            TeamDTO teamDTO = new TeamDTO();
+            teamDTO.setId(team.getTeam().getId());
+            teamDTO.setName(team.getEquipo().getName());
+            return teamDTO;
+        }).toList();
+        tournamentDTO.setTeams(teams);
+
         List<UserDTO> users = tournament.getUserTournaments().stream()
                 .map(ut -> {
                     UserDTO userDTO = new UserDTO();
@@ -178,4 +194,23 @@ public class TournamentService {
 
         return ResponseEntity.ok(tournamentDTO);
     }
+
+    public ResponseEntity<List<TournamentDTO>> getTournaments(Long userId,int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Tournament> tournaments = userTournamentRepository.findDistinctTournamentsByUserId(userId,pageable );
+        List<TournamentDTO> tournamentDTOS = tournaments.stream().map(tournament -> {
+            TournamentDTO tournamentDTO = new TournamentDTO();
+            tournamentDTO.setId(tournament.getId());
+            tournamentDTO.setName(tournament.getName());
+            tournamentDTO.setSport(tournament.getSport());
+            tournamentDTO.setTournamentType(tournament.getTournamentType());
+            tournamentDTO.setRules(tournament.getRules());
+            tournamentDTO.setDescription(tournament.getDescription());
+            return tournamentDTO;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(tournamentDTOS);
+    }
+
+
 }

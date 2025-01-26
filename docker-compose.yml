@@ -1,41 +1,28 @@
-version: '3.8'
-
 services:
   backend:
-    image: osmansuastegui/tnt:backend  # Use the Docker Hub image for backend
+    image: osmansuastegui/tournament-management-back  # Use the Docker Hub image for backend
     container_name: backend
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/basket
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_PASSWORD: osman
     depends_on:
       - db
-    networks:
-      - app-network
 
   db:
-    image: osmansuastegui/tnt:13-alpine  # Use the Docker Hub image for PostgreSQL
+    image: postgres:14-alpine
     container_name: db
     environment:
       POSTGRES_DB: basket
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: osman
     ports:
       - "5432:5432"
-    networks:
-      - app-network
+    volumes:
+      - db_data:/var/lib/postgresql/data
 
-  frontend:
-    image: osmansuastegui/tnt:frontend  # Use the Docker Hub image for frontend
-    container_name: frontend
-    ports:
-      - "80:80"  # Map host port 80 to container port 80 (or adjust as needed)
-    networks:
-      - app-network
+volumes:
+  db_data:
 
-networks:
-  app-network:
-    name: app-network  # Explicitly set the network name here
-    driver: bridge

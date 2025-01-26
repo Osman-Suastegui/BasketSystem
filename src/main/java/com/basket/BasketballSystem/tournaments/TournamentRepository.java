@@ -21,9 +21,14 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     @Query(value = "UPDATE temporadas SET estado = :estado WHERE id = :temporadaId", nativeQuery = true)
     void updateTemporadaEstado(@Param("temporadaId") Long temporadaId, @Param("estado") String estado);
 
-    @Query("SELECT t FROM Tournament t " +
-            "JOIN FETCH t.userTournaments ut " +
-            "JOIN FETCH ut.user u " +
-            "WHERE t.id = :tournamentId")
-    Tournament findTournamentWithUsers(@Param("tournamentId") Long tournamentId);
+    @Query("""
+           SELECT DISTINCT t 
+           FROM Tournament t
+           LEFT JOIN FETCH t.userTournaments ut
+           LEFT JOIN FETCH ut.user u
+           LEFT JOIN FETCH t.teamTournaments tt
+           LEFT JOIN FETCH tt.team
+           WHERE t.id = :tournamentId
+           """)
+    Tournament findTournamentWithUsersAndTeams(@Param("tournamentId") Long tournamentId);
 }
