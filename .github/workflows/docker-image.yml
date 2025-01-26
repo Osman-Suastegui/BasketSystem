@@ -21,7 +21,7 @@ jobs:
       with:
         username: ${{secrets.DOCKER_USERNAME}}
         password: ${{secrets.DOCKER_PASSWORD}}
-
+    
     - name: Build Docker image
       run: docker build -t ${{ secrets.DOCKER_USERNAME }}/tournament-management-back -f Dockerfile .
     
@@ -39,10 +39,14 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
 
+    - name: Create directory in server
+      run: |
+            ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} "mkdir -p /home/ec2-user"
+
     # Step 2: Upload Docker Compose File to EC2
     - name: Upload Docker Compose File
       run: |
-        scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/path/to/docker-compose/directory/docker-compose.yml
+        scp -o StrictHostKeyChecking=no docker-compose.yml ec2-user@${{ secrets.EC2_HOST }}:/home/ec2-user/docker-compose.yml
 
     # Step 3: Deploy Services on EC2
     - name: Deploy Backend and Database
