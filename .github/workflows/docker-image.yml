@@ -54,7 +54,7 @@ jobs:
     - name: Deploy Backend and Database
       run: |
         ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_HOST }} << 'EOF'
-          cd /path/to/docker-compose/directory
+          cd /home/ec2-user
           docker-compose pull
           docker-compose down
           docker-compose up -d
