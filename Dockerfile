@@ -23,6 +23,7 @@ WORKDIR /app
 # Copy the JAR file from the build stage
 COPY --from=build /app/target/BasketballSystem-0.0.1-SNAPSHOT.jar app.jar
 
+ENV SPRING_PROFILES_ACTIVE=prod
 # Expose the port that your Spring Boot app uses
 EXPOSE 8080
 

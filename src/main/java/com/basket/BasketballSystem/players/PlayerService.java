@@ -52,6 +52,7 @@ public class PlayerService {
         for (PlayerTournament player: playerTournaments){
             PlayerDTO playerResponseDTO = new PlayerDTO();
             playerResponseDTO.setName(player.getPlayer().getName());
+            playerResponseDTO.setId(player.getId());
             playersResponse.add(playerResponseDTO);
         }
 
