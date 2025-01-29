@@ -3,6 +3,7 @@ package com.basket.BasketballSystem.players;
 import com.basket.BasketballSystem.player_tournament.PlayerTournament;
 import com.basket.BasketballSystem.player_tournament.PlayerTournamentRepository;
 import com.basket.BasketballSystem.players.DTO.PlayerDTO;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournament;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import jakarta.transaction.Transactional;
@@ -58,4 +59,11 @@ public class PlayerService {
 
         return playersResponse;
     }
+
+    public void deletePlayerFromTeamTournament(Long playerId, Long teamId, Long tournamentId) {
+        TeamTournament teamTournament = teamTournamentRepository.findIdByTournamentIdAndTeamId(tournamentId,teamId);
+        playerTournamentRepository.deleteByPlayerIdAndTeamTournamentId(playerId,teamTournament.getId());
+    }
+
+//    params playerId,team,tournamentId
 }

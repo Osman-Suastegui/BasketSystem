@@ -2,7 +2,7 @@ package com.basket.BasketballSystem.players;
 
 import com.basket.BasketballSystem.players.DTO.CreatePlayerInTournamentTeamDTO;
 import com.basket.BasketballSystem.players.DTO.PlayerDTO;
-import org.apache.coyote.Response;
+import com.basket.BasketballSystem.players.DTO.DeletePlayerFromTeamTournamentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,4 +28,12 @@ public class PlayerController {
         List<PlayerDTO> res =  playerService.getPlayersInTournamentTeam(tournamentId,teamId);
         return ResponseEntity.ok(res);
     }
+
+    @DeleteMapping("/deletePlayerFromTeamTournament")
+    public ResponseEntity<Void>  deletePlayerFromTeamTournament(@RequestBody DeletePlayerFromTeamTournamentDTO req){
+
+        playerService.deletePlayerFromTeamTournament(req.getPlayerId(),req.getTeamId(),req.getTournamentId());
+        return ResponseEntity.ok().build();
+    }
+
 }

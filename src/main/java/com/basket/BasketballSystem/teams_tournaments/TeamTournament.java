@@ -3,12 +3,14 @@ package com.basket.BasketballSystem.teams_tournaments;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
 @Table(name = "teams_tournaments")
 public class TeamTournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long id;
 
     @ManyToOne
