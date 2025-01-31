@@ -25,7 +25,6 @@ public class PlayerService {
 
     @Transactional
     public PlayerDTO createPlayerInTournamentTeam(Long tournamentId, Long teamId,String playerName) {
-        System.out.println("player name " + playerName);
 
         TeamTournament teamTournament = teamTournamentRepository.findIdByTournamentIdAndTeamId(tournamentId,teamId);
 
@@ -53,7 +52,7 @@ public class PlayerService {
         for (PlayerTournament player: playerTournaments){
             PlayerDTO playerResponseDTO = new PlayerDTO();
             playerResponseDTO.setName(player.getPlayer().getName());
-            playerResponseDTO.setId(player.getId());
+            playerResponseDTO.setId(player.getPlayer().getId());
             playersResponse.add(playerResponseDTO);
         }
 
