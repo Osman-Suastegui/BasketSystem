@@ -50,17 +50,17 @@ public class TeamService {
 
     }
 
-    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(String nombreEquipo) {
-        if(nombreEquipo == null){
-          throw new BadRequestException("El nombre del equipo no puede ser nulo");
-        }
-        Optional<Team> equipo = teamRepository.findById(nombreEquipo);
-        if(equipo.isPresent()){
-            return equipo.get().getJugadores();
-        }
-
-        return null;
-    }
+//    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(String nombreEquipo) {
+//        if(nombreEquipo == null){
+//          throw new BadRequestException("El nombre del equipo no puede ser nulo");
+//        }
+//        Optional<Team> equipo = teamRepository.findById(nombreEquipo);
+//        if(equipo.isPresent()){
+//            return equipo.get().getJugadores();
+//        }
+//
+//        return null;
+//    }
 
 
     public ResponseEntity<Map<String, Object>> crearEquipo(Team equipo) {
@@ -74,9 +74,9 @@ public class TeamService {
             throw new BadRequestException("El usuario administrador del equipo no puede ser nulo");
         }
 
-        if (teamRepository.findById(equipo.getName()).isPresent()) {
-            throw new BadRequestException("El equipo ya existe");
-        }
+//        if (teamRepository.findById(equipo.getName()).isPresent()) {
+//            throw new BadRequestException("El equipo ya existe");
+//        }
 
 
         teamRepository.save(equipo);

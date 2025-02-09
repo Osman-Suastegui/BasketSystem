@@ -1,4 +1,4 @@
-package com.basket.BasketballSystem.tournaments;
+package com.basket.BasketballSystem.shared;
 
 public enum TournamentType {
     SingleElimination,

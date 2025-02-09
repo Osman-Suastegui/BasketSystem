@@ -1,11 +1,15 @@
 package com.basket.BasketballSystem.matches;
 
+import com.basket.BasketballSystem.matches.DTO.GenerateMatchReq;
+import com.basket.BasketballSystem.matches.DTO.GetMatchesRes;
 import com.basket.BasketballSystem.matches.DTO.PartidoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,4 +152,17 @@ public class PartidoController {
         return partidoService.arbitroIniciaPartidoFecha(idPartido,fecha);
     }
 
+    @PostMapping("/generateMatches")
+    public ResponseEntity<Map<String,Object>> generateMatches(@RequestBody GenerateMatchReq req) {
+        partidoService.generateMatches(req);
+
+        return ResponseEntity.ok(Map.of("message","success"));
+    }
+
+
+    @GetMapping("/matches")
+    public ResponseEntity<List<GetMatchesRes>> generateMatches(@RequestParam Long tournamentId ) {
+        List<GetMatchesRes> matches = partidoService.getMatches(tournamentId);
+        return ResponseEntity.ok(matches);
+    }
 }

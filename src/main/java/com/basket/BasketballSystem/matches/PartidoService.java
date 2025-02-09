@@ -1,5 +1,9 @@
 package com.basket.BasketballSystem.matches;
 
+import com.basket.BasketballSystem.matches.DTO.GenerateMatchReq;
+import com.basket.BasketballSystem.matches.DTO.GetMatchesRes;
+import com.basket.BasketballSystem.matches.DTO.TeamMatchesRes;
+import com.basket.BasketballSystem.shared.TournamentType;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
@@ -11,6 +15,7 @@ import com.basket.BasketballSystem.matches.DTO.PartidoResponse;
 import com.basket.BasketballSystem.tournaments.Estado;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
+import com.basket.BasketballSystem.tournaments.TournamentService;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +49,8 @@ public class PartidoService {
     TeamTournamentRepository teamTournamentRepository;
     @Autowired
     MatchPlayerRepository matchPlayerRepository;
+    @Autowired
+    TournamentRepository tournamentRepository;
 
     public List<Map<String, Object>> obtenerPartidosArbitro(Long idArbitro, String estatusPartido) {
         final int duracionPartido = 40; // 40 minutos dura un partido ??
@@ -377,14 +384,14 @@ public class PartidoService {
                 match.setEquipo1(teams.get(i));
                 match.setEquipo2(teams.get(j));
                 match.setTemporada(t);
-                match.setFase(Fase.REGULAR);
+                match.setFase(1);
                 matches.add(match);
                 if(cantidadEnfrentamientosRegular == 2){
                     match = new Match();
                     match.setEquipo1(teams.get(i));
                     match.setEquipo2(teams.get(j));
                     match.setTemporada(t);
-                    match.setFase(Fase.REGULAR);
+                    match.setFase(1);
                     matches.add(match);
                 }
 
@@ -579,7 +586,7 @@ public class PartidoService {
 
             PartidoResponse partidoResponse = new PartidoResponse();
             partidoResponse.setClavePartido(partido.get().getClavePartido());
-            partidoResponse.setFase(partido.get().getFase().toString());
+            partidoResponse.setFase("2");
             partidoResponse.setFechaInicio(partido.get().getFechaInicio().toString());
             partidoResponse.setEquipo1(partido.get().getEquipo1().getName());
             partidoResponse.setEquipo2(partido.get().getEquipo2().getName());
@@ -863,4 +870,40 @@ public class PartidoService {
         }
     }
 
+    public void generateMatches(GenerateMatchReq req) {
+        TournamentType tournamentType = req.getTournamentType();
+        Long tournamentId = req.getTournamentId();
+        MatchGenerator matchGenerator = null;
+        if(tournamentType == TournamentType.SingleElimination){
+            matchGenerator = new SingleEliminationBracket(partidoRepository,tournamentRepository,teamRepository);
+        }
+
+        if(matchGenerator == null){
+            return;
+        }
+
+        List<Match> generatedMatches = matchGenerator.generateBracket(req.getTournamentId(),req.getTeamIds());
+    }
+
+    public List<GetMatchesRes> getMatches(Long tournamentId) {
+         List<Match>  matches = partidoRepository.findAllByTournamentId(tournamentId);
+
+        return matches.stream()
+                .map(match -> {
+                    GetMatchesRes res = new GetMatchesRes();
+                    res.setId(match.getClavePartido());
+                    if(match.getEquipo1() != null){
+                        res.setTeam1(new TeamMatchesRes(match.getEquipo1().getId(),match.getEquipo1().getName()));
+                    }
+                    if(match.getEquipo2() != null){
+                        res.setTeam2(new TeamMatchesRes(match.getEquipo2().getId(),match.getEquipo2().getName()));
+                    }
+                    res.setRound(match.getFase());
+                    if(match.getNextMatch() != null){
+                        res.setNext(match.getNextMatch().getClavePartido());
+                    }
+                    return res;
+                })
+                .collect(Collectors.toList());
+    }
 }
