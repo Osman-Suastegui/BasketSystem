@@ -35,6 +35,8 @@ public class SecurityConfiguration {
     private static final String[] WHITE_LIST_URL = {"/auth/**","/Partido/**","/usuarios/**","/JugadorPartido/**","/ws-basket/**",
             "/auth/register",
             "/auth/authenticate",
+            "/Partido/**",
+
             "/Partido/obtenerPartidosArbitro",
             "/Partido/obtenerPartidosEquipo",
             "/Partido/obtenerPartido",

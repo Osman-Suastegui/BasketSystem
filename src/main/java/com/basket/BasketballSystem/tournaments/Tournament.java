@@ -1,5 +1,6 @@
 package com.basket.BasketballSystem.tournaments;
 
+import com.basket.BasketballSystem.shared.TournamentType;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournament;
 import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,9 +9,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity

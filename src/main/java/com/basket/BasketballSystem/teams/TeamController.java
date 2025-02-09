@@ -28,12 +28,12 @@ public class TeamController {
     public Team obtenerEquipoAdminEquipo(@RequestParam("idAdminEquipo") String idAdminEquipo) {
         return teamService.obtenerEquipoAdminEquipo(idAdminEquipo);
     }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
-    @GetMapping("/{nombreEquipo}/jugadores")
-    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(@PathVariable String nombreEquipo) {
-        return teamService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
-    }
+//
+//    @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
+//    @GetMapping("/{nombreEquipo}/jugadores")
+//    public List<TeamPlayer> obtenerJugadoresPorNombreDelEquipo(@PathVariable String nombreEquipo) {
+//        return teamService.obtenerJugadoresPorNombreDelEquipo(nombreEquipo);
+//    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN_EQUIPO')")
     @PostMapping("/crearEquipo")

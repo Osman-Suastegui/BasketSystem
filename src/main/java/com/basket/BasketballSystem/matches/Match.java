@@ -28,9 +28,8 @@ public class Match {
     @JoinColumn(name = "team2_id")
     private Team team2;
 
-    @Column(name = "fase")
-    @Enumerated(EnumType.STRING)
-    private Fase fase;
+    @Column(name = "round")
+    private int fase;
 
     @ManyToOne
     @JoinColumn(name = "referee_id")
@@ -41,10 +40,20 @@ public class Match {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Instant fechaInicio;
 
+    public Match getNextMatch() {
+        return nextMatch;
+    }
+
+    public void setNextMatch(Match nextMatch) {
+        this.nextMatch = nextMatch;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "next_match_id")
+    private Match nextMatch;
 
     @Column(name = "ganador")
     private String ganador;
-
     // Getters y setters
 
     public Long getClavePartido() {
@@ -63,7 +72,7 @@ public class Match {
         return team2;
     }
 
-    public Fase getFase() {
+    public int getFase() {
         return fase;
     }
 
@@ -108,7 +117,7 @@ public class Match {
         this.team2 = team2;
     }
 
-    public void setFase(Fase fase) {
+    public void setFase(int fase) {
         this.fase = fase;
     }
 
