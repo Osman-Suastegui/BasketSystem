@@ -17,8 +17,8 @@ public interface TeamTournamentRepository extends JpaRepository<TeamTournament, 
     @Query("SELECT e.team FROM TeamTournament e WHERE e.tournament.id = ?1")
     List<Team> findAllTeamsByTournament(Long idTemporada);
 
-    @Query("SELECT e.team FROM TeamTournament e WHERE e.tournament.id = :temporadaId")
-    List<Team> findTeamsByClaveTemporada(@Param("temporadaId") Long temporadaId);
+    @Query("SELECT e.team FROM TeamTournament e WHERE e.tournament.id = :tournamentId")
+    List<Team> findTeamsByTournamentId(Long tournamentId);
 
 
     @Query(value = "SELECT e.nombre " +

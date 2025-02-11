@@ -11,5 +11,4 @@ import java.util.List;
 public class GenerateMatchReq {
     TournamentType tournamentType;
     Long tournamentId;
-    List<Long> teamIds;
 }

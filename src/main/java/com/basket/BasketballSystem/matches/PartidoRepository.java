@@ -35,4 +35,6 @@ public interface PartidoRepository extends JpaRepository<Match,Long> {
 
 
     List<Match> findAllByTournamentId(Long tournamentId);
+
+    boolean existsByTournamentId(Long tournamentId);
 }

@@ -3,9 +3,9 @@ package com.basket.BasketballSystem.matches;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams.TeamRepository;
+import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
-import com.basket.BasketballSystem.tournaments.TournamentService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,27 +17,29 @@ public class SingleEliminationBracket implements MatchGenerator {
 
     private final PartidoRepository partidoRepository;
     private final TournamentRepository tournamentRepository;
-    private final TeamRepository teamRepository;
-    public SingleEliminationBracket(PartidoRepository partidoRepository, TournamentRepository tournamentRepository, TeamRepository teamRepository) {
+    private final TeamTournamentRepository teamTournamentRepository;
+    public SingleEliminationBracket(PartidoRepository partidoRepository, TournamentRepository tournamentRepository, TeamTournamentRepository teamTournamentRepository) {
         this.partidoRepository = partidoRepository;
         this.tournamentRepository = tournamentRepository;
-        this.teamRepository = teamRepository;
+        this.teamTournamentRepository = teamTournamentRepository;
     }
 
     @Override
-    public List<Match> generateBracket(Long tournamentId,List<Long> teamIds) {
-        if(!canGenerateBracket(teamIds)) throw  new  BadRequestException("invalid size of teams");
+    public List<Match> generateBracket(Long tournamentId) {
         Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
         if(tournament.isEmpty()) throw  new BadRequestException("Tournament not found");
+        boolean exists = partidoRepository.existsByTournamentId(tournamentId);
+        if(exists){
+            throw  new BadRequestException("Matches already exist in the tournament");
+        }
 
-        List<Team> teams = teamRepository.findAllById(teamIds);
-        System.out.println("123");
-        if(teams.size() != teamIds.size()){
-            throw new BadRequestException("teams not found");
+        List<Team> teams = teamTournamentRepository.findTeamsByTournamentId(tournamentId);
+        if(!canGenerateBracket(teams.size()) ){
+            throw new BadRequestException("invalid size of teams");
         }
 //       firstofll create the records in the database and just records empty
 
-        int numMatches = teamIds.size() - 1; // Total matches needed for a single-elimination bracket
+        int numMatches = teams.size() - 1; // Total matches needed for a single-elimination bracket
         List<Match> matches = new ArrayList<>();
 
         // Create empty match slots (finals → semifinals → quarterfinals, etc.)
@@ -99,9 +101,8 @@ public class SingleEliminationBracket implements MatchGenerator {
         return List.of();
     }
 
-    private boolean canGenerateBracket(List<Long> teamIds) {
-        int size = teamIds.size();
-        return size == 2 || size == 4 || size == 8 || size == 16 || size == 32 || size == 64;
+    private boolean canGenerateBracket(int teamSize) {
+        return teamSize == 2 || teamSize == 4 || teamSize == 8 || teamSize == 16 || teamSize == 32 || teamSize == 64;
     }
 
     private int determinePhase(int matchIndex) {
