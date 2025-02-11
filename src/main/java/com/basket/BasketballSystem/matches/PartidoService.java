@@ -48,8 +48,6 @@ public class PartidoService {
     @Autowired
     TeamTournamentRepository teamTournamentRepository;
     @Autowired
-    MatchPlayerRepository matchPlayerRepository;
-    @Autowired
     TournamentRepository tournamentRepository;
 
     public List<Map<String, Object>> obtenerPartidosArbitro(Long idArbitro, String estatusPartido) {
@@ -875,14 +873,14 @@ public class PartidoService {
         Long tournamentId = req.getTournamentId();
         MatchGenerator matchGenerator = null;
         if(tournamentType == TournamentType.SingleElimination){
-            matchGenerator = new SingleEliminationBracket(partidoRepository,tournamentRepository,teamRepository);
+            matchGenerator = new SingleEliminationBracket(partidoRepository,tournamentRepository,teamTournamentRepository);
         }
 
         if(matchGenerator == null){
             return;
         }
 
-        List<Match> generatedMatches = matchGenerator.generateBracket(req.getTournamentId(),req.getTeamIds());
+        List<Match> generatedMatches = matchGenerator.generateBracket(req.getTournamentId());
     }
 
     public List<GetMatchesRes> getMatches(Long tournamentId) {

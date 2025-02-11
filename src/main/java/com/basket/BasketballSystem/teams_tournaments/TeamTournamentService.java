@@ -67,7 +67,7 @@ public class TeamTournamentService {
             throw new BadRequestException("La temporada no existe");
         }
 
-        List<Team> teams = teamTournamentRepository.findTeamsByClaveTemporada(temporadaId);
+        List<Team> teams = teamTournamentRepository.findTeamsByTournamentId(temporadaId);
 
 
 
