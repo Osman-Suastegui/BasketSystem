@@ -7,10 +7,7 @@ import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SingleEliminationBracket implements MatchGenerator {
@@ -26,104 +23,101 @@ public class SingleEliminationBracket implements MatchGenerator {
 
     @Override
     public List<Match> generateBracket(Long tournamentId) {
-        Optional<Tournament> tournament = tournamentRepository.findById(tournamentId);
-        if(tournament.isEmpty()) throw  new BadRequestException("Tournament not found");
-        boolean exists = partidoRepository.existsByTournamentId(tournamentId);
-        if(exists){
-            throw  new BadRequestException("Matches already exist in the tournament");
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new BadRequestException("Tournament not found"));
+
+        if (partidoRepository.existsByTournamentId(tournamentId)) {
+            throw new BadRequestException("Matches already exist in the tournament");
         }
 
         List<Team> teams = teamTournamentRepository.findTeamsByTournamentId(tournamentId);
         if(!canGenerateBracket(teams.size()) ){
             throw new BadRequestException("invalid size of teams");
         }
-//       firstofll create the records in the database and just records empty
-
-        int numMatches = teams.size() - 1; // Total matches needed for a single-elimination bracket
-        List<Match> matches = new ArrayList<>();
-
         // Create empty match slots (finals → semifinals → quarterfinals, etc.)
+        List<Match> matches = createEmptyMatches(teams.size(), tournament);
+
+        // once the matches have ids when can link one match to antoher by id;
+        Map<Integer, List<Match>> roundToMatches = linkMatchRounds(matches);
+
+        // the matches are linked but we need to fill up the matches with teams in the last level
+        int lastPhase = determinePhase(teams.size());
+        List<Match> matchesLastRound = roundToMatches.get(lastPhase);
+        assignTeamsToLastRound(matchesLastRound,teams);
+
+        matches = flattenRounds(roundToMatches);
+
+        return partidoRepository.saveAll(matches);
+    }
+
+    private List<Match> createEmptyMatches(int teamCount, Tournament tournament) {
+        int numMatches = teamCount - 1;
+        List<Match> matches = new ArrayList<>();
         for (int i = 0; i < numMatches; i++) {
             Match match = new Match();
-            match.setTemporada(tournament.get());
+            match.setTemporada(tournament);
             match.setFase(determinePhase(i));
-            matches.add(partidoRepository.save(match));
+            matches.add(match);
         }
-        HashMap<Integer, List<Match>> roundToMatches = new HashMap<Integer, List<Match>>();
-        List<Match> matchesByRoundCurr = new ArrayList<>();
-        List<Match> matchesByRoundPrev = new ArrayList<>();
+        return partidoRepository.saveAll(matches);
+    }
 
-        for (int i = 1; i <= determinePhase(numMatches - 1); i++) {
-            int finalI = i;
-            matchesByRoundCurr = matches.stream()
-                    .filter(match -> match.getFase() == finalI)  // Compare phase as an int
+    private Map<Integer, List<Match>> linkMatchRounds(List<Match> matches) {
+        Map<Integer, List<Match>> roundToMatches = new HashMap<>();
+        List<Match> previousRoundMatches = new ArrayList<>();
+
+        // Assuming determinePhase returns the round number for a match index
+        int maxPhase = determinePhase(matches.size() - 1);
+        for (int phase = 1; phase <= maxPhase; phase++) {
+            int finalPhase = phase;
+            List<Match> currentRoundMatches = matches.stream()
+                    .filter(match -> match.getFase() == finalPhase)
                     .collect(Collectors.toList());
-            roundToMatches.put(i, matchesByRoundCurr);
+            roundToMatches.put(phase, currentRoundMatches);
 
-            if (i == 1){
-                matchesByRoundPrev = matchesByRoundCurr;
-                continue;
+            if (phase > 1 && !previousRoundMatches.isEmpty()) {
+                for (int i = 0, j = 0; i < currentRoundMatches.size() && j < previousRoundMatches.size(); i += 2, j++) {
+                    currentRoundMatches.get(i).setNextMatch(previousRoundMatches.get(j));
+                    currentRoundMatches.get(i + 1).setNextMatch(previousRoundMatches.get(j));
+                }
             }
-
-            int indexPrev = 0;
-            for(int indexCurr = 0;indexCurr < matchesByRoundCurr.size();indexCurr+=2){
-                Match match1 = matchesByRoundCurr.get(indexCurr);
-                Match match2 = matchesByRoundCurr.get(indexCurr+1);
-                match1.setNextMatch(matchesByRoundPrev.get(indexPrev));
-                match2.setNextMatch(matchesByRoundPrev.get(indexPrev));
-                indexPrev++;
-            }
-
-            roundToMatches.put(i,matchesByRoundCurr);
-            matchesByRoundPrev = matchesByRoundCurr;
+            previousRoundMatches = currentRoundMatches;
         }
-//       now matchesByRoundCurr has the last level we can save the teamIds;
-        int indexTeams = 0;
-        for(int indexCurr = 0;indexCurr < matchesByRoundCurr.size();indexCurr+=2){
-            Match match1 = matchesByRoundCurr.get(indexCurr);
-            Match match2 = matchesByRoundCurr.get(indexCurr+1);
-            match1.setEquipo1(teams.get(indexTeams));
-            match1.setEquipo2(teams.get(indexTeams + 1));
-            match2.setEquipo1(teams.get(indexTeams + 2));
-            match2.setEquipo2(teams.get(indexTeams + 3));
-            indexTeams += 4;
-        }
-        matches = roundToMatches.values()
-                .stream()
-                .flatMap(List::stream) // Flatten lists into a single stream
-                .collect(Collectors.toList());
-        for (int i = 0; i < matches.size(); i++) {
-            if(matches.get(i).getNextMatch() == null) continue;
-        }
-        partidoRepository.saveAll(matches);
 
+        return roundToMatches;
+    }
 
-        return List.of();
+    private void assignTeamsToLastRound(List<Match> matches, List<Team> teams) {
+        // Assume firstRoundMatches size is even and teams list is in proper order
+        int teamIndex = 0;
+        for (int i = 0; i < matches.size(); i += 2) {
+            Match match1 = matches.get(i);
+            Match match2 = matches.get(i + 1);
+            match1.setEquipo1(teams.get(teamIndex));
+            match1.setEquipo2(teams.get(teamIndex + 1));
+            match2.setEquipo1(teams.get(teamIndex + 2));
+            match2.setEquipo2(teams.get(teamIndex + 3));
+            teamIndex += 4;
+        }
     }
 
     private boolean canGenerateBracket(int teamSize) {
         return teamSize == 2 || teamSize == 4 || teamSize == 8 || teamSize == 16 || teamSize == 32 || teamSize == 64;
     }
 
+    private List<Match> flattenRounds(Map<Integer, List<Match>> rounds) {
+        return rounds.values().stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
+
     private int determinePhase(int matchIndex) {
-        if(matchIndex == 0 ){
-            return 1;
-        }
-        if(matchIndex <= 2){
-            return 2;
-        }
-        if(matchIndex <= 6){
-            return 3;
-        }
-        if(matchIndex <= 14){
-            return 4;
-        }
-        if(matchIndex <= 30){
-            return 5;
-        }
-        if(matchIndex <= 62){
-            return 6;
-        }
+        if (matchIndex == 0) return 1;
+        if (matchIndex <= 2) return 2;
+        if (matchIndex <= 6) return 3;
+        if (matchIndex <= 14) return 4;
+        if (matchIndex <= 30) return 5;
+        if (matchIndex <= 62) return 6;
         return 0;
     }
 
