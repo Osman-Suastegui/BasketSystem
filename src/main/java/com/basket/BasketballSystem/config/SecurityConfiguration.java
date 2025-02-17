@@ -36,7 +36,7 @@ public class SecurityConfiguration {
             "/auth/register",
             "/auth/authenticate",
             "/Partido/**",
-
+            "/TeamTournament/**",
             "/Partido/obtenerPartidosArbitro",
             "/Partido/obtenerPartidosEquipo",
             "/Partido/obtenerPartido",
