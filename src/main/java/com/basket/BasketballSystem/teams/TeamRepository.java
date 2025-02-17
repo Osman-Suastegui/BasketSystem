@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 @Repository
-public interface TeamRepository extends JpaRepository<Team, String> {
+public interface TeamRepository extends JpaRepository<Team, Long> {
 
     @Query("SELECT e FROM Team e WHERE e.admin_equipo.usuario = :idAdminEquipo")
     Optional<Team> findByidAdminEquipo(@Param("idAdminEquipo") String idAdminEquipo);

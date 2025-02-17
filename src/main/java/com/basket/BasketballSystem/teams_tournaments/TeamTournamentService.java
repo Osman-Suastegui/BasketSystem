@@ -1,5 +1,7 @@
 package com.basket.BasketballSystem.teams_tournaments;
 
+import com.basket.BasketballSystem.links.TeamTournamentLink;
+import com.basket.BasketballSystem.links.TeamTournamentLinkRepository;
 import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.tournaments.Tournament;
@@ -16,7 +18,8 @@ public class TeamTournamentService {
 
     @Autowired
     TournamentRepository TemporadaRepository;
-
+    @Autowired
+    TeamTournamentLinkRepository teamTournamentLinkRepository;
 
     @Autowired
     TeamTournamentRepository teamTournamentRepository;
@@ -45,15 +48,15 @@ public class TeamTournamentService {
     }
 
     @Transactional
-    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(TeamTournament teamTournament) {
+    public ResponseEntity<Map<String, Object>> eliminarEquipoTemporada(TeamTournament teamTournamentReq) {
+        Long tournamentId = teamTournamentReq.getTemporada().getId();
+        Long teamId = teamTournamentReq.getEquipo().getId();
 
-        Long claveTemporada = teamTournament.getTemporada().getId();
-        String nombreEquipo = teamTournament.getEquipo().getName();
-
-
-        teamTournamentRepository.deleteByTournamentIdAndTeamName(claveTemporada, nombreEquipo);
-
-            teamTournamentRepository.delete(teamTournament);
+        TeamTournament teamTournament = teamTournamentRepository.findIdByTournamentIdAndTeamId(tournamentId,teamId);
+        teamTournamentLinkRepository.deleteByTeamTournamentId(teamTournament.getId());
+        teamTournamentRepository.deleteById(teamTournament.getId());
+//
+//        teamTournamentRepository.delete(teamTournament);
         Map<String, Object> EquipoMap = new HashMap<>();
         EquipoMap.put("message", "Equipo eliminado exitosamente.");
             return ResponseEntity.ok(EquipoMap);
@@ -67,7 +70,7 @@ public class TeamTournamentService {
             throw new BadRequestException("La temporada no existe");
         }
 
-        List<Team> teams = teamTournamentRepository.findTeamsByClaveTemporada(temporadaId);
+        List<Team> teams = teamTournamentRepository.findTeamsByTournamentId(temporadaId);
 
 
 

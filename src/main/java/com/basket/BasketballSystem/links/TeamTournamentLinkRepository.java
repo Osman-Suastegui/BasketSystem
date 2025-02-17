@@ -16,4 +16,6 @@ public interface TeamTournamentLinkRepository extends JpaRepository<TeamTourname
 
     @Query("SELECT ttl FROM TeamTournamentLink ttl WHERE ttl.teamTournament.team.id = :teamId AND ttl.teamTournament.tournament.id = :tournamentId")
     List<TeamTournamentLink> findLinksByTeamAndTournament(@Param("teamId") Long teamId, @Param("tournamentId") Long tournamentId);
+
+    void deleteByTeamTournamentId(Long id);
 }

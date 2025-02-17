@@ -3,6 +3,7 @@ package com.basket.BasketballSystem.players;
 import com.basket.BasketballSystem.player_tournament.PlayerTournament;
 import com.basket.BasketballSystem.player_tournament.PlayerTournamentRepository;
 import com.basket.BasketballSystem.players.DTO.PlayerDTO;
+import com.basket.BasketballSystem.teams.Team;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournament;
 import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import jakarta.transaction.Transactional;
@@ -24,7 +25,6 @@ public class PlayerService {
 
     @Transactional
     public PlayerDTO createPlayerInTournamentTeam(Long tournamentId, Long teamId,String playerName) {
-        System.out.println("player name " + playerName);
 
         TeamTournament teamTournament = teamTournamentRepository.findIdByTournamentIdAndTeamId(tournamentId,teamId);
 
@@ -52,10 +52,17 @@ public class PlayerService {
         for (PlayerTournament player: playerTournaments){
             PlayerDTO playerResponseDTO = new PlayerDTO();
             playerResponseDTO.setName(player.getPlayer().getName());
-            playerResponseDTO.setId(player.getId());
+            playerResponseDTO.setId(player.getPlayer().getId());
             playersResponse.add(playerResponseDTO);
         }
 
         return playersResponse;
     }
+
+    public void deletePlayerFromTeamTournament(Long playerId, Long teamId, Long tournamentId) {
+        TeamTournament teamTournament = teamTournamentRepository.findIdByTournamentIdAndTeamId(tournamentId,teamId);
+        playerTournamentRepository.deleteByPlayerIdAndTeamTournamentId(playerId,teamTournament.getId());
+    }
+
+//    params playerId,team,tournamentId
 }

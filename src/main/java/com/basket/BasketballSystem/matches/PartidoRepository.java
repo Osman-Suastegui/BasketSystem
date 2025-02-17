@@ -26,12 +26,15 @@ public interface PartidoRepository extends JpaRepository<Match,Long> {
     List<Match> findAllByTournament(@Param("idTemporada") Long idTemporada);
 
 
-    @Query("SELECT p FROM Match p WHERE p.tournament.id = :idTemporada AND p.fase = :fase")
-    List<Match> findAllByTournamentAndFase(Long idTemporada, Fase fase);
-
+//    @Query("SELECT p FROM Match p WHERE p.tournament.id = :idTemporada AND p.fase = :fase")
+//    List<Match> findAllByTournamentAndFase(Long idTemporada, Fase fase);
+//
 
     @Query("SELECT p.arbitro.usuario FROM Match p WHERE p.id = :idPartido")
     String findArbitroById(Long idPartido);
 
 
+    List<Match> findAllByTournamentId(Long tournamentId);
+
+    boolean existsByTournamentId(Long tournamentId);
 }
