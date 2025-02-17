@@ -18,6 +18,7 @@ import com.basket.BasketballSystem.tournaments.TournamentRepository;
 import com.basket.BasketballSystem.tournaments.TournamentService;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -867,7 +868,7 @@ public class PartidoService {
             throw new BadRequestException("Error al analizar la fecha y hora.");
         }
     }
-
+    @Transactional
     public void generateMatches(GenerateMatchReq req) {
         TournamentType tournamentType = req.getTournamentType();
         Long tournamentId = req.getTournamentId();
@@ -880,7 +881,7 @@ public class PartidoService {
             return;
         }
 
-        List<Match> generatedMatches = matchGenerator.generateBracket(req.getTournamentId());
+        List<Match> generatedMatches = matchGenerator.generateBracket(tournamentId);
     }
 
     public List<GetMatchesRes> getMatches(Long tournamentId) {
