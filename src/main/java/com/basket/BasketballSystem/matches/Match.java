@@ -6,6 +6,8 @@ import com.basket.BasketballSystem.usuarios.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 
@@ -52,10 +54,15 @@ public class Match {
     @JoinColumn(name = "next_match_id")
     private Match nextMatch;
 
-    @Column(name = "ganador")
-    private String ganador;
+    @ManyToOne
+    @JoinColumn(name = "winner_id")
+    @Getter
+    @Setter
+    private Team winner;
     // Getters y setters
-
+    @Getter
+    @Setter
+    private boolean isDraw = false;
     public Long getClavePartido() {
         return id;
     }
@@ -83,19 +90,7 @@ public class Match {
     public Instant getFechaInicio() {
         return fechaInicio;
     }
-    public String getGanador() {
-        if(ganador == null) return "";
-        return ganador;
-    }
-    @JsonIgnore
-    public String obtenerEquipoGanador(){
-        return ganador;
-    }
 
-
-    public void setGanador(String ganador) {
-        this.ganador = ganador;
-    }
 
     public void setArbitro(Usuario arbitro) {
         this.arbitro = arbitro;

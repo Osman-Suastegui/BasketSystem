@@ -12,4 +12,5 @@ public class GetMatchesRes {
     TeamMatchesRes team1;
     TeamMatchesRes team2;
     Long next;
+    Team Winner;
 }

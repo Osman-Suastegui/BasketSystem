@@ -10,12 +10,10 @@ import com.basket.BasketballSystem.teams_tournaments.TeamTournamentRepository;
 import com.basket.BasketballSystem.exceptions.BadRequestException;
 import com.basket.BasketballSystem.teams_players.TeamPlayer;
 import com.basket.BasketballSystem.teams_players.TeamPlayerRepository;
-import com.basket.BasketballSystem.matches_player.MatchPlayerRepository;
 import com.basket.BasketballSystem.matches.DTO.PartidoResponse;
 import com.basket.BasketballSystem.tournaments.Estado;
 import com.basket.BasketballSystem.tournaments.Tournament;
 import com.basket.BasketballSystem.tournaments.TournamentRepository;
-import com.basket.BasketballSystem.tournaments.TournamentService;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import com.basket.BasketballSystem.usuarios.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -164,7 +162,7 @@ public class PartidoService {
             p.put("temporadaId", match.getTemporada().getName());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
-            p.put("ganador", match.getGanador());
+            p.put("ganador", match.getWinner());
 
             if (fechaInicioPartido.isBefore(horaAcutal) && fechaEndPartido.isAfter(horaAcutal)){
                 p.put("estatus", "enCurso");
@@ -219,7 +217,7 @@ public class PartidoService {
 
         // Filtrar partidos que aún no tienen un ganador (futuros o en curso)
         List<Match> partidosFiltrados = matches.stream()
-                .filter(partido -> partido.getGanador().isEmpty())
+                .filter(partido -> partido.getWinner() == null)
                 .collect(Collectors.toList());
 
         // Ordenar partidos por fecha de inicio
@@ -240,7 +238,7 @@ public class PartidoService {
             p.put("temporadaId", match.getTemporada().getId());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
-            p.put("ganador", match.getGanador());
+            p.put("ganador", match.getWinner());
             partidosMap.add(p);
         }
 
@@ -267,12 +265,12 @@ public class PartidoService {
             p.put("temporadaId", match.getTemporada().getId());
             p.put("equipo1", match.getEquipo1().getName());
             p.put("equipo2", match.getEquipo2().getName());
-            p.put("ganador", match.getGanador());
+            p.put("ganador", match.getWinner());
             p.put("fase", match.getFase());
-            if (match.getGanador().isEmpty()) {
+            if (match.getWinner() == null) {
                 p.put("ganador", "Sin concluir");
             } else {
-                p.put("ganador", match.getGanador());
+                p.put("ganador", match.getWinner());
             }
             partidosMap.add(p);
         }
@@ -488,12 +486,12 @@ public class PartidoService {
         }
         List<Match> matches = partidoRepository.findAllByTournament(idTemporada);
         for(Match p : matches){
-            if(p.getGanador().length() != 0 ){
-                if(p.getGanador().equals("EMPATE")){
+            if(p.isDraw()){
+                if(p.getWinner().equals("EMPATE")){
                     equiposPuntos.put(p.getEquipo1().getName(),equiposPuntos.get(p.getEquipo1().getName())+1);
                     equiposPuntos.put(p.getEquipo2().getName(),equiposPuntos.get(p.getEquipo2().getName())+1);
                 }
-                else if(p.getGanador().equals(p.getEquipo1().getName())){
+                else if(p.getWinner().equals(p.getEquipo1().getName())){
                     equiposPuntos.put(p.getEquipo1().getName(),equiposPuntos.get(p.getEquipo1().getName())+3);
                 }else{
                     equiposPuntos.put(p.getEquipo2().getName(),equiposPuntos.get(p.getEquipo2().getName())+3);
@@ -525,16 +523,16 @@ public class PartidoService {
         }
 
         for (Match p : matches) {
-            if (!p.getGanador().isEmpty()) {
+            if (p.getWinner() != null ) {
                 // Actualizar partidos jugados para ambos equipos
                 actualizarContadores(equiposInfo, p.getEquipo1().getName(), "jugados");
                 actualizarContadores(equiposInfo, p.getEquipo2().getName(), "jugados");
 
-                if (p.getGanador().equals("EMPATE")) {
+                if (p.getWinner().equals("EMPATE")) {
                     // Actualizar partidos empatados para ambos equipos
                     actualizarContadores(equiposInfo, p.getEquipo1().getName(), "puntosTemporada");
                     actualizarContadores(equiposInfo, p.getEquipo2().getName(), "puntosTemporada");
-                } else if (p.getGanador().equals(p.getEquipo1().getName())) {
+                } else if (p.getWinner().equals(p.getEquipo1().getName())) {
                     // Actualizar partidos ganados para el equipo 1
                     actualizarContadores(equiposInfo, p.getEquipo1().getName(), "puntosTemporada", 3);
                     actualizarContadores(equiposInfo, p.getEquipo1().getName(), "ganados");
@@ -590,7 +588,7 @@ public class PartidoService {
             partidoResponse.setEquipo1(partido.get().getEquipo1().getName());
             partidoResponse.setEquipo2(partido.get().getEquipo2().getName());
             partidoResponse.setArbitro(partido.get().getArbitro().getUsuario());
-            partidoResponse.setResultado(partido.get().getGanador());
+            partidoResponse.setResultado(partido.get().getWinner().getName());
             partidoResponse.setClaveTemporada(partido.get().getTemporada().getId());
             return ResponseEntity.ok(partidoResponse);
     }
@@ -615,11 +613,11 @@ public class PartidoService {
                 Random r = new Random();
                 int random = r.nextInt(3);
                 if(random == 0){
-                    p.setGanador(p.getEquipo1().getName());
+                    p.setWinner(p.getEquipo1());
                 }else if(random == 1){
-                    p.setGanador(p.getEquipo2().getName());
+                    p.setWinner(p.getEquipo2());
                 }else{
-                    p.setGanador("EMPATE");
+                    p.setDraw(true);
                 }
                 partidoRepository.save(p);
         }
@@ -631,7 +629,7 @@ public class PartidoService {
         List<Match> matches = partidoRepository.findAllByTournament(idTemporada);
         int cantidadPartidosTerminados = 0;
         for(Match p : matches){
-            if(p.getGanador().length() != 0){
+            if(p.getWinner() != null){
                 cantidadPartidosTerminados++;
             }
         }
@@ -768,16 +766,16 @@ public class PartidoService {
         Optional<Match> partido = partidoRepository.findById(idPartido);
         if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
 
-        String equipo1 = partido.get().getEquipo1().getName();
-        String equipo2 = partido.get().getEquipo2().getName();
+        Team equipo1 = partido.get().getEquipo1();
+        Team equipo2 = partido.get().getEquipo2();
         int anotacionesEquipo1 = 0;
         int anotacionesEquipo2 = 0;
 
         if(anotacionesEquipo1 > anotacionesEquipo2){
-            partido.get().setGanador(equipo1);
+            partido.get().setWinner(equipo1);
         }
         if(anotacionesEquipo2 > anotacionesEquipo1 ){
-            partido.get().setGanador(equipo2);
+            partido.get().setWinner(equipo2);
         }
         partidoRepository.save(partido.get());
         return ResponseEntity.ok().build();
@@ -789,10 +787,10 @@ public class PartidoService {
         if (!partido.isPresent()) throw new BadRequestException("El partido no existe");
 
         Map<String, Object> ganador = new HashMap<>();
-        if(partido.get().getGanador().isEmpty() || partido.get() == null){
+        if(partido.get().getWinner() == null || partido.get() == null){
             ganador.put("ganador","");
         }else{
-            ganador.put("ganador", partido.get().getGanador());
+            ganador.put("ganador", partido.get().getWinner());
         }
 
         return ResponseEntity.ok(ganador);
@@ -901,6 +899,7 @@ public class PartidoService {
                     if(match.getNextMatch() != null){
                         res.setNext(match.getNextMatch().getClavePartido());
                     }
+                    res.setWinner(match.getWinner());
                     return res;
                 })
                 .collect(Collectors.toList());
