@@ -6,9 +6,12 @@ import com.basket.BasketballSystem.user_tournament.UserTournament;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,7 +45,8 @@ public class Tournament {
     private String description;
     private String rules;
 
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private Instant createdAt;
     @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private Set<UserTournament> userTournaments = new HashSet<>();
@@ -53,7 +57,7 @@ public class Tournament {
 
     @PrePersist
     public void onCreate() {
-        createdAt = LocalDateTime.now(); // Set the current date and time
+        createdAt = Instant.now();
     }
 
     public Tournament(String name, LocalDate fechaInicio, LocalDate fechaTermino, Integer cantidadEquipos) {

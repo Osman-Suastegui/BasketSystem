@@ -35,7 +35,7 @@ public class AuthenticationService {
                 .build();
 
         userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user,user.getId());
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
@@ -47,7 +47,7 @@ public class AuthenticationService {
                 )
         );
         Usuario user = userRepository.findByUsuario(authenticateRequest.getUsuario()).orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(user,user.getId());
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 }

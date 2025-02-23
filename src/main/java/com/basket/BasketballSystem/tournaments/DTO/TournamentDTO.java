@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -22,4 +23,5 @@ public class TournamentDTO {
     private String description;
     private String rules;
     private List<TeamDTO> teams;
+    private Instant createdAt;
 }
