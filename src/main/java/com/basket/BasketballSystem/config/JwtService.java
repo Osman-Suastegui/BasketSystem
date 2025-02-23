@@ -24,13 +24,19 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+    public Long extractUserId(String token) {
+        return extractAllClaims(token).get("id", Long.class); // Assuming `userId` is stored as "id" in the token
+    }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails);
+
+    public String generateToken(UserDetails userDetails, Long userId){
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("id", userId); // ✅ Add userId to token claims
+        return generateToken(extraClaims, userDetails);
     }
     public String generateToken(Map<String,Object> extraClaims, UserDetails userDetails){
         return Jwts.builder()

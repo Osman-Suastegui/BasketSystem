@@ -207,6 +207,7 @@ public class TournamentService {
             tournamentDTO.setTournamentType(tournament.getTournamentType());
             tournamentDTO.setRules(tournament.getRules());
             tournamentDTO.setDescription(tournament.getDescription());
+            tournamentDTO.setCreatedAt(tournament.getCreatedAt());
             return tournamentDTO;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(tournamentDTOS);

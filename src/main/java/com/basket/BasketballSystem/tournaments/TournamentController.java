@@ -1,13 +1,15 @@
 package com.basket.BasketballSystem.tournaments;
 
-import com.basket.BasketballSystem.tournaments.DTO.CreateTournamentRequest;
+import com.basket.BasketballSystem.config.JwtService;
 import com.basket.BasketballSystem.tournaments.DTO.TemporadaRequest;
 import com.basket.BasketballSystem.tournaments.DTO.TournamentDTO;
 import com.basket.BasketballSystem.usuarios.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +21,13 @@ public class TournamentController {
 
     @Autowired
     TournamentService tournamentService;
-
+    @Autowired
+    JwtService jwtService;
     @PostMapping("/createTournament")
-    public ResponseEntity<Map<String, Object>> createTournament(@RequestBody CreateTournamentRequest request) {
-        Tournament tournament = request.getTournament();
-        System.out.println("tournament string -> " + tournament.toString());
-        Long userId = request.getUserId();
-
+    public ResponseEntity<Map<String, Object>> createTournament(@AuthenticationPrincipal Usuario user,
+                                                                @RequestBody Tournament tournament) {
+        Long userId = user.getId();
+        System.out.println(tournament.toString());
         try {
             return tournamentService.createTournament(tournament,userId);
         } catch (Exception e) {
